@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Relationspiloten — Argon 4.0 Somatisk & Taktil Motor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="brand-col">
+      <div class="status-dot" id="supaStatusDot" title="System redo"></div>
+      <div>
+        <div class="brand-title">Relationspiloten</div>
+        <div class="brand-sub">ARGON 4.0 MULTISENSORISK MOTOR</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="badge-phase" id="phaseBadge">KALIBRERING</span>
+      <button class="btn-icon" onclick="openSettings()" title="Supabase & Bucket-inställningar">⚙️ Supabase</button>
+    </div>
+  </header>
+
+  <!-- MODE SELECTOR BAR -->
+  <div class="mode-bar">
+    <div>
+      Läge:
+      <select class="mode-select" id="testScopeSelect" onchange="restartSuite()">
+        <option value="quick_all">Snabbtest: Kropp + Hand/Fot + Djävulstest (24 kort)</option>
+        <option value="full_all">Fullständigt: Alla 88 bilder + 8 Djävulsfrågor</option>
+        <option value="body_only">Endast Kroppsmatris (68 kort + Djävulstest)</option>
+        <option value="tactile_only">Endast Hand & Fot (20 kort + Djävulstest)</option>
+      </select>
+    </div>
+    <div id="progressCounter">Kort 1 av 24</div>
+  </div>
+
+  <!-- MAIN STIMULUS STAGE -->
+  <main>
+    <div class="stimulus-card" id="stimulusCard">
+      <div class="image-viewport" id="viewport">
+        <div class="module-pill" id="modulePill">MODUL 1: KROPP</div>
+        <div class="file-pill" id="filePill">ba1.jpg</div>
+
+        <!-- Real image from Supabase bucket (hidden if fallback active) -->
+        <img id="stimulusImg" class="stimulus-img" alt="Stimuli" style="display:none;" />
+
+        <!-- High-contrast procedural SVG fallback if image isn't in bucket yet -->
+        <div id="fallbackContainer" class="fallback-svg-container"></div>
+
+        <!-- 2-STEP RADIAL WHEEL OVERLAY -->
+        <div class="wheel-overlay" id="wheelOverlay">
+          <div class="wheel-container" id="wheelContainer">
+            <div class="wheel-center">
+              <div class="wheel-step-label" id="wheelStepLabel">STEG 1</div>
+              <div class="wheel-step-title" id="wheelStepTitle">FORM</div>
+            </div>
+            <div id="wheelNodes"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-meta-left">
+          <span class="card-tag" id="cardTag">ANKARE</span>
+          <div class="card-title" id="cardTitle">Sensorisk Lust & Njutning</div>
+          <div class="card-subtitle" id="cardSubtitle">Tryck eller svep på bilden för att välja form & färg</div>
+        </div>
+        <div class="card-meta-right">
+          <div>PROTOKOLL</div>
+          <div id="cardCode" style="color:#e5e7eb;font-weight:700;">ANCHOR_PLEASURE</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TELEMETRY FOOTER -->
+  <div class="telemetry-bar">
+    <div class="telemetry-row">
+      <span>TELEMETRI Latens: <span class="val-highlight" id="telLatency">-- ms</span></span>
+      <span>Δ Lust: <span class="val-highlight" id="telPleasure">--</span></span>
+      <span>Δ Trygghet: <span class="val-highlight" id="telSafety">--</span></span>
+      <span>Skärpa: <span class="val-highlight" id="telClarity">100%</span></span>
+    </div>
+    <div id="telStatusLog">Tryck på bilden för att öppna radialhjulet (Steg 1: Form/Textur -> Steg 2: Färg)...</div>
+  </div>
+
+  <!-- OFF-GUARD DEVIL'S TEST SPEEDBUMP MODAL -->
+  <div class="offguard-modal" id="offguardModal">
+    <div class="offguard-box">
+      <div class="offguard-header">
+        <span class="offguard-badge">⚡ PAUS I FLÖDET — SNABB IMPULS</span>
+        <span class="offguard-timer" id="offguardTimer">Svara direkt</span>
+      </div>
+      <div class="offguard-question" id="offguardQuestion">Frågetext laddas...</div>
+      <div class="offguard-options" id="offguardOptions"></div>
+    </div>
+  </div>
+
+  <!-- SUPABASE SETTINGS MODAL -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal-panel">
+      <h2>Supabase & Bucket-koppling</h2>
+      <p>
+        Lägg alla 88 bilder direkt i en publik bucket som heter <code>stimuli</code> med de korta filnamnen
+        (<code>ba1.jpg</code>–<code>ba4.jpg</code>, <code>b01.jpg</code>–<code>b64.jpg</code>, <code>ta1.jpg</code>–<code>ta4.jpg</code>, <code>h1.jpg</code>–<code>h8.jpg</code>, <code>f1.jpg</code>–<code>f8.jpg</code>).
+        Om en bild saknas i bucketen visas automatiskt en konstnärlig SVG-förlaga.
+      </p>
+      <div class="form-group">
+        <label>Supabase Project URL</label>
+        <input type="text" id="inpSupaUrl" placeholder="https://dittprojekt.supabase.co" />
+      </div>
+      <div class="form-group">
+        <label>Supabase Anon Key (Valfri för bilder, krävs för att spara tabellrad)</label>
+        <input type="password" id="inpSupaKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..." />
+      </div>
+      <div class="form-group">
+        <label>Bucket-namn</label>
+        <input type="text" id="inpBucket" value="stimuli" />
+      </div>
+      <div class="form-group">
+        <label>Primär filändelse i bucketen</label>
+        <select id="inpExt">
+          <option value="jpg">.jpg ( testar även .png / .webp automatiskt )</option>
+          <option value="png">.png</option>
+          <option value="webp">.webp</option>
+          <option value="jpeg">.jpeg</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="saveSettings()">Spara & Ladda om bilder</button>
+      <button class="btn-secondary" onclick="closeSettings()">Stäng</button>
+    </div>
+  </div>
+
+  <!-- FINAL SYNTHESIS REPORT MODAL -->
+  <div class="modal-backdrop" id="reportModal">
+    <div class="modal-panel">
+      <h2>Argon 4.0 — Separerad Profilsyntes</h2>
+      <p>Resultatet är uppdelat i tre oberoende lager enligt vår arkitektur (Kroppsattraktion, Taktil polaritet och Profilskärpa).</p>
+      <div id="reportContent"></div>
+      <button class="btn-primary" id="btnSaveSupabase" onclick="saveProfileToSupabase()">☁️ Spara anonymiserad syntes till Supabase</button>
+      <button class="btn-secondary" onclick="downloadJsonReport()">📥 Ladda ner JSON-profil</button>
+      <button class="btn-secondary" onclick="closeReportAndRestart()">🔄 Kör nytt test</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
