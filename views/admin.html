@@ -1,0 +1,90 @@
+<!-- ADMINPORTAL & MODERERINGSCENTRAL (SKYDDAD VIA SUPABASE SERVER-RPC) -->
+    <div id="view-admin" class="view">
+      <div class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <span class="status-badge badge-gold">🛡️ Krypterad Admin- &amp; Modereringscentral</span>
+            <span class="status-badge badge-engine">Server-validerad via Supabase RPC</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitAdminPanel()">⬅️ Lämna Admin</button>
+        </div>
+
+        <h1 style="margin-top:8px; margin-bottom:6px;">Relationspiloten — Admin</h1>
+        <p style="font-size:0.86rem; margin-top:0;">
+          Här hanterar du flaggade chattmeddelanden, stänger av regelbrytare, nollställer försöksräknare (vid urladdat batteri / barnskrik) och följer plattformens statistik i realtid.
+        </p>
+
+        <!-- INLOGGNINGSRUTA FÖR ADMIN-NYCKEL -->
+        <div id="admin-login-box" style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:14px;">
+          <label for="admin-secret-input" style="font-weight:600; color:#fde68a; font-size:0.88rem;">🔑 Ange din Master Admin-nyckel (valideras direkt i Supabase):</label>
+          <div style="display:flex; gap:10px; margin-top:6px; flex-wrap:wrap;">
+            <input type="password" id="admin-secret-input" placeholder="Skriv in ditt hemliga admin-lösenord..." style="flex:1; margin:0; min-width:220px;">
+            <button type="button" id="btn-admin-unlock" class="btn" style="width:auto; margin:0; background:#d97706;" onclick="window.loadAdminDashboard()">🔓 Lås upp Adminpanelen</button>
+          </div>
+          <p id="admin-auth-msg" style="font-size:0.82rem; color:#fca5a5; margin:8px 0 0 0; display:none;"></p>
+        </div>
+
+        <!-- SJÄLVA INSTRUMENTPANELEN (VISAS NÄR NYCKELN ÄR VERIFIERAD) -->
+        <div id="admin-dashboard-content" style="display:none; margin-top:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+            <strong style="color:#6ee7b7; font-size:0.9rem;">🟢 Ansluten till Supabase Admin-RPC</strong>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.loadAdminDashboard()">🔄 Uppdatera all data</button>
+              <button type="button" class="btn btn-danger" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.lockAdminPanel()">🔒 Lås panelen</button>
+            </div>
+          </div>
+
+          <!-- 1. STATISTIK-KORT (KPI:ER) -->
+          <h3 style="font-size:1rem; margin-bottom:10px; color:#38bdf8;">📊 Plattformens Statistik &amp; Hälsa</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(155px, 1fr)); gap:10px; margin-bottom:20px;">
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Totalt antal profiler</div>
+              <div id="stat-total-profiles" style="font-size:1.5rem; font-weight:800; color:#fff; margin-top:4px;">0</div>
+              <div id="stat-ready-profiles" style="font-size:0.72rem; color:#6ee7b7; margin-top:2px;">0 redo för matchning</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Könsfördelning</div>
+              <div id="stat-gender-split" style="font-size:0.88rem; font-weight:700; color:#e2e8f0; margin-top:6px; line-height:1.4;">-</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Skapade Matchningar</div>
+              <div id="stat-total-matches" style="font-size:1.5rem; font-weight:800; color:#38bdf8; margin-top:4px;">0</div>
+              <div id="stat-avg-score" style="font-size:0.72rem; color:var(--muted); margin-top:2px;">Snitt: - %</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Chatt &amp; Flaggningar</div>
+              <div id="stat-total-msgs" style="font-size:1.5rem; font-weight:800; color:#fde68a; margin-top:4px;">0</div>
+              <div id="stat-flagged-msgs" style="font-size:0.72rem; color:#ef4444; font-weight:700; margin-top:2px;">0 anmälda</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">360°-Kompass &amp; Röst</div>
+              <div id="stat-multimodal-count" style="font-size:1.1rem; font-weight:800; color:#d2a8ff; margin-top:6px;">0 kompasser</div>
+              <div style="font-size:0.72rem; color:var(--muted); margin-top:2px;">Inbakade i profiler</div>
+            </div>
+          </div>
+
+          <!-- 2. MODERERING AV FLAGGADE / ANMÄLDA CHATTMEDDELANDEN -->
+          <div style="background:#141922; border:1px solid #ef4444; border-radius:10px; padding:16px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:10px;">
+              <h3 style="margin:0; font-size:1rem; color:#fca5a5;">🚨 Anmälda Chattmeddelanden (Moderering)</h3>
+              <span id="admin-flagged-badge" class="status-badge" style="background:#7f1d1d; color:#fecaca; margin:0;">0 ärenden</span>
+            </div>
+            <div id="admin-flagged-list" style="display:flex; flex-direction:column; gap:10px;">
+              <p style="font-size:0.85rem; margin:0;">Inga flaggade meddelanden just nu.</p>
+            </div>
+          </div>
+
+          <!-- 3. MEDLEMSHANTERING & NOLLSTÄLLNING AV FÖRSÖKSRÄKNARE -->
+          <div style="background:#141922; border:1px solid var(--border); border-radius:10px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+              <h3 style="margin:0; font-size:1rem; color:#fff;">👥 Medlemmar, Försöksräknare &amp; Avstängning</h3>
+              <input type="text" id="admin-member-search" placeholder="🔍 Sök alias eller user-ID..." style="width:220px; margin:0; padding:7px 10px; font-size:0.82rem;" oninput="window.filterAdminMembers()">
+            </div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0; margin-bottom:12px;">
+              Klicka på <strong>"⚡ Nollställ vald räknare"</strong> på en medlem om telefonen laddat ur eller barnen skrikit, så synkas nollställningen direkt till medlemmens konto nästa gång hen öppnar sidan.
+            </p>
+            <div id="admin-members-list" style="display:flex; flex-direction:column; gap:12px; max-height:540px; overflow-y:auto; padding-right:4px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>

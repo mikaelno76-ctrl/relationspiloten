@@ -1,0 +1,152 @@
+<!-- 4.5. SOMATISK & TAKTIL PROJEKTION (2-STEGS RADIALHJUL) + GLOBAL OFF-GUARD DJÄVULSTEST -->
+    <div id="view-somatic-lab" class="view">
+      <!-- STEG 1: INTRODUKTION & VAL AV OMFÅNG -->
+      <div id="somatic-step-intro" class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-gold">🏛️ Somatisk &amp; Taktil Projektion</span>
+            <span class="status-badge badge-engine">Synestetiskt 2-stegs Radialhjul</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka</button>
+        </div>
+
+        <h2>Kroppsmatris, Händer/Fötter &amp; Off-Guard Profilskärpa</h2>
+        <p style="font-size:0.92rem; margin-bottom:14px;">
+          Istället för slentrianmässiga ”gilla/ogilla”-svep mäter detta test hur ditt nervsystem spontant översätter <strong>kroppsformer</strong> samt <strong>händers och fötters uttryck</strong> till synestetiska former, texturer och temperaturer.
+        </p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.84rem;">
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #f59e0b;">
+              <strong style="color:#fde68a; display:block; margin-bottom:4px;">1. Kroppsmatris (Form + Färg)</strong>
+              4 kalibreringsankare följt av konstnärliga skulptur- och skissarketyper. Du väljer först <strong>Geometrisk Form</strong> och direkt därefter <strong>Kromatisk Färg</strong>.
+            </div>
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #10b981;">
+              <strong style="color:#6ee7b7; display:block; margin-bottom:4px;">2. Händer &amp; Fötter (Textur + Värme)</strong>
+              4 taktila ankare följt av renässansstudier i rödkrita (passiva/aktiva, små/stora, smala/fylliga). Hjulet skiftar till <strong>Taktil Textur</strong> och <strong>Termisk Värme</strong>.
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:10px; font-size:0.8rem; color:var(--muted);">
+            ⚡ <strong>Inbäddat Off-Guard ”Djävulstest”:</strong> Mitt i bildflödet dyker snabba mikrodilemman upp för att mäta din <em>Profilskärpa</em> (skillnaden mellan polerad fasad och ofiltrerad ärlighet).<br>
+            🔒 <strong>GDPR-skyddad syntes:</strong> Endast de tre separerade profilvektorerna sparas – aldrig enskilda bildklick.
+          </div>
+        </div>
+
+        <div class="builder-box" style="margin-bottom:14px;">
+          <label for="somatic-scope-select">🎛️ Välj testets omfattning:</label>
+          <select id="somatic-scope-select" style="margin-bottom:4px;">
+            <option value="quick_all" selected>⚡ Snabbtest: Kalibrering + Kroppsurval + Hand/Fot + Djävulstest (24 kort – ca 3 min)</option>
+            <option value="full_all">🏛️ Fullständigt: Alla 88 bilder (4+64 Kropp, 4+16 Hand/Fot) + 8 Djävulsfrågor</option>
+            <option value="body_only">🗿 Endast Kroppsmatrisen (4 ankare + 64 konstarketyper + Djävulstest)</option>
+            <option value="tactile_only">✋ Endast Händer &amp; Fötter (4 taktila ankare + 16 rödkritestudier + Djävulstest)</option>
+          </select>
+          <div id="somatic-bucket-status" style="font-size:0.78rem; color:#94a3b8; margin-top:4px;">
+            🔍 Kontrollerar Supabase-bucket <code>stimuli</code>...
+          </div>
+        </div>
+
+        <div style="background:#141922; border-left:4px solid #f59e0b; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:0.84rem; color:#fde68a;">
+          ⚠️ <strong>Observera innan start:</strong> För detta test gäller <strong>1 skarpt försök</strong> i din profil (<span id="attempts-somatic-modal-label">0 av 1 förbrukat</span>). Tryck eller dra direkt på bilden för att öppna tvåstegshjulet!
+        </div>
+
+        <button type="button" id="btn-start-somatic-session" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; font-size:1rem; padding:14px;" onclick="window.startSomaticLabSession()">
+          🚀 Starta Somatisk &amp; Taktil Projektion
+        </button>
+      </div>
+
+      <!-- STEG 2: AKTIV RADIAL-ARENA -->
+      <div id="somatic-step-arena" class="card" style="display:none; max-width:520px; margin:0 auto; padding:16px; border:1px solid #334155; background:#11151d;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span id="somatic-phase-badge" class="status-badge badge-gold" style="margin:0;">KALIBRERING</span>
+            <span id="somatic-progress-counter" style="font-size:0.82rem; color:var(--muted); font-weight:700;">Kort 1 av 24</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.abortSomaticToIntro()">✕ Avbryt</button>
+        </div>
+
+        <div class="somatic-stimulus-card">
+          <div class="somatic-viewport" id="somatic-viewport">
+            <div class="somatic-module-pill" id="somatic-module-pill">MODUL 1: KROPP (FORM + FÄRG)</div>
+            <div class="somatic-file-pill" id="somatic-file-pill">ba1.jpg</div>
+
+            <img id="somatic-stimulus-img" class="somatic-stimulus-img" alt="Stimuli" style="display:none;" />
+            <div id="somatic-fallback-container" class="somatic-fallback-svg"></div>
+
+            <!-- 2-STEGS RADIALHJUL -->
+            <div class="somatic-wheel-overlay" id="somatic-wheel-overlay">
+              <div class="somatic-wheel-container" id="somatic-wheel-container">
+                <div class="somatic-wheel-center">
+                  <div class="somatic-wheel-step-lbl" id="somatic-wheel-step-lbl">STEG 1</div>
+                  <div class="somatic-wheel-step-title" id="somatic-wheel-step-title">FORM</div>
+                </div>
+                <div id="somatic-wheel-nodes"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="somatic-card-footer">
+            <div>
+              <span class="somatic-card-tag" id="somatic-card-tag">KALIBRERINGSANKARE</span>
+              <div class="somatic-card-title" id="somatic-card-title">Sensorisk Lust &amp; Njutning</div>
+              <div class="somatic-card-sub" id="somatic-card-sub">Tryck eller svep på bilden för att välja form &amp; färg</div>
+            </div>
+            <div style="text-align:right; font-family:monospace; font-size:0.72rem; color:var(--muted);">
+              <div>PROTOKOLL</div>
+              <div id="somatic-card-code" style="color:#e2e8f0; font-weight:700;">ANCHOR_PLEASURE</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TELEMETRIBALK -->
+        <div class="somatic-telemetry-bar">
+          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+            <span>Latens: <strong style="color:#fcd34d;" id="somatic-tel-lat">-- ms</strong></span>
+            <span>Δ Lust: <strong style="color:#fcd34d;" id="somatic-tel-pleasure">--</strong></span>
+            <span>Δ Trygghet: <strong style="color:#fcd34d;" id="somatic-tel-safety">--</strong></span>
+            <span>Skärpa: <strong style="color:#6ee7b7;" id="somatic-tel-clarity">100%</strong></span>
+          </div>
+          <div id="somatic-tel-log" style="color:#94a3b8; font-size:0.74rem; margin-top:3px;">
+            Tryck på bilden för att öppna radialhjulet (Steg 1: Form/Textur ➔ Steg 2: Färg/Värme)...
+          </div>
+        </div>
+      </div>
+
+      <!-- STEG 3: SEPARERAD 3-LAGERS SYNTES & ARGON 4.0 DJUPANALYS -->
+      <div id="somatic-step-report" class="card" style="display:none; border:1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge badge-gold">Steg 3: Separerad 3-Lagers Syntes</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka till Hubben</button>
+        </div>
+
+        <h2>Dina tre separerade attraktions- &amp; skärpelager</h2>
+        <p style="font-size:0.88rem; margin-bottom:14px;">
+          Här redovisas dina tre dimensioner var för sig så att omedelbar fysisk/taktil dragningskraft hålls skild från dina långsiktiga rollspelsvärderingar.
+        </p>
+
+        <div id="somatic-report-layers"></div>
+
+        <button type="button" id="btn-run-somatic-argon" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; margin-top:12px;" onclick="window.analyzeSomaticAndTactileWithArgon()">
+          🧠 Slutför &amp; Låt Argon 4.0 tolka mina 3 lager till profilen
+        </button>
+
+        <pre id="somatic-argon-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.9rem; line-height:1.55;"></pre>
+
+        <div id="somatic-standalone-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('somatic-argon-output')">📋 Kopiera analysen</button>
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadSomaticJsonReport()">📥 Ladda ner JSON-vektorer</button>
+          <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.exitSomaticLab()">🚀 Klar — Gå till Matchningshubben</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLOBAL OFF-GUARD "DJÄVULSTEST" MODAL (ANVÄNDS I BÅDE SVAJPFLÖDEN OCH ROLLSPEL) -->
+    <div id="offguard-devil-modal" class="somatic-offguard-modal">
+      <div class="somatic-offguard-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span class="somatic-offguard-badge">⚡ PAUS I FLÖDET — SNABB IMPULS</span>
+          <span style="font-family:monospace; font-size:0.76rem; color:#fcd34d;" id="offguard-context-tag">Första magkänslan</span>
+        </div>
+        <div class="somatic-offguard-question" id="offguard-question-text">Frågetext laddas...</div>
+        <div class="somatic-offguard-options" id="offguard-options-box"></div>
+      </div>
+    </div>

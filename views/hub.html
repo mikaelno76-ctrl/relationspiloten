@@ -1,0 +1,353 @@
+<!-- 2. HUVUDSIDAN (MATCHNINGSHUBB) -->
+    <div id="view-hub" class="view">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span class="status-badge">Certifierad Profil</span>
+            <span class="status-badge badge-engine">Analyserad av Argon 4.0</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openFaqModal()">❓ Frågor &amp; svar</button>
+            <button type="button" id="btn-logout" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px;">Logga ut</button>
+          </div>
+        </div>
+        <h1 style="margin-top:10px;">Matchningshubben</h1>
+        <p>Inloggad som: <strong id="hub-user-name"></strong></p>
+
+        <div style="margin-top: 15px; border-left: 3px solid var(--accent); padding-left: 15px;">
+          <h3>Din Aktiva Beteendeprofil</h3>
+          <p style="font-size:0.75rem; margin:0 0 6px 0;">AI-genererad reflektion baserad på dina val i ett spel. Inte en psykologisk bedömning eller diagnos.</p>
+          <p id="profile-text" style="font-size:0.95rem; white-space:pre-wrap;"></p>
+        </div>
+
+        <div id="argon-queue-hub-banner" style="display:none; margin-top:16px; background:rgba(217, 119, 6, 0.18); border:1px solid #f59e0b; border-radius:8px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="color:#fde68a; font-size:0.92rem;">⏳ Argon 4.0 Kö-motor aktiv i bakgrunden</strong>
+            <span id="argon-queue-count-badge" class="status-badge badge-gold" style="margin:0;">1 jobb i kö</span>
+          </div>
+          <p id="argon-queue-hub-msg" style="font-size:0.83rem; color:#e2e8f0; margin:6px 0 10px 0;">
+            Systemet väntar strikt på <strong>Gemini 4.0 Argon</strong> (inga sämre reservmodeller tillåts). Vi försöker automatiskt var 10:e minut i bakgrunden. Du kan tryggt stänga webbläsaren – ditt underlag är säkrat och körs klart så fort Argon svarar!
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn" style="width:auto; margin:0; padding:7px 14px; font-size:0.8rem; background:#d97706;" onclick="window.processArgonQueueNow(true)">🔄 Testa Argon 4.0 direkt nu</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 14px; font-size:0.8rem;" onclick="window.clearArgonQueue()">✕ Rensa kö</button>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; border-top: 1px solid var(--border); padding-top:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <button type="button" id="btn-replay-base" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">Spela nytt Grundäventyr (Scenariobyggaren)</button>
+          <button type="button" id="btn-delete-data" class="btn btn-danger" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">Radera all min data (Art. 17)</button>
+        </div>
+      </div>
+
+      <!-- MATCHAR: TOPPLISTA (GULD, SILVER, BRONS) MED 4 FILTER & GROK-ISBRYTARE -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+          <h2 style="margin:0;">Aktuella Matchningar (Topp 3)</h2>
+          <span class="status-badge badge-engine" style="margin:0;">Argon 4.0 Korssyntes + Grok-Isbrytare</span>
+        </div>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:12px;">
+          <label for="match-filter-select" style="display:block; font-size:0.85rem; font-weight:600; color:#38bdf8; margin-bottom:6px;">
+            🎯 Välj Matchningsfilter (Styr hur Argon 4.0 viktar rollspel, 360°-vektorer &amp; röstspegling):
+          </label>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <select id="match-filter-select" style="flex:1; min-width:240px; margin:0;">
+              <option value="spark">🔥 1. Kemi, Gnista &amp; Polära Motpoler (Magnetisk spänning &amp; komplementär dynamik)</option>
+              <option value="harmony" selected>🏡 2. Trygghet &amp; Vardagsgemenskap (Delade grundvärderingar, lugn &amp; pålitlig rytm)</option>
+              <option value="intellect">🧠 3. Intellektuell Synergi &amp; Djupa Samtal (Idéutbyte, nyfikenhet &amp; mentalt tuggmotstånd)</option>
+              <option value="collab">🚀 4. Professionellt Idésamarbete &amp; Co-Founder (Beslutskraft, kompletterande styrkor &amp; leverans)</option>
+            </select>
+            <button type="button" id="btn-run-match" class="btn" style="width:auto; margin:0; padding:11px 16px; font-size:0.88rem;">
+              🧠 Kör Matchning med valt filter
+            </button>
+          </div>
+        </div>
+        <p id="match-status-msg" style="font-size:0.82rem; color:var(--muted); margin:6px 0 0 0;"></p>
+
+        <div class="grid" id="match-list"><p style="font-size:0.9rem;">Inga matchningar än. Matchning kräver att fler medlemmar har gjort äventyret och godkänt sin profil. Tryck på knappen ovan när det finns fler.</p></div>
+
+        <!-- GEMENSAM INBÄDDAD CHATTMODUL -->
+        <div id="hub-chat-container" style="display:none; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong id="active-chat-partner" style="font-size:0.95rem; color:var(--text);"></strong>
+            <button type="button" id="btn-close-chat" class="btn btn-secondary" style="width:auto; margin:0; padding:4px 8px; font-size:0.75rem;">Minimera chatt</button>
+          </div>
+
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:6px; padding:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px; font-size:0.82rem;">
+            <label style="margin:0; font-weight:600; color:var(--muted);">Frivillig presentation i chatten:</label>
+            <select id="user-gender-select" style="width:auto; margin:0; padding:4px 8px; font-size:0.82rem;">
+              <option value="">(Inget angivet)</option>
+              <option value="Kvinna">Kvinna</option>
+              <option value="Man">Man</option>
+              <option value="Annat">Annat</option>
+            </select>
+            <span style="color:var(--muted); font-size:0.75rem;">Visas diskret bredvid ditt alias för motparten.</span>
+          </div>
+          
+          <div id="hub-chat-box" class="chat-box" style="height:240px;">
+            <div class="msg model">Anonymiserad säker kanal aktiv. Endast ni två ser detta samtal.</div>
+          </div>
+
+          <div class="input-row">
+            <input type="text" id="hub-chat-input" placeholder="Skriv ett meddelande...">
+            <button type="button" id="btn-send-hub-msg" class="btn" style="width:auto; margin:0;">Skicka</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border: 1px solid #38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h2 style="margin:0;">⚡ Visuell Intuitiv Analys &amp; Självbildskompass</h2>
+          <span class="status-badge badge-engine">360° Vektor + Millisekunds-sensor</span>
+        </div>
+        <p>Utforska din omedvetna attraktions- och tillitskompass i 360 grader, följt av tvingad gallring och val av dina 3 egna uttrycks-arketyper för visuell korsmatchning.</p>
+        <div style="background:#11151c; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:0.82rem; color:#fde68a;">
+          ⚠️ <strong>Observera innan start:</strong> För detta test gäller <strong>endast 1 försök</strong> (<span id="attempts-swipe-label">0 av 1 förbrukat</span>).
+        </div>
+        <button type="button" id="btn-hub-swipelab" class="btn">🔥 Starta 360° Vektorswipe &amp; Självbildstest</button>
+      </div>
+
+      <!-- SOMATISK & TAKTIL PROJEKTION + DJÄVULSTEST (2-STEGS RADIALHJUL) -->
+      <div class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h2 style="margin:0;">🏛️ Somatisk &amp; Taktil Projektion (Kropp, Hand/Fot &amp; Skärpa)</h2>
+          <span class="status-badge badge-gold">2-stegs Radialhjul + Off-Guard</span>
+        </div>
+        <p>
+          Mäter omedveten somatisk och taktil dragningskraft via konstnärliga kroppsarketyper (Form + Färg) samt händer och fötter i rödkrita (Textur + Värme), kombinerat med inbäddade Off-Guard-frågor som mäter din profilskärpa.
+        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; background:#11151c; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:0.82rem; color:#fde68a;">
+          <span>⚠️ <strong>1 skarpt försök i profilen:</strong> (<span id="attempts-somatic-label">0 av 1 förbrukat</span>)</span>
+          <span id="hub-clarity-badge" class="status-badge badge-engine" style="margin:0;">⚡ Profilskärpa: 100%</span>
+        </div>
+        <button type="button" id="btn-hub-somaticlab" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+          🏛️ Starta Somatisk &amp; Taktil Projektion
+        </button>
+      </div>
+
+
+      <!-- FÖRDJUPANDE MODULER: VÄLJ DILEMMA + EGET TEMA -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0;">Fördjupande Rollspelsmoduler (35 Rundor)</h2>
+          <span class="status-badge badge-engine">Spelledare: Flash 3.1 Lite</span>
+        </div>
+        <p>Välj vilket psykologiskt dilemma du vill utforska och forma själv språk, miljö och epok. Efter avslutat äventyr väver Argon 4.0 in de nya insikterna i din befintliga profil.</p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
+          <h3 style="font-size:1rem; margin-bottom:10px;">1. Skapa din värld &amp; kompanjon</h3>
+
+          <div class="builder-box" style="margin-bottom:14px;">
+            <label for="deep-lang-select">🌍 Språk för själva rollspelet:</label>
+            <select id="deep-lang-select">
+              <option value="Svenska" selected>Svenska</option>
+              <option value="Engelska (English)">Engelska (English)</option>
+              <option value="Spanska (Español - Argentina / voseo)">Spanska (Español - Argentina / voseo)</option>
+              <option value="Spanska (Español)">Spanska (Español standard)</option>
+              <option value="Norska">Norska</option>
+              <option value="Danska">Danska</option>
+              <option value="Tyska (Deutsch)">Tyska (Deutsch)</option>
+              <option value="Franska (Français)">Franska (Français)</option>
+            </select>
+            <input type="text" id="deep-lang-free" placeholder="Valfritt: Ange annat språk eller dialekt fritt här...">
+          </div>
+
+          <div class="builder-grid">
+            <div class="builder-box">
+              <label for="deep-world-select">🌌 Värld / Genre:</label>
+              <select id="deep-world-select">
+                <option value="Verkligheten" selected>Verkligheten</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Postapokalyptiskt">Postapokalyptiskt</option>
+                <option value="Rymdäventyr">Rymdäventyr</option>
+              </select>
+              <input type="text" id="deep-world-free" placeholder="Valfritt: Eget val eller detalj om världen...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-era-label" for="deep-era-select">⏳ Tidsepok:</label>
+              <select id="deep-era-select">
+                <option value="Nutid" selected>Nutid</option>
+                <option value="Stenåldern">Stenåldern</option>
+                <option value="Vikingatiden">Vikingatiden</option>
+                <option value="1500-talet">1500-talet</option>
+                <option value="1600-talet">1600-talet</option>
+                <option value="1700-talet">1700-talet</option>
+                <option value="1800-talet">1800-talet</option>
+                <option value="1920-talet">1920-talet</option>
+                <option value="1930-talet">1930-talet</option>
+                <option value="1940-talet">1940-talet</option>
+                <option value="1950-talet">1950-talet</option>
+                <option value="1960-talet">1960-talet</option>
+                <option value="1970-talet">1970-talet</option>
+                <option value="1980-talet">1980-talet</option>
+                <option value="1990-talet">1990-talet</option>
+              </select>
+              <input type="text" id="deep-era-free" placeholder="Valfritt: Eget årtal eller fri epok...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-context-label" for="deep-context-select">🎭 Kontext / Tema:</label>
+              <select id="deep-context-select">
+                <option value="Familjedrama" selected>Familjedrama</option>
+                <option value="Krig">Krig</option>
+                <option value="Politik">Politik</option>
+                <option value="Tonårsdrama">Tonårsdrama</option>
+                <option value="Sport">Sport</option>
+              </select>
+              <input type="text" id="deep-context-free" placeholder="Valfritt: Egen kontext eller situation...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-super-label" for="deep-super-select">✨ Tillåta övernaturliga inslag:</label>
+              <select id="deep-super-select">
+                <option value="Nej" selected>Nej</option>
+                <option value="Ja">Ja</option>
+              </select>
+              <input type="text" id="deep-super-free" placeholder="Valfritt: Precisera fritt...">
+            </div>
+          </div>
+
+          <label style="font-size:0.85rem;">Övrig miljö, epok och atmosfär (valfritt):</label>
+          <input type="text" id="deep-env" placeholder="T.ex. Ett segelfartyg på 1800-talet, en antikvarisk bokhandel i regnigt London, eller en Mars-bas...">
+          
+          <label style="font-size:0.85rem;">Kompanjon (vem reser du med?):</label>
+          <input type="text" id="deep-companion" placeholder="T.ex. Envis maskinist, tystlåten kollega, äventyrlig forskare...">
+
+          <label class="checkbox-label" style="margin-top:4px;">
+            <input type="checkbox" id="deep-swap-twist">
+            <span>🔄 Ja till en överraskande twist (valfritt): något oväntat händer mitt i äventyret som förändrar din roll. Du får inga detaljer i förväg och kan avbryta när som helst.</span>
+          </label>
+        </div>
+
+        <h3 style="font-size:1rem; margin-bottom:6px;">2. Välj dilemmats fokus</h3>
+        <div style="background:#11151c; border-left:3px solid #38bdf8; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:0.82rem; color:#cbd5e1;">
+          ℹ️ <strong>Observera innan du startar:</strong> För varje fördjupande rollspelsmodul gäller <strong>max 2 försök</strong>.
+        </div>
+        <div class="grid">
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">A. Resursbrist &amp; Hårda Beslut</h3>
+              <span id="attempts-deep-resource-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Logistik, knapphet, krisrespons och prioriteringar under stress.</p>
+            <button type="button" id="btn-deep-resource" class="btn" onclick="window.startDeepAdventure('resource')">Starta Modul A (35 rundor)</button>
+          </div>
+
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">B. Värdekonflikt &amp; Maktbalans</h3>
+              <span id="attempts-deep-conflict-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Samarbete, lojalitet, gränssättning och etiska dilemman.</p>
+            <button type="button" id="btn-deep-conflict" class="btn" onclick="window.startDeepAdventure('conflict')">Starta Modul B (35 rundor)</button>
+          </div>
+
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">C. Vardagslunk &amp; Friktion</h3>
+              <span id="attempts-deep-routine-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Tålamod, lyhördhet, tystnad och hantering av vardagsfriktion.</p>
+            <button type="button" id="btn-deep-routine" class="btn" onclick="window.startDeepAdventure('routine')">Starta Modul C (35 rundor)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALFRIA KOMPLETTERANDE MULTIMODALA TESTER -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0;">Valfria kompletterande tester</h2>
+          <span class="status-badge badge-engine">Multimodal motor: Argon 4.0</span>
+        </div>
+        <p>Utforska vårt psykologiska växelspel (Röst ➔ AI-målning ➔ Din tolkning), granska vardagsbilder och reflektera över en vändpunkt.</p>
+        <div style="background:#11151c; border-left:3px solid #f59e0b; padding:10px 12px; border-radius:6px; margin-bottom:14px; font-size:0.83rem; color:#fde68a;">
+          ⚠️ <strong>Viktigt innan du startar:</strong> För dessa kompletterande tester gäller <strong>endast 1 försök per delmoment</strong> (Röst-till-bild: <span id="attempts-voice-label">0/1</span> • Vardagsbilder: <span id="attempts-photos-label">0/1</span> • Minnesfråga: <span id="attempts-memory-label">0/1</span>).
+        </div>
+
+        <div class="grid">
+          <div class="scenario-item" style="border: 1px solid #38bdf8;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">🎙️🎨 Växelspel med Argon 4.0: Röst ➔ AI-bild ➔ Din tolkning</h3>
+              <span class="status-badge badge-engine" style="margin:0;">Projektion &amp; Spegling</span>
+            </div>
+            <p><strong>Hur det fungerar:</strong> Berätta fritt med din röst om något <em>vackert</em>, något <em>sorgligt</em> eller något <em>fult/skavande</em>. Argon 4.0 lyssnar på vad du säger och din intonation, och målar en bild av vad den hörde. Därefter får du berätta vad du själv ser i bilden.</p>
+
+            <label style="font-size:0.85rem; font-weight:600; color:#cbd5e1;">1. Välj vad du vill beskriva med rösten:</label>
+            <select id="voice-theme-select" style="margin-bottom:10px;">
+              <option value="Något vackert och djupt meningsfullt">✨ Beskriv något vackert (eller en plats/stund som ger dig ro)</option>
+              <option value="Något sorgligt, vemodigt eller förlorat">🌧️ Beskriv något sorgligt eller vemodigt som berört dig</option>
+              <option value="Något fult, trasigt eller skavande">⚡ Beskriv något fult, kaotiskt eller något som skaver i världen</option>
+              <option value="Kontrasten mellan något vackert och något fult/sorgligt">🎭 Beskriv både något vackert och något fult/sorgligt</option>
+            </select>
+
+            <label style="font-size:0.85rem;">Spela in din röst (ca 20–30 sek) eller ladda upp ljudfil:</label>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+              <button type="button" id="btn-voice-record" class="btn btn-secondary" style="margin-top:0; flex:1;">🎙️ Spela in med mikrofon (max 30s)</button>
+              <input type="file" id="voice-file" accept="audio/*" style="margin:0; flex:1; padding:8px;">
+            </div>
+            <div id="voice-status" style="font-size:0.8rem; color:var(--muted); margin-top:4px; margin-bottom:8px;"></div>
+
+            <label style="font-size:0.82rem; color:var(--muted);">Valfritt stöd (om du inte har mikrofon kan du även skriva din beskrivning här):</label>
+            <textarea id="voice-transcript" placeholder="Frivilligt: berätta med ord eller lämna tomt om du spelat in ljud ovan..." style="min-height:55px; margin-bottom:8px;"></textarea>
+
+            <button type="button" id="btn-generate-voice-art" class="btn" style="background:#0284c7; margin-top:4px;" onclick="window.generateVoiceArtWithArgon()">
+              🎨 Steg 1: Låt Argon 4.0 lyssna &amp; måla det den hörde
+            </button>
+            <p id="voice-art-status" style="font-size:0.82rem; color:#38bdf8; margin:6px 0 0 0;"></p>
+
+            <!-- STEG 2 AV VÄXELSPELET: ARGONS MÅLNING & ANVÄNDARENS REAKTION -->
+            <div id="voice-art-stage2" style="display:none; margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+              <div style="background:#11151c; border-left:3px solid #38bdf8; padding:10px 12px; border-radius:6px; margin-bottom:12px;">
+                <strong style="color:#38bdf8; font-size:0.85rem;">🎨 Argon 4.0 säger:</strong>
+                <p id="argon-art-intro" style="margin:4px 0 0 0; font-size:0.88rem; color:#e2e8f0; font-style:italic;"></p>
+              </div>
+
+              <div id="argon-artwork-container" style="width:100%; max-width:440px; margin:0 auto 12px; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:#090d13; box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+
+              <label style="font-size:0.88rem; font-weight:600; color:#fde68a;">
+                2. Din tur igen: Vad tycker du om teckningen/målningen? Vad ser du i den och vilken känsla väcker den?
+              </label>
+              <textarea id="voice-art-reaction" placeholder="Berätta spontant: Stämmer den med vad du kände, eller ser du något helt annat i formerna och färgerna?..." style="min-height:75px;"></textarea>
+            </div>
+          </div>
+
+          <div class="scenario-item">
+            <h3>📷 Tre bilder ur din verklighet</h3>
+            <p><strong>Vad det fångar:</strong> Vad du väljer att rikta blicken mot i vardagen. Hellre sant än snyggt.</p>
+            <div style="background:#11151c; border-radius:6px; padding:10px; margin:8px 0; font-size:0.85rem;">
+              <strong>Regeln (granskas av Argon 4.0):</strong> Ingen selfie. Ingen solnedgång. Inget gym. Inga gruppfoton.
+            </div>
+            <label style="font-size:0.85rem;">Bild 1</label>
+            <input type="file" id="photo1" accept="image/*" onchange="window.previewPhoto(this, 'prev1')">
+            <img id="prev1" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption1" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+
+            <label style="font-size:0.85rem;">Bild 2</label>
+            <input type="file" id="photo2" accept="image/*" onchange="window.previewPhoto(this, 'prev2')">
+            <img id="prev2" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption2" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+
+            <label style="font-size:0.85rem;">Bild 3</label>
+            <input type="file" id="photo3" accept="image/*" onchange="window.previewPhoto(this, 'prev3')">
+            <img id="prev3" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption3" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+          </div>
+
+          <div class="scenario-item">
+            <h3>📝 En gång du ändrade dig</h3>
+            <p><strong>Vad det fångar:</strong> Intellektuell ödmjukhet och förmåga att beskriva en konkret vändpunkt utan floskler.</p>
+            <p style="font-size:0.9rem;">Berätta om en gång du var helt säker, och sedan bytte håll mitt i. Vad hände?</p>
+            <textarea id="memory-answer" placeholder="Beskriv med 4–8 meningar..." style="min-height:100px;"></textarea>
+          </div>
+        </div>
+
+        <button type="button" id="btn-deepen-tests" class="btn" style="margin-top:16px;">🧠 Slutför &amp; Fördjupa profil med Argon 4.0 (Röst-växelspel, Bild &amp; Minne)</button>
+        <p id="tests-status" style="font-size:0.85rem; color:var(--muted); margin-top:8px;"></p>
+      </div>
+
+      <div style="text-align:center; margin-top:6px; margin-bottom:18px; font-size:0.75rem; color:#475569;">
+        <span style="cursor:pointer; text-decoration:underline;" onclick="window.openFaqModal()">❓ Frågor &amp; svar om Relationspiloten</span>
+      </div>
+    </div>

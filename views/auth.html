@@ -1,0 +1,53 @@
+<!-- 1. INLOGGNING, REGISTRERING & API-NYCKEL -->
+    <div id="view-auth" class="view active">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h1>Relationspiloten</h1>
+          <span class="status-badge badge-engine">Flash 3.1 Lite + Argon 4.0</span>
+        </div>
+        <p>Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
+
+        <label>Användar-alias:</label>
+        <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren">
+
+        <label>Lösenord:</label>
+        <input type="password" id="auth-pass" placeholder="Minst 6 tecken...">
+
+
+
+        <div class="legal-box">
+          <strong>GDPR &amp; Modellarkitektur:</strong><br>
+          • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
+          • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
+          • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
+          • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+        </div>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="legal-consent">
+          <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="age-consent">
+          <span>Jag är minst 18 år gammal.</span>
+        </label>
+
+        <div id="auth-feedback" class="feedback-banner"></div>
+
+        <div style="display:flex; gap:10px;">
+          <button type="button" id="btn-login" class="btn">Logga in</button>
+          <button type="button" id="btn-register" class="btn btn-secondary">Skapa profil</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:8px;">
+          <div id="js-health" style="font-size:0.78rem; color:#ef4444;">
+            🔴 Laddar JavaScript-motor...
+          </div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
+            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#475569; font-size:0.74rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
+          </div>
+        </div>
+
+      </div>
+    </div>

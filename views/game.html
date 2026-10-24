@@ -1,0 +1,90 @@
+<!-- 3. ROLLSPELSMOTORN (UPPGRADERT: TOKEN-SNÅLT RULLANDE MINNE + DYNAMISKA KNAPPAR/FRITEXT) -->
+    <div id="view-game" class="view">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 id="game-title" style="margin:0;">Äventyr</h2>
+          <div>
+            <span class="status-badge badge-engine">Flash 3.1 Lite</span>
+            <span id="turn-indicator" class="status-badge">Runda 1</span>
+          </div>
+        </div>
+        <p id="game-desc" style="font-size:0.85rem; margin: 8px 0 16px 0;"></p>
+
+        <div id="chat-history" class="chat-box"></div>
+
+        <!-- DYNAMISKT VALOMRÅDE (65% KNAPPAR / 35% FRITEXT) -->
+        <div id="game-interaction-container" style="margin-top: 14px;">
+          <!-- KNAPPVAL (VISAS VID CHOICE) -->
+          <div id="choice-container" style="display:none; flex-direction:column; gap:8px;"></div>
+
+          <!-- FRITEXTFÄLT (VISAS VID FREE_TEXT) -->
+          <div id="freetext-container" style="display:none;">
+            <div style="font-size:0.82rem; color:#f59e0b; margin-bottom:6px; font-weight:600;">
+              ✍️ Emotionellt vägskäl / dilemma: Formulera ditt svar med egna ord
+            </div>
+            <div class="input-row" style="margin-top:0;">
+              <input type="text" id="user-input" placeholder="Vad gör eller säger du?...">
+              <button type="button" id="send-btn" class="btn" style="width:auto; margin:0;">Svara</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; text-align:right;">
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="if (confirm('Avsluta äventyret? Ingenting från den här sessionen sparas.')) leaveGame();">Avbryt äventyret</button>
+        </div>
+
+        <div id="epilogue-action" style="display:none; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+          <p style="margin:0 0 10px 0; color:#6ee7b7; font-size:0.9rem; font-weight:600;">✨ Äventyret och epilogen är avslutade!</p>
+          <button type="button" id="btn-to-questions" class="btn">Gå vidare till avslutande reflektionsfrågor ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.5. AVSLUTANDE REFLEKTIONSFRÅGOR EFTER EPILOGEN -->
+    <div id="view-post-questions" class="view">
+      <div class="card">
+        <span class="status-badge">Steg 2 av 2: Reflektion efter äventyret</span>
+        <h2>Avslutande frågor om ert samarbete</h2>
+        <p>Nu när äventyret är över – svara kort med egna ord på hur du upplevde samspelet. Dina svar vävs samman med dina val i berättelsen när Argon 4.0 tar fram din profil.</p>
+
+        <label>1. Hur upplevde du samarbetet med din kompanjon? När fungerade det som bäst eller sämst?</label>
+        <textarea id="post-q1" placeholder="Beskriv kort hur du kände inför er arbetsfördelning och ton..."></textarea>
+
+        <label>2. Vilket beslut under äventyret kändes svårast eller mest avgörande för dig, och varför?</label>
+        <textarea id="post-q2" placeholder="Berätta kort vad du prioriterade när det drog ihop sig..."></textarea>
+
+        <label>3. Om detta hade varit en verklig situation med en partner i vardagen – vad hade du behövt mest från den andra personen?</label>
+        <textarea id="post-q3" placeholder="T.ex. tydlighet, lugn, humor, att bli lyssnad på, eget utrymme..."></textarea>
+
+        <div id="post-q4-wrap" style="display:none;">
+          <label>4. Hur kändes det att plötsligt spela din kompanjons roll? Vad förstod eller förvånades du över?</label>
+          <textarea id="post-q4" placeholder="Beskriv kort vad som kändes annorlunda eller bekant..."></textarea>
+        </div>
+
+        <button type="button" id="btn-to-summary" class="btn">🧠 Skicka in &amp; Gå till sammanställningen (Argon 4.0)</button>
+      </div>
+    </div>
+
+    <!-- 4. ANALYS & PROFILVY -->
+    <div id="view-profile-result" class="view">
+      <div class="card">
+        <span class="status-badge badge-engine">Strikt Argon 4.0 Djupanalys</span>
+        <h2 id="profile-result-heading">Din Profil sammanställs</h2>
+        <pre id="analysis-result"></pre>
+        <div id="argon-queued-box" style="display:none; background:rgba(217, 119, 6, 0.18); border:1px solid #f59e0b; border-radius:8px; padding:16px; margin-top:14px;">
+          <strong style="color:#fde68a; font-size:0.95rem; display:block; margin-bottom:6px;">🛡️ Strikt Argon-garanti: Ditt äventyr ligger i bakgrundskö!</strong>
+          <p style="font-size:0.86rem; color:#e2e8f0; margin:0 0 8px 0;">
+            Eftersom Relationspiloten vägrar kompromissa med sämre AI-modeller för din profilering väntar vi in <strong>Gemini 4.0 Argon</strong>. Systemet provar automatiskt igen var 10:e minut (<span id="argon-next-retry-clock">om 10 min</span>).
+          </p>
+          <p style="font-size:0.84rem; color:#6ee7b7; margin:0 0 12px 0; font-weight:600;">
+            ✅ Hela ditt äventyr är sparat! Du kan tryggt stänga webbläsaren eller fliken nu – eller gå till Matchningshubben så uppdateras profilen automatiskt i Supabase så fort Argon svarar.
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn" style="flex:1; margin:0; background:#d97706;" onclick="window.processArgonQueueNow(true)">🔄 Försök nå Argon 4.0 nu</button>
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.switchView('view-hub')">🏠 Gå till Matchningshubben under tiden</button>
+          </div>
+        </div>
+        <button type="button" id="retry-btn" class="btn btn-secondary" style="display:none;">Försök igen nu</button>
+        <button type="button" id="proceed-btn" class="btn" style="display:none;">Spara i Valvet &amp; Gå till Huvudsidan</button>
+      </div>
+    </div>
