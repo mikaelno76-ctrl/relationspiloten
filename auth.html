@@ -39,6 +39,28 @@
           <button type="button" id="btn-register" class="btn btn-secondary">Skapa profil</button>
         </div>
 
+        
+        <!-- DIREKTGENENVÄG TILL SNABBTESTER & PSYKOAKUSTISK LJUDANALYS (CRM) -->
+        <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
+          <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; margin-bottom:8px;">
+            🧪 Direktlabb &amp; Fristående Tester (kan även köras direkt utan inloggning):
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Psykoakustisk Ljudanalys (CRM)
+            </button>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+              🏛️ Somatisk &amp; Taktil + CRM
+            </button>
+            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openSwipeLab()">
+              🔥 360° Vektorswipe
+            </button>
+            <button type="button" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openTaxiMenu()">
+              🚕 Öppna Baksätes-Labbet
+            </button>
+          </div>
+        </div>
+
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:8px;">
           <div id="js-health" style="font-size:0.78rem; color:#ef4444;">
             🔴 Laddar JavaScript-motor...

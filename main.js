@@ -7,13 +7,16 @@ async function loadModularViews() {
     const src = slot.getAttribute("data-view-src");
     if (!src) return;
     try {
-      const res = await fetch(src);
+      const sep = src.indexOf("?") === -1 ? "?" : "&";
+      const res = await fetch(src + sep + "v=7.2", { cache: "no-store" });
       if (res.ok) {
         const html = await res.text();
-        slot.outerHTML = html;
+        if (html && html.trim().length > 20) {
+          slot.outerHTML = html;
+        }
       }
     } catch (err) {
-      console.warn("Kunde inte hämta vy-fil " + src + " via fetch (t.ex. vid lokal file://):", err);
+      console.warn("Använder inbäddad vy för " + src + " (lokal file:// eller offline):", err);
     }
   }));
 }

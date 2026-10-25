@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relationspiloten — Samarbetsrollspel, 360° Vektorkompass & Röst-till-Bild</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Relationspiloten v7 — Samarbetsrollspel, 360° Kompass, Somatik &amp; Psykoakustisk CRM</title>
+  <link rel="stylesheet" href="css/styles.css?v=7.2">
 </head>
 <body>
   <div class="container">
@@ -14,30 +14,1430 @@
       <button type="button" class="lang-btn" id="lang-btn-en" onclick="window.setAppLanguage('en')">🇬🇧 EN</button>
     </div>
 
-    <!-- Modulära HTML-vyer (laddas automatiskt in från undermappen views/ vid sidstart) -->
-    <div data-view-src="views/auth.html"></div>
-    <div data-view-src="views/interests.html"></div>
-    <div data-view-src="views/hub.html"></div>
-    <div data-view-src="views/game.html"></div>
-    <div data-view-src="views/swipe-lab.html"></div>
-    <div data-view-src="views/somatic-lab.html"></div>
-    <div data-view-src="views/labs.html"></div>
-    <div data-view-src="views/admin.html"></div>
-    <div data-view-src="views/modals.html"></div>
+    <!-- Modulära HTML-vyer (både förinbäddade för noll-fördröjning/lokal körning och dynamiskt synkade från views/*.html?v=7.2) -->
+    <div data-view-src="views/auth.html">
+<!-- 1. INLOGGNING, REGISTRERING & API-NYCKEL -->
+    <div id="view-auth" class="view active">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h1>Relationspiloten</h1>
+          <span class="status-badge badge-engine">Flash 3.1 Lite + Argon 4.0</span>
+        </div>
+        <p>Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
+
+        <label>Användar-alias:</label>
+        <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren">
+
+        <label>Lösenord:</label>
+        <input type="password" id="auth-pass" placeholder="Minst 6 tecken...">
+
+
+
+        <div class="legal-box">
+          <strong>GDPR &amp; Modellarkitektur:</strong><br>
+          • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
+          • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
+          • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
+          • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+        </div>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="legal-consent">
+          <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="age-consent">
+          <span>Jag är minst 18 år gammal.</span>
+        </label>
+
+        <div id="auth-feedback" class="feedback-banner"></div>
+
+        <div style="display:flex; gap:10px;">
+          <button type="button" id="btn-login" class="btn">Logga in</button>
+          <button type="button" id="btn-register" class="btn btn-secondary">Skapa profil</button>
+        </div>
+
+        
+        <!-- DIREKTGENENVÄG TILL SNABBTESTER & PSYKOAKUSTISK LJUDANALYS (CRM) -->
+        <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
+          <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; margin-bottom:8px;">
+            🧪 Direktlabb &amp; Fristående Tester (kan även köras direkt utan inloggning):
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Psykoakustisk Ljudanalys (CRM)
+            </button>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+              🏛️ Somatisk &amp; Taktil + CRM
+            </button>
+            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openSwipeLab()">
+              🔥 360° Vektorswipe
+            </button>
+            <button type="button" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openTaxiMenu()">
+              🚕 Öppna Baksätes-Labbet
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:8px;">
+          <div id="js-health" style="font-size:0.78rem; color:#ef4444;">
+            🔴 Laddar JavaScript-motor...
+          </div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
+            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#475569; font-size:0.74rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/interests.html">
+<!-- 1.5. FÖRBEREDELSE: SCENARIOBYGGARE, SPRÅK & INTRESSEN -->
+    <div id="view-interests" class="view">
+      <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge" style="margin:0;">Steg 1 av 2: Anpassning &amp; Scenariobyggare</span>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.78rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openPsychoacousticCrmLab()">🎧 Direkt till Ljudanalys (CRM)</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.78rem; border:1px solid #f59e0b; color:#fde68a;" onclick="window.openSomaticLab()">🏛️ Somatisk &amp; Taktil</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.78rem;" onclick="window.switchView('view-hub')">🏠 Gå till Matchningshubben</button>
+          </div>
+        </div>
+        <h1>Vad engagerar dig?</h1>
+        <p>Innan rollspelet startar formar vi grundäventyret direkt efter dina val och intressen så att världen och utmaningen känns levande för dig. Välj i menyerna och/eller skriv fritt under varje punkt.</p>
+
+        <div class="builder-box" style="margin-bottom:14px;">
+          <label for="base-lang-select">🌍 Språk för själva rollspelet:</label>
+          <select id="base-lang-select">
+            <option value="Svenska" selected>Svenska</option>
+            <option value="Engelska (English)">Engelska (English)</option>
+            <option value="Spanska (Español - Argentina / voseo)">Spanska (Español - Argentina / voseo)</option>
+            <option value="Spanska (Español)">Spanska (Español standard)</option>
+            <option value="Norska">Norska</option>
+            <option value="Danska">Danska</option>
+            <option value="Tyska (Deutsch)">Tyska (Deutsch)</option>
+            <option value="Franska (Français)">Franska (Français)</option>
+          </select>
+          <input type="text" id="base-lang-free" placeholder="Valfritt: Ange annat språk, dialekt eller stil fritt här...">
+        </div>
+
+        <div class="builder-grid">
+          <div class="builder-box">
+            <label for="base-world-select">🌌 Värld / Genre:</label>
+            <select id="base-world-select">
+              <option value="Verkligheten" selected>Verkligheten</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Postapokalyptiskt">Postapokalyptiskt</option>
+              <option value="Rymdäventyr">Rymdäventyr</option>
+            </select>
+            <input type="text" id="base-world-free" placeholder="Valfritt: Eget val eller detalj om världen...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-era-label" for="base-era-select">⏳ Tidsepok:</label>
+            <select id="base-era-select">
+              <option value="Nutid" selected>Nutid</option>
+              <option value="Stenåldern">Stenåldern</option>
+              <option value="Vikingatiden">Vikingatiden</option>
+              <option value="1500-talet">1500-talet</option>
+              <option value="1600-talet">1600-talet</option>
+              <option value="1700-talet">1700-talet</option>
+              <option value="1800-talet">1800-talet</option>
+              <option value="1920-talet">1920-talet</option>
+              <option value="1930-talet">1930-talet</option>
+              <option value="1940-talet">1940-talet</option>
+              <option value="1950-talet">1950-talet</option>
+              <option value="1960-talet">1960-talet</option>
+              <option value="1970-talet">1970-talet</option>
+              <option value="1980-talet">1980-talet</option>
+              <option value="1990-talet">1990-talet</option>
+            </select>
+            <input type="text" id="base-era-free" placeholder="Valfritt: Eget årtal eller fri epok...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-context-label" for="base-context-select">🎭 Kontext / Tema:</label>
+            <select id="base-context-select">
+              <option value="Familjedrama" selected>Familjedrama</option>
+              <option value="Krig">Krig</option>
+              <option value="Politik">Politik</option>
+              <option value="Tonårsdrama">Tonårsdrama</option>
+              <option value="Sport">Sport</option>
+            </select>
+            <input type="text" id="base-context-free" placeholder="Valfritt: Egen kontext eller situation...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-super-label" for="base-super-select">✨ Tillåta övernaturliga inslag:</label>
+            <select id="base-super-select">
+              <option value="Nej" selected>Nej</option>
+              <option value="Ja">Ja</option>
+            </select>
+            <input type="text" id="base-super-free" placeholder="Valfritt: Precisera fritt (t.ex. folktro, drömmar)...">
+          </div>
+        </div>
+
+        <label>Övriga intressen, miljöer &amp; teman du vill ha i äventyret:</label>
+        <textarea id="user-interests" placeholder="T.ex. Segling i skärgården, gamla motorer, historia, tysta vinterstugor, djur, filosofi, matlagning..."></textarea>
+
+        <label>Vad vill du helst undvika i fiktionen?:</label>
+        <input type="text" id="user-avoid" placeholder="T.ex. Skräck, våld, övernaturligt, stress, ytligt vädersnack...">
+
+        <div style="background:#141922; border-left:4px solid #38bdf8; border-radius:8px; padding:12px 14px; margin-top:8px; margin-bottom:12px; font-size:0.84rem; color:#cbd5e1;">
+          ℹ️ <strong>Regel för antal försök:</strong> Du har <strong>max 2 försök</strong> på varje rollspelsdelmoment (<span id="attempts-base-label" style="color:#6ee7b7; font-weight:600;">0 av 2 förbrukade</span>). För övriga tester (360°-svajp, röst-till-bild, vardagsbilder &amp; minne) gäller <strong>endast 1 försök</strong>.
+        </div>
+
+        <div id="interests-feedback" class="feedback-banner"></div>
+
+        <button type="button" id="btn-start-base" class="btn">🚀 Skapa mitt äventyr med Flash 3.1 Lite (16 rundor)</button>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/hub.html">
+<!-- 2. HUVUDSIDAN (MATCHNINGSHUBB) -->
+    <div id="view-hub" class="view">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span class="status-badge">Certifierad Profil</span>
+            <span class="status-badge badge-engine">Analyserad av Argon 4.0</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openFaqModal()">❓ Frågor &amp; svar</button>
+            <button type="button" id="btn-logout" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px;">Logga ut</button>
+          </div>
+        </div>
+        <h1 style="margin-top:10px;">Matchningshubben</h1>
+        <p>Inloggad som: <strong id="hub-user-name"></strong></p>
+
+        <div style="margin-top: 15px; border-left: 3px solid var(--accent); padding-left: 15px;">
+          <h3>Din Aktiva Beteendeprofil</h3>
+          <p style="font-size:0.75rem; margin:0 0 6px 0;">AI-genererad reflektion baserad på dina val i ett spel. Inte en psykologisk bedömning eller diagnos.</p>
+          <p id="profile-text" style="font-size:0.95rem; white-space:pre-wrap;"></p>
+        </div>
+
+        <div id="argon-queue-hub-banner" style="display:none; margin-top:16px; background:rgba(217, 119, 6, 0.18); border:1px solid #f59e0b; border-radius:8px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <strong style="color:#fde68a; font-size:0.92rem;">⏳ Argon 4.0 Kö-motor aktiv i bakgrunden</strong>
+            <span id="argon-queue-count-badge" class="status-badge badge-gold" style="margin:0;">1 jobb i kö</span>
+          </div>
+          <p id="argon-queue-hub-msg" style="font-size:0.83rem; color:#e2e8f0; margin:6px 0 10px 0;">
+            Systemet väntar strikt på <strong>Gemini 4.0 Argon</strong> (inga sämre reservmodeller tillåts). Vi försöker automatiskt var 10:e minut i bakgrunden. Du kan tryggt stänga webbläsaren – ditt underlag är säkrat och körs klart så fort Argon svarar!
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn" style="width:auto; margin:0; padding:7px 14px; font-size:0.8rem; background:#d97706;" onclick="window.processArgonQueueNow(true)">🔄 Testa Argon 4.0 direkt nu</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 14px; font-size:0.8rem;" onclick="window.clearArgonQueue()">✕ Rensa kö</button>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; border-top: 1px solid var(--border); padding-top:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <button type="button" id="btn-replay-base" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">Spela nytt Grundäventyr (Scenariobyggaren)</button>
+          <button type="button" id="btn-delete-data" class="btn btn-danger" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">Radera all min data (Art. 17)</button>
+        </div>
+      </div>
+
+      <!-- MATCHAR: TOPPLISTA (GULD, SILVER, BRONS) MED 4 FILTER & GROK-ISBRYTARE -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+          <h2 style="margin:0;">Aktuella Matchningar (Topp 3)</h2>
+          <span class="status-badge badge-engine" style="margin:0;">Argon 4.0 Korssyntes + Grok-Isbrytare</span>
+        </div>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:12px;">
+          <label for="match-filter-select" style="display:block; font-size:0.85rem; font-weight:600; color:#38bdf8; margin-bottom:6px;">
+            🎯 Välj Matchningsfilter (Styr hur Argon 4.0 viktar rollspel, 360°-vektorer &amp; röstspegling):
+          </label>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <select id="match-filter-select" style="flex:1; min-width:240px; margin:0;">
+              <option value="spark">🔥 1. Kemi, Gnista &amp; Polära Motpoler (Magnetisk spänning &amp; komplementär dynamik)</option>
+              <option value="harmony" selected>🏡 2. Trygghet &amp; Vardagsgemenskap (Delade grundvärderingar, lugn &amp; pålitlig rytm)</option>
+              <option value="intellect">🧠 3. Intellektuell Synergi &amp; Djupa Samtal (Idéutbyte, nyfikenhet &amp; mentalt tuggmotstånd)</option>
+              <option value="collab">🚀 4. Professionellt Idésamarbete &amp; Co-Founder (Beslutskraft, kompletterande styrkor &amp; leverans)</option>
+            </select>
+            <button type="button" id="btn-run-match" class="btn" style="width:auto; margin:0; padding:11px 16px; font-size:0.88rem;">
+              🧠 Kör Matchning med valt filter
+            </button>
+          </div>
+        </div>
+        <p id="match-status-msg" style="font-size:0.82rem; color:var(--muted); margin:6px 0 0 0;"></p>
+
+        <div class="grid" id="match-list"><p style="font-size:0.9rem;">Inga matchningar än. Matchning kräver att fler medlemmar har gjort äventyret och godkänt sin profil. Tryck på knappen ovan när det finns fler.</p></div>
+
+        <!-- GEMENSAM INBÄDDAD CHATTMODUL -->
+        <div id="hub-chat-container" style="display:none; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong id="active-chat-partner" style="font-size:0.95rem; color:var(--text);"></strong>
+            <button type="button" id="btn-close-chat" class="btn btn-secondary" style="width:auto; margin:0; padding:4px 8px; font-size:0.75rem;">Minimera chatt</button>
+          </div>
+
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:6px; padding:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px; font-size:0.82rem;">
+            <label style="margin:0; font-weight:600; color:var(--muted);">Frivillig presentation i chatten:</label>
+            <select id="user-gender-select" style="width:auto; margin:0; padding:4px 8px; font-size:0.82rem;">
+              <option value="">(Inget angivet)</option>
+              <option value="Kvinna">Kvinna</option>
+              <option value="Man">Man</option>
+              <option value="Annat">Annat</option>
+            </select>
+            <span style="color:var(--muted); font-size:0.75rem;">Visas diskret bredvid ditt alias för motparten.</span>
+          </div>
+          
+          <div id="hub-chat-box" class="chat-box" style="height:240px;">
+            <div class="msg model">Anonymiserad säker kanal aktiv. Endast ni två ser detta samtal.</div>
+          </div>
+
+          <div class="input-row">
+            <input type="text" id="hub-chat-input" placeholder="Skriv ett meddelande...">
+            <button type="button" id="btn-send-hub-msg" class="btn" style="width:auto; margin:0;">Skicka</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border: 1px solid #38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h2 style="margin:0;">⚡ Visuell Intuitiv Analys &amp; Självbildskompass</h2>
+          <span class="status-badge badge-engine">360° Vektor + Millisekunds-sensor</span>
+        </div>
+        <p>Utforska din omedvetna attraktions- och tillitskompass i 360 grader, följt av tvingad gallring och val av dina 3 egna uttrycks-arketyper för visuell korsmatchning.</p>
+        <div style="background:#11151c; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:0.82rem; color:#fde68a;">
+          ⚠️ <strong>Observera innan start:</strong> För detta test gäller <strong>endast 1 försök</strong> (<span id="attempts-swipe-label">0 av 1 förbrukat</span>).
+        </div>
+        <button type="button" id="btn-hub-swipelab" class="btn">🔥 Starta 360° Vektorswipe &amp; Självbildstest</button>
+      </div>
+
+      <!-- SOMATISK & TAKTIL PROJEKTION + DJÄVULSTEST (2-STEGS RADIALHJUL) -->
+      <div class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h2 style="margin:0;">🏛️ Somatisk &amp; Taktil Projektion (Kropp, Hand/Fot &amp; Skärpa)</h2>
+          <span class="status-badge badge-gold">88 Konststimuli + 2-stegs Radialhjul</span>
+        </div>
+        <p>
+          Mäter omedveten somatisk och taktil dragningskraft via konstnärliga kroppsarketyper (Form + Färg) samt händer och fötter i rödkrita (Textur + Värme), kombinerat med inbäddade Off-Guard-frågor som mäter din profilskärpa.
+        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; background:#11151c; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:0.82rem; color:#fde68a;">
+          <span>⚠️ <strong>1 skarpt försök i profilen:</strong> (<span id="attempts-somatic-label">0 av 1 förbrukat</span>)</span>
+          <span id="hub-clarity-badge" class="status-badge badge-engine" style="margin:0;">⚡ Profilskärpa: 100%</span>
+          <span id="hub-mood-ladder-badge" class="status-badge" style="margin:0;">🎨 Symbolkompass: 0/2</span>
+        </div>
+        <button type="button" id="btn-hub-somaticlab" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+          🏛️ Starta Somatisk &amp; Taktil Projektion
+        </button>
+      </div>
+
+      <!-- PSYKOAKUSTISK LJUDANALYS & RÖSTARKETYPER (CONTINUOUS AFFECT TRACKING / CRM) -->
+      <div class="card" style="border: 1px solid #38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h2 style="margin:0;">🎧 Psykoakustisk Ljudanalys &amp; Vokal Kemi (Continuous Affect Tracking)</h2>
+          <span class="status-badge badge-engine">8 Ljudspår (bed1–bed4 &amp; v1–v4) • 4 Hz CRM</span>
+        </div>
+        <p>
+          Hur reagerar ditt nervsystem på olika ljudvärldar och röstklanger? Lyssna på 4 musikbakgrunder (<code>bed1–bed4</code>: akustisk cello/gitarr, kinematisk lo-fi, neosoul med drop-stop och minimalistiskt felt piano) samt 4 vokalarketyper (<code>v1–v4</code>: djup bröstklang, hudnära viskning, kristallklar sopran och hes soul/jazz). Du följer ljudet kontinuerligt i realtid med fingret på vår 2D-affektyta medan Argon 4.0 korrelerar din kurva mot varje brytpunkt och dramatopp i cue-sheetet.
+        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; background:#11151c; border-left:3px solid #38bdf8; padding:8px 12px; border-radius:6px; margin-bottom:10px; font-size:0.82rem; color:#bae6fd;">
+          <span>🎧 <strong>8 kalibrerade ljudspår med fullständigt Cue-Sheet:</strong> (<span id="attempts-crm-label">0 av 1 förbrukat</span>)</span>
+          <span class="status-badge badge-gold" style="margin:0;">Argon 4.0 Realtids-korrelation</span>
+        </div>
+        <button type="button" id="btn-hub-crmlab" class="btn" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
+          🎧 Starta Psykoakustisk Ljudanalys (bed1–bed4 &amp; v1–v4)
+        </button>
+      </div>
+
+
+      <!-- FÖRDJUPANDE MODULER: VÄLJ DILEMMA + EGET TEMA -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0;">Fördjupande Rollspelsmoduler (35 Rundor)</h2>
+          <span class="status-badge badge-engine">Spelledare: Flash 3.1 Lite</span>
+        </div>
+        <p>Välj vilket psykologiskt dilemma du vill utforska och forma själv språk, miljö och epok. Efter avslutat äventyr väver Argon 4.0 in de nya insikterna i din befintliga profil.</p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px;">
+          <h3 style="font-size:1rem; margin-bottom:10px;">1. Skapa din värld &amp; kompanjon</h3>
+
+          <div class="builder-box" style="margin-bottom:14px;">
+            <label for="deep-lang-select">🌍 Språk för själva rollspelet:</label>
+            <select id="deep-lang-select">
+              <option value="Svenska" selected>Svenska</option>
+              <option value="Engelska (English)">Engelska (English)</option>
+              <option value="Spanska (Español - Argentina / voseo)">Spanska (Español - Argentina / voseo)</option>
+              <option value="Spanska (Español)">Spanska (Español standard)</option>
+              <option value="Norska">Norska</option>
+              <option value="Danska">Danska</option>
+              <option value="Tyska (Deutsch)">Tyska (Deutsch)</option>
+              <option value="Franska (Français)">Franska (Français)</option>
+            </select>
+            <input type="text" id="deep-lang-free" placeholder="Valfritt: Ange annat språk eller dialekt fritt här...">
+          </div>
+
+          <div class="builder-grid">
+            <div class="builder-box">
+              <label for="deep-world-select">🌌 Värld / Genre:</label>
+              <select id="deep-world-select">
+                <option value="Verkligheten" selected>Verkligheten</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Postapokalyptiskt">Postapokalyptiskt</option>
+                <option value="Rymdäventyr">Rymdäventyr</option>
+              </select>
+              <input type="text" id="deep-world-free" placeholder="Valfritt: Eget val eller detalj om världen...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-era-label" for="deep-era-select">⏳ Tidsepok:</label>
+              <select id="deep-era-select">
+                <option value="Nutid" selected>Nutid</option>
+                <option value="Stenåldern">Stenåldern</option>
+                <option value="Vikingatiden">Vikingatiden</option>
+                <option value="1500-talet">1500-talet</option>
+                <option value="1600-talet">1600-talet</option>
+                <option value="1700-talet">1700-talet</option>
+                <option value="1800-talet">1800-talet</option>
+                <option value="1920-talet">1920-talet</option>
+                <option value="1930-talet">1930-talet</option>
+                <option value="1940-talet">1940-talet</option>
+                <option value="1950-talet">1950-talet</option>
+                <option value="1960-talet">1960-talet</option>
+                <option value="1970-talet">1970-talet</option>
+                <option value="1980-talet">1980-talet</option>
+                <option value="1990-talet">1990-talet</option>
+              </select>
+              <input type="text" id="deep-era-free" placeholder="Valfritt: Eget årtal eller fri epok...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-context-label" for="deep-context-select">🎭 Kontext / Tema:</label>
+              <select id="deep-context-select">
+                <option value="Familjedrama" selected>Familjedrama</option>
+                <option value="Krig">Krig</option>
+                <option value="Politik">Politik</option>
+                <option value="Tonårsdrama">Tonårsdrama</option>
+                <option value="Sport">Sport</option>
+              </select>
+              <input type="text" id="deep-context-free" placeholder="Valfritt: Egen kontext eller situation...">
+            </div>
+
+            <div class="builder-box">
+              <label id="deep-super-label" for="deep-super-select">✨ Tillåta övernaturliga inslag:</label>
+              <select id="deep-super-select">
+                <option value="Nej" selected>Nej</option>
+                <option value="Ja">Ja</option>
+              </select>
+              <input type="text" id="deep-super-free" placeholder="Valfritt: Precisera fritt...">
+            </div>
+          </div>
+
+          <label style="font-size:0.85rem;">Övrig miljö, epok och atmosfär (valfritt):</label>
+          <input type="text" id="deep-env" placeholder="T.ex. Ett segelfartyg på 1800-talet, en antikvarisk bokhandel i regnigt London, eller en Mars-bas...">
+          
+          <label style="font-size:0.85rem;">Kompanjon (vem reser du med?):</label>
+          <input type="text" id="deep-companion" placeholder="T.ex. Envis maskinist, tystlåten kollega, äventyrlig forskare...">
+
+          <label class="checkbox-label" style="margin-top:4px;">
+            <input type="checkbox" id="deep-swap-twist">
+            <span>🔄 Ja till en överraskande twist (valfritt): något oväntat händer mitt i äventyret som förändrar din roll. Du får inga detaljer i förväg och kan avbryta när som helst.</span>
+          </label>
+        </div>
+
+        <h3 style="font-size:1rem; margin-bottom:6px;">2. Välj dilemmats fokus</h3>
+        <div style="background:#11151c; border-left:3px solid #38bdf8; padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:0.82rem; color:#cbd5e1;">
+          ℹ️ <strong>Observera innan du startar:</strong> För varje fördjupande rollspelsmodul gäller <strong>max 2 försök</strong>.
+        </div>
+        <div class="grid">
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">A. Resursbrist &amp; Hårda Beslut</h3>
+              <span id="attempts-deep-resource-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Logistik, knapphet, krisrespons och prioriteringar under stress.</p>
+            <button type="button" id="btn-deep-resource" class="btn" onclick="window.startDeepAdventure('resource')">Starta Modul A (35 rundor)</button>
+          </div>
+
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">B. Värdekonflikt &amp; Maktbalans</h3>
+              <span id="attempts-deep-conflict-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Samarbete, lojalitet, gränssättning och etiska dilemman.</p>
+            <button type="button" id="btn-deep-conflict" class="btn" onclick="window.startDeepAdventure('conflict')">Starta Modul B (35 rundor)</button>
+          </div>
+
+          <div class="scenario-item">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">C. Vardagslunk &amp; Friktion</h3>
+              <span id="attempts-deep-routine-badge" class="status-badge" style="margin:0;">Försök: 0 / 2</span>
+            </div>
+            <p><strong>Psykologiskt fokus:</strong> Tålamod, lyhördhet, tystnad och hantering av vardagsfriktion.</p>
+            <button type="button" id="btn-deep-routine" class="btn" onclick="window.startDeepAdventure('routine')">Starta Modul C (35 rundor)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALFRIA KOMPLETTERANDE MULTIMODALA TESTER -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0;">Valfria kompletterande tester</h2>
+          <span class="status-badge badge-engine">Multimodal motor: Argon 4.0</span>
+        </div>
+        <p>Utforska vårt psykologiska växelspel (Röst ➔ AI-målning ➔ Din tolkning), granska vardagsbilder och reflektera över en vändpunkt.</p>
+        <div style="background:#11151c; border-left:3px solid #f59e0b; padding:10px 12px; border-radius:6px; margin-bottom:14px; font-size:0.83rem; color:#fde68a;">
+          ⚠️ <strong>Viktigt innan du startar:</strong> För dessa kompletterande tester gäller <strong>endast 1 försök per delmoment</strong> (Röst-till-bild: <span id="attempts-voice-label">0/1</span> • Vardagsbilder: <span id="attempts-photos-label">0/1</span> • Minnesfråga: <span id="attempts-memory-label">0/1</span>).
+        </div>
+
+        <div class="grid">
+                    <div class="scenario-item" style="border: 1px solid #ec4899; border-left: 4px solid #ec4899;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">🎧🎼 Psykoakustisk Ljudanalys &amp; Vokal Kemi (Continuous Affect Tracking / CRM)</h3>
+              <span class="status-badge badge-engine" style="margin:0;">bed1–bed4 &amp; v1–v4 (4 Hz)</span>
+            </div>
+            <p><strong>Vad det fångar:</strong> Hur ditt nervsystem reagerar kontinuerligt i realtid på 4 musikbakgrunder (<code>bed1–bed4</code>) och 4 röstarketyper (<code>v1–v4</code>: djup bröstklang, hudnära viskning, kristallklar sopran och hes soul/jazz). Argon 4.0 korrelerar din rörelsekurva mot hela cue-sheetet (stråkentréer, tvärstopp, dramatoppar och nakna viskande epiloger).</p>
+            <button type="button" class="btn" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800; margin-top:6px;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Öppna Psykoakustisk Ljudanalys (CRM: bed1–v4)
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border: 1px solid #38bdf8;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0;">🎙️🎨 Växelspel med Argon 4.0: Röst ➔ AI-bild ➔ Din tolkning</h3>
+              <span class="status-badge badge-engine" style="margin:0;">Projektion &amp; Spegling</span>
+            </div>
+            <p><strong>Hur det fungerar:</strong> Berätta fritt med din röst om något <em>vackert</em>, något <em>sorgligt</em> eller något <em>fult/skavande</em>. Argon 4.0 lyssnar på vad du säger och din intonation, och målar en bild av vad den hörde. Därefter får du berätta vad du själv ser i bilden.</p>
+
+            <label style="font-size:0.85rem; font-weight:600; color:#cbd5e1;">1. Välj vad du vill beskriva med rösten:</label>
+            <select id="voice-theme-select" style="margin-bottom:10px;">
+              <option value="Något vackert och djupt meningsfullt">✨ Beskriv något vackert (eller en plats/stund som ger dig ro)</option>
+              <option value="Något sorgligt, vemodigt eller förlorat">🌧️ Beskriv något sorgligt eller vemodigt som berört dig</option>
+              <option value="Något fult, trasigt eller skavande">⚡ Beskriv något fult, kaotiskt eller något som skaver i världen</option>
+              <option value="Kontrasten mellan något vackert och något fult/sorgligt">🎭 Beskriv både något vackert och något fult/sorgligt</option>
+            </select>
+
+            <label style="font-size:0.85rem;">Spela in din röst (ca 20–30 sek) eller ladda upp ljudfil:</label>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+              <button type="button" id="btn-voice-record" class="btn btn-secondary" style="margin-top:0; flex:1;">🎙️ Spela in med mikrofon (max 30s)</button>
+              <input type="file" id="voice-file" accept="audio/*" style="margin:0; flex:1; padding:8px;">
+            </div>
+            <div id="voice-status" style="font-size:0.8rem; color:var(--muted); margin-top:4px; margin-bottom:8px;"></div>
+
+            <label style="font-size:0.82rem; color:var(--muted);">Valfritt stöd (om du inte har mikrofon kan du även skriva din beskrivning här):</label>
+            <textarea id="voice-transcript" placeholder="Frivilligt: berätta med ord eller lämna tomt om du spelat in ljud ovan..." style="min-height:55px; margin-bottom:8px;"></textarea>
+
+            <button type="button" id="btn-generate-voice-art" class="btn" style="background:#0284c7; margin-top:4px;" onclick="window.generateVoiceArtWithArgon()">
+              🎨 Steg 1: Låt Argon 4.0 lyssna &amp; måla det den hörde
+            </button>
+            <p id="voice-art-status" style="font-size:0.82rem; color:#38bdf8; margin:6px 0 0 0;"></p>
+
+            <!-- STEG 2 AV VÄXELSPELET: ARGONS MÅLNING & ANVÄNDARENS REAKTION -->
+            <div id="voice-art-stage2" style="display:none; margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+              <div style="background:#11151c; border-left:3px solid #38bdf8; padding:10px 12px; border-radius:6px; margin-bottom:12px;">
+                <strong style="color:#38bdf8; font-size:0.85rem;">🎨 Argon 4.0 säger:</strong>
+                <p id="argon-art-intro" style="margin:4px 0 0 0; font-size:0.88rem; color:#e2e8f0; font-style:italic;"></p>
+              </div>
+
+              <div id="argon-artwork-container" style="width:100%; max-width:440px; margin:0 auto 12px; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:#090d13; box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+
+              <label style="font-size:0.88rem; font-weight:600; color:#fde68a;">
+                2. Din tur igen: Vad tycker du om teckningen/målningen? Vad ser du i den och vilken känsla väcker den?
+              </label>
+              <textarea id="voice-art-reaction" placeholder="Berätta spontant: Stämmer den med vad du kände, eller ser du något helt annat i formerna och färgerna?..." style="min-height:75px;"></textarea>
+            </div>
+          </div>
+
+          <div class="scenario-item">
+            <h3>📷 Tre bilder ur din verklighet</h3>
+            <p><strong>Vad det fångar:</strong> Vad du väljer att rikta blicken mot i vardagen. Hellre sant än snyggt.</p>
+            <div style="background:#11151c; border-radius:6px; padding:10px; margin:8px 0; font-size:0.85rem;">
+              <strong>Regeln (granskas av Argon 4.0):</strong> Ingen selfie. Ingen solnedgång. Inget gym. Inga gruppfoton.
+            </div>
+            <label style="font-size:0.85rem;">Bild 1</label>
+            <input type="file" id="photo1" accept="image/*" onchange="window.previewPhoto(this, 'prev1')">
+            <img id="prev1" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption1" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+
+            <label style="font-size:0.85rem;">Bild 2</label>
+            <input type="file" id="photo2" accept="image/*" onchange="window.previewPhoto(this, 'prev2')">
+            <img id="prev2" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption2" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+
+            <label style="font-size:0.85rem;">Bild 3</label>
+            <input type="file" id="photo3" accept="image/*" onchange="window.previewPhoto(this, 'prev3')">
+            <img id="prev3" style="max-width:100%; max-height:120px; display:none; border-radius:6px; margin:4px 0;">
+            <input type="text" id="caption3" placeholder="Kort: vad är det vi tittar på?" style="margin-bottom:8px;">
+          </div>
+
+          <div class="scenario-item">
+            <h3>📝 En gång du ändrade dig</h3>
+            <p><strong>Vad det fångar:</strong> Intellektuell ödmjukhet och förmåga att beskriva en konkret vändpunkt utan floskler.</p>
+            <p style="font-size:0.9rem;">Berätta om en gång du var helt säker, och sedan bytte håll mitt i. Vad hände?</p>
+            <textarea id="memory-answer" placeholder="Beskriv med 4–8 meningar..." style="min-height:100px;"></textarea>
+          </div>
+        </div>
+
+        <button type="button" id="btn-deepen-tests" class="btn" style="margin-top:16px;">🧠 Slutför &amp; Fördjupa profil med Argon 4.0 (Röst-växelspel, Bild &amp; Minne)</button>
+        <p id="tests-status" style="font-size:0.85rem; color:var(--muted); margin-top:8px;"></p>
+      </div>
+
+      <div style="text-align:center; margin-top:6px; margin-bottom:18px; font-size:0.75rem; color:#475569;">
+        <span style="cursor:pointer; text-decoration:underline;" onclick="window.openFaqModal()">❓ Frågor &amp; svar om Relationspiloten</span>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/game.html">
+<!-- 3. ROLLSPELSMOTORN (UPPGRADERT: TOKEN-SNÅLT RULLANDE MINNE + DYNAMISKA KNAPPAR/FRITEXT) -->
+    <div id="view-game" class="view">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 id="game-title" style="margin:0;">Äventyr</h2>
+          <div>
+            <span class="status-badge badge-engine">Flash 3.1 Lite</span>
+            <span id="turn-indicator" class="status-badge">Runda 1</span>
+          </div>
+        </div>
+        <p id="game-desc" style="font-size:0.85rem; margin: 8px 0 16px 0;"></p>
+
+        <div id="chat-history" class="chat-box"></div>
+
+        <!-- DYNAMISKT VALOMRÅDE (65% KNAPPAR / 35% FRITEXT) -->
+        <div id="game-interaction-container" style="margin-top: 14px;">
+          <!-- KNAPPVAL (VISAS VID CHOICE) -->
+          <div id="choice-container" style="display:none; flex-direction:column; gap:8px;"></div>
+
+          <!-- FRITEXTFÄLT (VISAS VID FREE_TEXT) -->
+          <div id="freetext-container" style="display:none;">
+            <div style="font-size:0.82rem; color:#f59e0b; margin-bottom:6px; font-weight:600;">
+              ✍️ Emotionellt vägskäl / dilemma: Formulera ditt svar med egna ord
+            </div>
+            <div class="input-row" style="margin-top:0;">
+              <input type="text" id="user-input" placeholder="Vad gör eller säger du?...">
+              <button type="button" id="send-btn" class="btn" style="width:auto; margin:0;">Svara</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; text-align:right;">
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="if (confirm('Avsluta äventyret? Ingenting från den här sessionen sparas.')) leaveGame();">Avbryt äventyret</button>
+        </div>
+
+        <div id="epilogue-action" style="display:none; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
+          <p style="margin:0 0 10px 0; color:#6ee7b7; font-size:0.9rem; font-weight:600;">✨ Äventyret och epilogen är avslutade!</p>
+          <button type="button" id="btn-to-questions" class="btn">Gå vidare till avslutande reflektionsfrågor ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.5. AVSLUTANDE REFLEKTIONSFRÅGOR EFTER EPILOGEN -->
+    <div id="view-post-questions" class="view">
+      <div class="card">
+        <span class="status-badge">Steg 2 av 2: Reflektion efter äventyret</span>
+        <h2>Avslutande frågor om ert samarbete</h2>
+        <p>Nu när äventyret är över – svara kort med egna ord på hur du upplevde samspelet. Dina svar vävs samman med dina val i berättelsen när Argon 4.0 tar fram din profil.</p>
+
+        <label>1. Hur upplevde du samarbetet med din kompanjon? När fungerade det som bäst eller sämst?</label>
+        <textarea id="post-q1" placeholder="Beskriv kort hur du kände inför er arbetsfördelning och ton..."></textarea>
+
+        <label>2. Vilket beslut under äventyret kändes svårast eller mest avgörande för dig, och varför?</label>
+        <textarea id="post-q2" placeholder="Berätta kort vad du prioriterade när det drog ihop sig..."></textarea>
+
+        <label>3. Om detta hade varit en verklig situation med en partner i vardagen – vad hade du behövt mest från den andra personen?</label>
+        <textarea id="post-q3" placeholder="T.ex. tydlighet, lugn, humor, att bli lyssnad på, eget utrymme..."></textarea>
+
+        <div id="post-q4-wrap" style="display:none;">
+          <label>4. Hur kändes det att plötsligt spela din kompanjons roll? Vad förstod eller förvånades du över?</label>
+          <textarea id="post-q4" placeholder="Beskriv kort vad som kändes annorlunda eller bekant..."></textarea>
+        </div>
+
+        <button type="button" id="btn-to-summary" class="btn">🧠 Skicka in &amp; Gå till sammanställningen (Argon 4.0)</button>
+      </div>
+    </div>
+
+    <!-- 4. ANALYS & PROFILVY -->
+    <div id="view-profile-result" class="view">
+      <div class="card">
+        <span class="status-badge badge-engine">Strikt Argon 4.0 Djupanalys</span>
+        <h2 id="profile-result-heading">Din Profil sammanställs</h2>
+        <pre id="analysis-result"></pre>
+        <div id="argon-queued-box" style="display:none; background:rgba(217, 119, 6, 0.18); border:1px solid #f59e0b; border-radius:8px; padding:16px; margin-top:14px;">
+          <strong style="color:#fde68a; font-size:0.95rem; display:block; margin-bottom:6px;">🛡️ Strikt Argon-garanti: Ditt äventyr ligger i bakgrundskö!</strong>
+          <p style="font-size:0.86rem; color:#e2e8f0; margin:0 0 8px 0;">
+            Eftersom Relationspiloten vägrar kompromissa med sämre AI-modeller för din profilering väntar vi in <strong>Gemini 4.0 Argon</strong>. Systemet provar automatiskt igen var 10:e minut (<span id="argon-next-retry-clock">om 10 min</span>).
+          </p>
+          <p style="font-size:0.84rem; color:#6ee7b7; margin:0 0 12px 0; font-weight:600;">
+            ✅ Hela ditt äventyr är sparat! Du kan tryggt stänga webbläsaren eller fliken nu – eller gå till Matchningshubben så uppdateras profilen automatiskt i Supabase så fort Argon svarar.
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn" style="flex:1; margin:0; background:#d97706;" onclick="window.processArgonQueueNow(true)">🔄 Försök nå Argon 4.0 nu</button>
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.switchView('view-hub')">🏠 Gå till Matchningshubben under tiden</button>
+          </div>
+        </div>
+        <button type="button" id="retry-btn" class="btn btn-secondary" style="display:none;">Försök igen nu</button>
+        <button type="button" id="proceed-btn" class="btn" style="display:none;">Spara i Valvet &amp; Gå till Huvudsidan</button>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/swipe-lab.html">
+<div id="view-swipe-lab" class="view">
+      <!-- FÖRBEREDELSESIDA: INSTRUKTIONER & VAL INNAN SVAJPNINGEN STARTAR -->
+      <div id="swipe-step-intro" class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Visuell Intuitiv Analys (360° Kompass)</span>
+          <button type="button" id="btn-exit-swipelab" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">⬅️ Tillbaka</button>
+        </div>
+
+        <h2>Så fungerar 360°-svajpningen</h2>
+        <p style="font-size:0.92rem; margin-bottom:14px;">
+          När du startar visas porträtt på en låst, centrerad skärm. Dra kortet i valfri riktning (även diagonalt) utifrån din första spontana magkänsla:
+        </p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85rem;">
+            <div><span class="compass-dot dot-up"></span> <strong style="color:#6ee7b7;">UPP (Norr):</strong> Tillit &amp; Trygghet</div>
+            <div><span class="compass-dot dot-right"></span> <strong style="color:#fca5a5;">HÖGER (Öster):</strong> Attraktion &amp; Gnista</div>
+            <div><span class="compass-dot dot-down"></span> <strong style="color:#d2a8ff;">NER (Söder):</strong> Varning / Obehag</div>
+            <div><span class="compass-dot dot-left"></span> <strong style="color:#79c0ff;">VÄNSTER (Väster):</strong> Neutral / Distans</div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:10px; font-size:0.8rem; color:var(--muted);">
+            💡 <strong>Diagonalerna fångar nyanserna:</strong> Dra t.ex. <em>Uppåt-Höger</em> för trygg förälskelse, <em>Nedåt-Höger</em> för farlig attraktion, eller <em>Uppåt-Vänster</em> för ren vänskap/samarbete.
+          </div>
+        </div>
+
+        <div style="background:#141922; border-left:4px solid #f59e0b; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:0.85rem; color:#fde68a;">
+          ⚠️ <strong>Viktigt innan du startar (Endast 1 försök):</strong><br>
+          <span style="color:#cbd5e1;">För att fånga din genuina, ofiltrerade magkänsla kan 360°-kompassen och självbildstestet <strong>endast genomföras 1 gång</strong>. Du går automatiskt igenom samtliga ronder i följd.</span>
+        </div>
+
+        <button type="button" id="btn-start-locked-swipe" class="btn" style="font-size:1.02rem; padding:14px;" onclick="window.startLockedSwipeSession()">
+          🚀 Starta Svajpningen (Endast 1 försök)
+        </button>
+      </div>
+
+      <!-- STEG 1: LÅST, ICKE-SCROLLBAR HELSKÄRMSSVAJP -->
+      <div id="swipe-step-arena" class="swipe-fullscreen-modal">
+        <div class="swipe-fs-header">
+          <span id="swipe-round-badge" class="status-badge badge-engine" style="margin:0;">Rond A</span>
+          <span id="lab-card-counter" style="font-size:0.82rem; color:var(--muted); font-weight:600;">1 / 16</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">✕ Avsluta</button>
+        </div>
+
+        <div class="swipe-fs-question">
+          <h3 id="swipe-phase-title">Vem vill du fika, äta lunch eller samarbeta med?</h3>
+          <p id="swipe-phase-desc" style="display:none;"></p>
+          <div class="swipe-fs-compass-mini">
+            <span>⬆️ Tillit</span>
+            <span>➡️ Kemi</span>
+            <span>⬇️ Varning</span>
+            <span>⬅️ Distans</span>
+          </div>
+        </div>
+
+        <div class="swipe-fs-arena-wrap" id="lab-arena">
+          <div id="lab-emotion-pill" class="emotion-pill">Tillit &amp; Kemi</div>
+          <!-- Dold hastighetssensor och telemetri (loggas tyst i bakgrunden) -->
+          <div id="lab-speed-pill" style="display:none;"></div>
+
+          <div id="lab-card-active" class="swipe-card-slot active-card">
+            <div class="swipe-img-wrap" style="height:82%;">
+              <img id="lab-card-img" class="swipe-img" alt="Arketyp" style="display:none;">
+              <div id="lab-card-fallback" class="swipe-placeholder">
+                <div style="font-size:2.4rem; margin-bottom:8px;">👤</div>
+                <strong id="lab-fallback-file" style="color:#fff;">a1.jpg</strong>
+                <span style="font-size:0.76rem; margin-top:6px;">Bilden hittades inte i mappen än.</span>
+              </div>
+            </div>
+            <div class="swipe-info" style="height:18%;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong id="lab-card-title" style="color:#fff; font-size:0.98rem;">Arketyp A1</strong>
+              </div>
+              <div id="lab-card-trait" style="font-size:0.78rem; color:#38bdf8; margin-top:2px;">Svep i 360° utifrån din magkänsla</div>
+            </div>
+          </div>
+
+          <div id="lab-card-next" class="swipe-card-slot under">
+            <div class="swipe-img-wrap" style="height:82%;">
+              <div class="swipe-placeholder"><span>Nästa porträtt...</span></div>
+            </div>
+            <div class="swipe-info" style="height:18%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEG 2: TVINGAT GALLRINGSMOMENT (FORCED CHOICE) -->
+      <div id="swipe-step-elimination" class="card" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Steg 2 av 3: Tvingad gallring</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">⬅️ Till instruktioner</button>
+        </div>
+        <h2>Gallra bort 3 av dina positiva val</h2>
+        <div style="background:#11151c; border-left:4px solid #ef4444; padding:12px 14px; border-radius:6px; margin-bottom:12px;">
+          <strong style="color:#fca5a5;">Tvingat gallringsmoment ("Forced choice"):</strong>
+          <p style="margin:4px 0 0 0; font-size:0.85rem;">Här är ansiktena du reagerade positivt på. För att skala bort slentrianswipande måste du nu <strong>välja bort 3 stycken</strong> (eller minst 1 om du har få val).</p>
+        </div>
+        <div id="elim-counter-text" style="font-size:0.85rem; font-weight:600; color:#f59e0b;">Valda att gallra bort: 0 av 3</div>
+        <div id="elimination-grid" class="archetype-grid"></div>
+        <button type="button" id="btn-confirm-elim" class="btn" style="margin-top:16px;" onclick="window.openSelfArchetypeStep()">Bekräfta gallring &amp; Gå till Självbildsvalet ➔</button>
+      </div>
+
+      <!-- STEG 3: SJÄLVIDENTIFIERINGS-MODUL (TOPP 3 EGNA ARKETYPER) -->
+      <div id="swipe-step-self" class="card" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Steg 3 av 3: Din Självbild &amp; Energi</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">⬅️ Till instruktioner</button>
+        </div>
+        <h2>Vilket ansiktsuttryck identifierar du dig själv mest med?</h2>
+        <div style="background:#11151c; border-left:4px solid #f59e0b; padding:12px 14px; border-radius:6px; margin-bottom:12px;">
+          <strong style="color:#fde68a;">Speglings- &amp; Självbildsval (Topp 3):</strong>
+          <p style="margin:4px 0 0 0; font-size:0.85rem;">Klicka i ordning för att utse din <strong>1:a plats, 2:a plats och 3:e plats</strong> för det uttryck och den utstrålning som ligger närmast dig själv.</p>
+        </div>
+        <div id="self-counter-text" style="font-size:0.85rem; font-weight:600; color:#6ee7b7;">Dina valda självbilds-arketyper: 0 av 3</div>
+        <div id="self-archetype-grid" class="archetype-grid"></div>
+        <button type="button" id="btn-run-swipe-argon" class="btn" style="margin-top:16px;" onclick="window.analyzeSwipeAndSelfWithArgon()">
+          🧠 Slutför &amp; Låt Argon 4.0 sammanställa analysen
+        </button>
+        <pre id="swipe-argon-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.9rem; line-height:1.55;"></pre>
+        <div id="swipe-standalone-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('swipe-argon-output')">📋 Kopiera analysen</button>
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadTextElement('swipe-argon-output', 'min-360-kompass-profil.txt')">💾 Spara som fil på mobilen</button>
+          <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.exitSwipeLab()">🚀 Gå till Relationspiloten (Skapa konto / Spela rollspelet)</button>
+        </div>
+      </div>
+
+      <!-- DOLD TELEMETRI-CONTAINER (Krävs ej i UI, data hålls i minnet för Argon 4.0) -->
+      <div id="lab-telemetry-log" style="display:none;"></div>
+      <span id="lab-telemetry-count" style="display:none;"></span>
+    </div>
+
+    </div>
+    <div data-view-src="views/somatic-lab.html">
+<!-- 4.5. SOMATISK & TAKTIL PROJEKTION (2-STEGS RADIALHJUL) + CONTINUOUS AFFECT TRACKING (CRM) + GLOBAL OFF-GUARD DJÄVULSTEST -->
+    <div id="view-somatic-lab" class="view">
+      <!-- STEG 1: INTRODUKTION (ALLTID ALLA 88 BILDER + 8 PSYKOAKUSTISKA CRM-SPÅR) -->
+      <div id="somatic-step-intro" class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-gold">🏛️ Somatisk, Taktil &amp; Psykoakustisk Projektion</span>
+            <span class="status-badge badge-engine">88 Konststimuli + 8 CRM-spår + Off-Guard</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka</button>
+        </div>
+
+        <h2>Kroppsmatris, Händer/Fötter, Psykoakustisk CRM &amp; Profilskärpa</h2>
+        <p style="font-size:0.92rem; margin-bottom:14px;">
+          Istället för slentrianmässiga ”gilla/ogilla”-svep mäter detta test hur ditt nervsystem spontant översätter <strong>kroppsformer</strong>, <strong>händers och fötters uttryck</strong> samt <strong>ljudvärldar och vokalarketyper</strong> till synestetiska former, känselintryck, temperaturer och kontinuerliga rörelsekurvor (Continuous Affect Tracking / CRM).
+        </p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; font-size:0.84rem;">
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #f59e0b;">
+              <strong style="color:#fde68a; display:block; margin-bottom:4px;">Del 1: Kroppsmatris (68 bilder)</strong>
+              4 kalibreringsbilder följt av 64 konstnärliga kroppsarketyper. Tryck på bilden och välj <strong>Formkraft</strong> följt av <strong>Färgklang</strong>.
+            </div>
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #10b981;">
+              <strong style="color:#6ee7b7; display:block; margin-bottom:4px;">Del 2: Händer &amp; Fötter (20 bilder)</strong>
+              4 taktila kalibreringsbilder samt 16 studier av händer och fötter där hjulet skiftar till <strong>Känsel</strong> och <strong>Temperatur</strong>.
+            </div>
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #38bdf8;">
+              <strong style="color:#38bdf8; display:block; margin-bottom:4px;">Del 3: Psykoakustisk CRM (8 ljudspår)</strong>
+              4 bakgrundskomp (<code>bed1–bed4</code>) och 4 röstarketyper (<code>v1–v4</code>). Följ musiken och rösterna i realtid med fingret på vår 2D-affektyta.
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:10px; font-size:0.8rem; color:var(--muted);">
+            ⚡ <strong>Inbäddade Off-Guard-frågor:</strong> Mitt i bildflödet stannar skärmen ibland upp med en snabb flervalsfråga. Svara med din allra första impuls.<br>
+            🔒 <strong>GDPR-skyddad syntes:</strong> Endast de aggregerade profilvektorerna och CRM-korrelationerna sparas – aldrig enskilda råklick.
+          </div>
+        </div>
+
+        <div id="somatic-bucket-status" style="font-size:0.78rem; color:#94a3b8; margin-bottom:12px;">
+          🔍 Kontrollerar bild- och ljudbiblioteket i Supabase (<code>stimuli</code>)...
+        </div>
+
+        <div style="background:#141922; border-left:4px solid #f59e0b; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:0.84rem; color:#fde68a;">
+          ⚠️ <strong>Observera innan start:</strong> Du går igenom bildsekvensen (88 bilder) följt av de 8 psykoakustiska CRM-spåren (<strong>1 skarpt försök</strong> i profilen: <span id="attempts-somatic-modal-label">0 av 1 förbrukat</span>). Du kan även hoppa direkt till det psykoakustiska CRM-labbet nedan om du vill provköra ljudspåren separat!
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" id="btn-start-somatic-session" class="btn" style="flex:2; min-width:240px; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px; margin-top:0;" onclick="window.startSomaticLabSession()">
+            🚀 Starta hela sekvensen (88 bilder + 8 CRM-spår)
+          </button>
+          <button type="button" id="btn-start-crm-direct" class="btn btn-secondary" style="flex:1; min-width:210px; border:1px solid #38bdf8; color:#38bdf8; font-weight:700; font-size:0.9rem; padding:14px; margin-top:0;" onclick="window.startPsychoacousticCrmDirect()">
+            🎧 Starta CRM-ljudspår direkt (bed1–v4)
+          </button>
+        </div>
+      </div>
+
+      <!-- STEG 2: REN VISUELL RADIAL-ARENA (INGEN TEXT UNDER BILDERNA) -->
+      <div id="somatic-step-arena" class="card" style="display:none; max-width:500px; margin:0 auto; padding:14px; border:1px solid #334155; background:#0d1017;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span id="somatic-progress-counter" style="font-size:0.84rem; color:var(--muted); font-weight:700; font-family:monospace;">1 / 88</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.abortSomaticToIntro()">✕ Avbryt</button>
+        </div>
+
+        <div class="somatic-stimulus-card">
+          <div class="somatic-viewport" id="somatic-viewport">
+            <img id="somatic-stimulus-img" class="somatic-stimulus-img" alt="" style="display:none;" />
+            <div id="somatic-fallback-container" class="somatic-fallback-svg"></div>
+
+            <!-- 2-STEGS RADIALHJUL -->
+            <div class="somatic-wheel-overlay" id="somatic-wheel-overlay">
+              <div class="somatic-wheel-container" id="somatic-wheel-container">
+                <div class="somatic-wheel-center">
+                  <div class="somatic-wheel-step-lbl" id="somatic-wheel-step-lbl">STEG 1</div>
+                  <div class="somatic-wheel-step-title" id="somatic-wheel-step-title">FORMKRAFT</div>
+                </div>
+                <div id="somatic-wheel-nodes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEG 2.5: MELLANSKÄRM NÄR KROPPAR BYTS MOT HÄNDER OCH FÖTTER (EFTER KORT 68) -->
+      <div id="somatic-step-transition" class="card" style="display:none; max-width:520px; margin:0 auto; border:1px solid #10b981; background:#121722;">
+        <span class="status-badge" style="background:rgba(16, 185, 129, 0.2); color:#6ee7b7; border:1px solid #10b981;">✋ Del 2 av 3: Händer, Fötter &amp; Beröring</span>
+        <h2 style="margin-top:8px;">Nu skiftar vi från kroppsform till beröring &amp; fotfäste</h2>
+        <p style="font-size:0.92rem; color:#e2e8f0;">
+          Du har nu gått igenom kroppssilhuetterna. I nästa del visas studier av <strong>händer och fötter</strong> – både när de vilar mjukt och när de griper, formar eller tar spjärn.
+        </p>
+        <p style="font-size:0.88rem; color:#cbd5e1;">
+          Eftersom händer och fötter är våra verktyg för närhet, handlingskraft och förankring byter radialhjulet nu symboler så att det fångar <strong>hur kontakten känns i huden</strong>:
+        </p>
+
+        <div style="background:#0d1118; border:1px solid var(--border); border-radius:10px; padding:14px; margin:14px 0; font-size:0.84rem;">
+          <div style="margin-bottom:10px;">
+            <strong style="color:#fcd34d; display:block; margin-bottom:3px;">Steg 1 i hjulet — Känsel &amp; Grepp:</strong>
+            <span style="color:#cbd5e1;">Dunbädd (mjuk vila) • Smekning (följsam) • Pulsvåg (kemi/nerv) • Kraftgrepp (styrka/kontroll) • Spegelglas (sval/slät) • Taggfrost (stickig/avvisande)</span>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:10px;">
+            <strong style="color:#6ee7b7; display:block; margin-bottom:3px;">Steg 2 i hjulet — Temperatur:</strong>
+            <span style="color:#cbd5e1;">Glöd • Solvärme • Mossa • Cederträ • Sval skiffer • Nattfrost</span>
+          </div>
+        </div>
+
+        <p style="font-size:0.82rem; color:var(--muted); margin-bottom:16px;">
+          Precis som i första delen inleder vi med <strong>4 korta kalibreringsbilder</strong> innan de 16 bilderna på händer och fötter tar vid.
+        </p>
+
+        <button type="button" class="btn" style="background:linear-gradient(135deg, #10b981, #059669); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px;" onclick="window.continueToTactilePhase()">
+          ✋ Fortsätt till Händer &amp; Fötter (Kort 69–88) ➔
+        </button>
+      </div>
+
+      <!-- STEG 2.75: MELLANSKÄRM INFÖR PSYKOAKUSTISK CONTINUOUS AFFECT TRACKING (CRM) -->
+      <div id="somatic-step-crm-intro" class="card" style="display:none; max-width:540px; margin:0 auto; border:1px solid #38bdf8; background:#111722;">
+        <span class="status-badge badge-engine">🎧 Del 3 av 3: Continuous Affect Tracking (CRM)</span>
+        <h2 style="margin-top:8px;">Nu lyssnar vi: Hur rör sig ditt nervsystem i musiken och rösterna?</h2>
+        <p style="font-size:0.92rem; color:#e2e8f0;">
+          I denna del får du höra <strong>4 bakgrundskomp / ljudvärldar</strong> (<code>bed1–bed4</code>) och <strong>4 vokalarketyper</strong> (<code>v1–v4</code>). Istället för att svara efteråt följer du ljudet <strong>kontinuerligt i realtid</strong> med fingret eller muspekaren över vår 2D-affektyta.
+        </p>
+
+        <div style="background:#0d1118; border:1px solid var(--border); border-radius:10px; padding:14px; margin:14px 0; font-size:0.84rem;">
+          <strong style="color:#38bdf8; display:block; margin-bottom:6px;">🧭 Så fungerar 2D-affektytan (Continuous Response Measurement):</strong>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; color:#cbd5e1;">
+            <div>🟢 <strong>Uppåt (Norr):</strong> Jordad trygghet, ro, tillit &amp; värme</div>
+            <div>🔴 <strong>Höger (Öster):</strong> Stark kemi, puls, gåshud &amp; passion</div>
+            <div>🟣 <strong>Nedåt (Söder):</strong> Friktion, vaksamhet, tryck eller obehag</div>
+            <div>🔵 <strong>Vänster (Väster):</strong> Sval distans, tomrum &amp; introspektion</div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:8px; font-size:0.79rem; color:var(--muted);">
+            💡 Håll fingret/musen på plattan medan spåret spelas. Argon 4.0 korrelerar exakt din rörelsekurva mot varje brytpunkt, stråkentré, andningspaus och dramatopp i cue-sheetet!
+          </div>
+        </div>
+
+        <button type="button" class="btn" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px;" onclick="window.beginCrmArenaSequence()">
+          🎧 Starta Continuous Affect Tracking (8 spår) ➔
+        </button>
+      </div>
+
+      <!-- STEG 2.8: PSYKOAKUSTISK CRM-ARENA (bed1–bed4 & v1–v4 MED HELA CUE-SHEETET) -->
+      <div id="somatic-step-crm-arena" class="card" style="display:none; max-width:540px; margin:0 auto; padding:16px; border:1px solid #38bdf8; background:#0d1119;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+          <div>
+            <span id="crm-track-counter" class="status-badge badge-engine" style="margin:0; font-family:monospace;">Spår 1 / 8</span>
+            <span id="crm-track-category-badge" class="status-badge badge-gold" style="margin:0;">Bakgrundskomp</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.74rem;" onclick="window.finishCrmAndShowReport()">⏭️ Slutför &amp; Gå till Syntes</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.74rem;" onclick="window.abortSomaticToIntro()">✕ Avbryt</button>
+          </div>
+        </div>
+
+        <h3 id="crm-track-title" style="margin:4px 0 2px 0; font-size:1.04rem; color:#fff;">bed1.mp3 — Akustisk &amp; Organisk</h3>
+        <p id="crm-track-character" style="margin:0 0 10px 0; font-size:0.8rem; color:#94a3b8; line-height:1.4;"></p>
+
+        <!-- TIDSLINJE MED CUE-SEGMENT OCH AKTIV FAS -->
+        <div class="crm-timeline-wrap">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; font-family:monospace; color:#cbd5e1;">
+            <span id="crm-time-display">00:00 / 02:02</span>
+            <span id="crm-active-phase-pill" style="color:#fde68a; font-weight:700;">Väntar på uppspelning...</span>
+          </div>
+          <div class="crm-timeline-bar" id="crm-timeline-bar">
+            <div class="crm-playhead" id="crm-playhead" style="left:0%;"></div>
+          </div>
+          <div id="crm-active-cue-desc" style="font-size:0.77rem; color:#94a3b8; margin-top:6px; min-height:1.2em;">
+            Tryck på Spela eller håll fingret på 2D-ytan nedan för att starta spåret och logga din kurva.
+          </div>
+        </div>
+
+        <!-- 2D CONTINUOUS AFFECT PAD -->
+        <div class="crm-pad-wrap" id="crm-pad-wrap">
+          <div class="crm-axis-line-h"></div>
+          <div class="crm-axis-line-v"></div>
+          <div class="crm-ring-guide" style="width:38%; height:38%;"></div>
+          <div class="crm-ring-guide" style="width:74%; height:74%;"></div>
+
+          <div class="crm-pole-label crm-pole-n">🟢 TRYGGHET &amp; RO (SAFE)</div>
+          <div class="crm-pole-label crm-pole-e">🔴 KEMI &amp; PULS (SPARK)</div>
+          <div class="crm-pole-label crm-pole-s">🟣 FRIKTION &amp; VAKSAMHET</div>
+          <div class="crm-pole-label crm-pole-w">🔵 SVAL DISTANS &amp; RYMD</div>
+
+          <canvas id="crm-trail-canvas" width="390" height="390" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:4;"></canvas>
+          <div class="crm-cursor-puck" id="crm-cursor-puck"></div>
+        </div>
+
+        <!-- LIVE TELEMETRI -->
+        <div class="somatic-telemetry-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-top:6px; margin-bottom:10px;">
+          <span id="crm-live-coords">X (Kemi/Distans): 0.00 | Y (Trygg/Friktion): 0.00</span>
+          <span id="crm-sample-counter" style="color:#38bdf8;">0 mätpunkter (4 Hz)</span>
+        </div>
+
+        <audio id="crm-audio-player" preload="auto" crossorigin="anonymous" style="display:none;"></audio>
+
+        <!-- KONTROLLER FÖR UPPSPELNING & NÄSTA SPÅR -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" id="btn-crm-play-toggle" class="btn" style="flex:1; margin:0; background:#0284c7; padding:11px;" onclick="window.toggleCrmAudioPlayback()">
+            ▶️ Spela &amp; Spåra i realtid
+          </button>
+          <button type="button" id="btn-crm-next-track" class="btn btn-secondary" style="flex:1; margin:0; border:1px solid #38bdf8; color:#38bdf8; padding:11px;" onclick="window.nextCrmTrack()">
+            Nästa spår (Spara kurva) ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- STEG 3: SEPARERAD 4-LAGERS SYNTES & ARGON 4.0 DJUPANALYS -->
+      <div id="somatic-step-report" class="card" style="display:none; border:1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge badge-gold">Steg 3: Separerad 4-Lagers Syntes (inkl. CRM)</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka till Hubben</button>
+        </div>
+
+        <h2>Dina fyra separerade attraktions-, CRM- &amp; skärpelager</h2>
+        <p style="font-size:0.88rem; margin-bottom:14px;">
+          Här redovisas dina fyra dimensioner var för sig: Kroppsmatris, Händer/Fötter, Psykoakustisk Continuous Affect Tracking (<code>bed1–bed4</code> &amp; <code>v1–v4</code>) samt Off-Guard Profilskärpa.
+        </p>
+
+        <div id="somatic-report-layers"></div>
+
+        <button type="button" id="btn-run-somatic-argon" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; margin-top:12px;" onclick="window.analyzeSomaticAndTactileWithArgon()">
+          🧠 Slutför &amp; Låt Argon 4.0 tolka mina 4 lager (inkl. CRM-kurvor) till profilen
+        </button>
+
+        <pre id="somatic-argon-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.9rem; line-height:1.55;"></pre>
+
+        <div id="somatic-standalone-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('somatic-argon-output')">📋 Kopiera analysen</button>
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadSomaticJsonReport()">📥 Ladda ner JSON-vektorer &amp; CRM</button>
+          <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.exitSomaticLab()">🚀 Klar — Gå till Matchningshubben</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLOBAL OFF-GUARD "DJÄVULSTEST" MODAL (ANVÄNDS I BÅDE SVAJPFLÖDEN OCH ROLLSPEL) -->
+    <div id="offguard-devil-modal" class="somatic-offguard-modal">
+      <div class="somatic-offguard-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span class="somatic-offguard-badge">⚡ PAUS I FLÖDET — SNABB IMPULS</span>
+          <span style="font-family:monospace; font-size:0.76rem; color:#fcd34d;" id="offguard-context-tag">Första magkänslan</span>
+        </div>
+        <div class="somatic-offguard-question" id="offguard-question-text">Frågetext laddas...</div>
+        <div class="somatic-offguard-options" id="offguard-options-box"></div>
+      </div>
+    </div>
+
+
+    <!-- GLOBAL SUBJEKTIV FÄRG- & FORMSTEGE (BRA VS DÅLIGT HUMÖR + TEST-RETEST KOHERENS) -->
+    <div id="mood-ladder-modal" class="somatic-offguard-modal">
+      <div class="somatic-offguard-box" style="max-width:480px; border-color:#38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+          <span class="status-badge badge-engine" style="margin:0;" id="mood-ladder-badge">🎨 Personlig Symbolkompass (Del 1 av 4)</span>
+          <span style="font-family:monospace; font-size:0.75rem; color:#fcd34d;" id="mood-ladder-step-counter">Steg 1 / 4</span>
+        </div>
+
+        <h3 id="mood-ladder-title" style="color:#fff; font-size:1.05rem; margin:0 0 6px 0;">Färgstege vid Bra Humör</h3>
+        <p id="mood-ladder-desc" style="font-size:0.86rem; color:#cbd5e1; margin:0 0 12px 0; line-height:1.45;">
+          Klicka på brickorna i ordning från <strong>#1 (Mest tilltalande / ger mest kraft)</strong> ner till <strong>#6 (Minst tilltalande)</strong>. Klicka på en vald bricka om du vill ångra.
+        </p>
+
+        <div id="mood-ladder-grid" class="mood-ladder-grid"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; gap:10px;">
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:8px 14px; font-size:0.8rem;" onclick="window.resetCurrentMoodLadderStep()">↺ Nollställ ordning</button>
+          <button type="button" id="btn-mood-ladder-next" class="btn" style="flex:1; margin:0; padding:10px 16px; font-weight:800;" disabled onclick="window.commitCurrentMoodLadderStep()">
+            Bekräfta ordning (0/6 valda) ➔
+          </button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/labs.html">
+<!-- FRISTÅENDE TAXI DROP-IN MENY (?test=taxi) -->
+    <div id="view-taxi-menu" class="view">
+      <div class="card" style="border:1px solid #38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+          <span class="status-badge badge-engine">🚕 Välkommen ombord — Interaktivt Baksätes-Lab</span>
+          <span class="status-badge">100% Anonymt • Inget sparas</span>
+        </div>
+        <h1 style="margin-bottom:6px;">Utforska din Relations- &amp; Intuitionsprofil under resan</h1>
+        <p style="font-size:0.92rem; margin-top:0;">
+          Välj ett av våra fyra fristående AI-experiment nedan. Du behöver inte skapa något konto och <strong>ingenting sparas på någon server</strong> – du får din analys direkt på skärmen och kan spara den på din egen telefon om du vill.
+        </p>
+
+        <div class="grid" style="margin-top:18px;">
+          <div class="scenario-item" style="border-left:4px solid #38bdf8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">⚡ Test 1: 360° Vektorswipe &amp; Självbild</h3>
+              <span class="status-badge badge-engine" style="margin:0;">ca 3–4 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Svep porträtt i 360 grader utifrån din första magkänsla (Tillit, Kemi, Varning eller Distans). Gallra därefter bort tre val och peka ut vilka 3 ansiktsuttryck som ligger närmast dig själv. Argon 4.0 analyserar både dina svepriktningar och hur snabbt/tvekande du reagerar.
+            </p>
+            <button type="button" class="btn" style="margin-top:0;" onclick="window.openSwipeLab()">
+              🔥 Starta 360° Vektorswipe
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border-left:4px solid #f59e0b;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🎙️🎨 Test 2: Röst ➔ AI-Målning ➔ Din Tolkning</h3>
+              <span class="status-badge badge-gold" style="margin:0;">ca 2 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Beskriv något vackert, något sorgligt eller något som skaver med din röst (20–30 sek). Argon 4.0 lyssnar på din röstmelodi och målar ett abstrakt/symboliskt konstverk utifrån vad den hörde. Du berättar vad du ser i målningen – och får en direkt psykologisk spegling.
+            </p>
+            <button type="button" class="btn" style="background:#d97706; margin-top:0;" onclick="window.openStandaloneVoiceLab()">
+              🎙️ Starta Röst-till-Målning
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border-left:4px solid #10b981;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🏛️✋ Test 3: Somatisk &amp; Taktil Projektion + Djävulstest</h3>
+              <span class="status-badge" style="margin:0;">ca 3 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Synestetiskt 2-stegs radialhjul där du kopplar skulpturer (Kropp) samt rödkritestudier av händer och fötter till former, texturer och temperaturer – med inbäddade Off-Guard-frågor som mäter din profilskärpa.
+            </p>
+            <button type="button" class="btn" style="background:#059669; margin-top:0;" onclick="window.openSomaticLab()">
+              🏛️ Starta Somatisk &amp; Taktil Projektion
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border-left:4px solid #ec4899;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🎧🎼 Test 4: Psykoakustisk Ljudanalys &amp; Vokal Kemi (CRM)</h3>
+              <span class="status-badge badge-engine" style="margin:0;">8 spår (bed1–v4)</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Lyssna på 4 musikvärldar (<code>bed1–bed4</code>) och 4 röstarketyper (<code>v1–v4</code>) medan du kontinuerligt styr fingret över en 2D-affektyta (Trygghet, Kemi/Puls, Friktion eller Sval distans). Argon 4.0 korrelerar din rörelsekurva mot exakt varje stråkentré, andningspaus och dramatopp i cue-sheetet.
+            </p>
+            <button type="button" class="btn" style="background:linear-gradient(135deg, #ec4899, #be185d); margin-top:0;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Starta Psykoakustisk Ljudanalys (CRM)
+            </button>
+          </div>
+
+
+          <div class="scenario-item" style="border-left:4px solid var(--accent);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🎭 Hela Relationspiloten (Rollspel &amp; Matchning)</h3>
+              <span class="status-badge" style="margin:0;">Fullversion</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Vill du uppleva hela det interaktiva samarbetsrollspelet och bli matchad med andra utifrån hur ni faktiskt agerar och löser dilemman under press?
+            </p>
+            <button type="button" class="btn btn-secondary" style="margin-top:0;" onclick="window.switchView('view-auth')">
+              🚀 Öppna Relationspilotens Startsida
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRISTÅENDE RÖST-TILL-BILD LAB (?test=voice) -->
+    <div id="view-voice-lab" class="view">
+      <div class="card" style="border:1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-gold">🎙️🎨 Fristående Experiment: Röst ➔ AI-Målning ➔ Spegling</span>
+            <span class="status-badge">Noll lagring</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitStandaloneVoiceLab()">⬅️ Tillbaka</button>
+        </div>
+
+        <h2 style="margin-bottom:6px;">Växelspel med Argon 4.0</h2>
+        <p style="font-size:0.9rem; margin-top:0;">
+          1. Berätta fritt i mikrofonen (eller med text) om något vackert, något sorgligt eller något som skaver.<br>
+          2. Argon 4.0 lyssnar på din intonation och målar en bild av vad den hörde.<br>
+          3. Du berättar vad du tycker att bilden föreställer – och får en fristående psykologisk profilering direkt på skärmen.
+        </p>
+
+        <label style="font-size:0.88rem; font-weight:600; color:#cbd5e1;">1. Välj vad du vill beskriva:</label>
+        <select id="solo-voice-theme" style="margin-bottom:12px;">
+          <option value="Något vackert och djupt meningsfullt">✨ Beskriv något vackert (eller en plats/stund som ger dig ro)</option>
+          <option value="Något sorgligt, vemodigt eller förlorat">🌧️ Beskriv något sorgligt eller vemodigt som berört dig</option>
+          <option value="Något fult, trasigt eller skavande">⚡ Beskriv något fult, kaotiskt eller något som skaver i världen</option>
+          <option value="Kontrasten mellan något vackert och något fult/sorgligt">🎭 Beskriv både något vackert och något fult/sorgligt</option>
+        </select>
+
+        <label style="font-size:0.85rem;">Spela in din röst (ca 20–30 sek) eller välj en ljudfil:</label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+          <button type="button" id="btn-solo-voice-record" class="btn btn-secondary" style="margin-top:0; flex:1;" onclick="window.startSoloVoiceRecord()">🎙️ Spela in med mikrofon (max 30s)</button>
+          <input type="file" id="solo-voice-file" accept="audio/*" style="margin:0; flex:1; padding:8px;">
+        </div>
+        <div id="solo-voice-status" style="font-size:0.82rem; color:var(--muted); margin-top:4px; margin-bottom:10px;"></div>
+
+        <label style="font-size:0.82rem; color:var(--muted);">Valfritt (om du sitter i en bullrig miljö eller föredrar att skriva med ord):</label>
+        <textarea id="solo-voice-transcript" placeholder="Frivilligt: berätta med ord här eller lämna tomt om du spelat in med mikrofonen..." style="min-height:60px; margin-bottom:10px;"></textarea>
+
+        <button type="button" id="btn-solo-generate-art" class="btn" style="background:#0284c7;" onclick="window.generateSoloVoiceArt()">
+          🎨 Steg 1: Låt Argon 4.0 lyssna &amp; måla det den hörde
+        </button>
+        <p id="solo-art-status" style="font-size:0.84rem; color:#38bdf8; margin:8px 0 0 0;"></p>
+
+        <!-- STEG 2: ARGONS MÅLNING & TOLKNING -->
+        <div id="solo-voice-stage2" style="display:none; margin-top:18px; padding-top:16px; border-top:1px solid var(--border);">
+          <div style="background:#11151c; border-left:3px solid #38bdf8; padding:12px 14px; border-radius:6px; margin-bottom:14px;">
+            <strong style="color:#38bdf8; font-size:0.86rem;">🎨 Argon 4.0 säger:</strong>
+            <p id="solo-argon-intro" style="margin:4px 0 0 0; font-size:0.9rem; color:#e2e8f0; font-style:italic;"></p>
+          </div>
+
+          <div id="solo-artwork-box" style="width:100%; max-width:440px; margin:0 auto 14px; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:#090d13; box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+
+          <label style="font-size:0.9rem; font-weight:600; color:#fde68a;">
+            2. Din tur igen: Vad tycker du om målningen? Vad ser du i den och vilken känsla väcker den hos dig?
+          </label>
+          <textarea id="solo-voice-reaction" placeholder="Skriv spontant vad du ser i formerna och färgerna, eller hur du reagerar på Argons tolkning..." style="min-height:80px;"></textarea>
+
+          <button type="button" id="btn-solo-run-analysis" class="btn" style="margin-top:8px;" onclick="window.runSoloVoiceFinalAnalysis()">
+            🧠 Steg 2: Ge mig Argon 4.0:s analys av vårt växelspel
+          </button>
+
+          <pre id="solo-voice-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.92rem; line-height:1.58;"></pre>
+
+          <div id="solo-voice-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('solo-voice-output')">📋 Kopiera min analys</button>
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadTextElement('solo-voice-output', 'min-rost-och-bild-analys.txt')">💾 Spara som fil på mobilen</button>
+            <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.switchView('view-auth')">🚀 Gå till Relationspiloten (Skapa konto / Spela rollspelet)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/admin.html">
+<!-- ADMINPORTAL & MODERERINGSCENTRAL (SKYDDAD VIA SUPABASE SERVER-RPC) -->
+    <div id="view-admin" class="view">
+      <div class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <span class="status-badge badge-gold">🛡️ Krypterad Admin- &amp; Modereringscentral</span>
+            <span class="status-badge badge-engine">Server-validerad via Supabase RPC</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitAdminPanel()">⬅️ Lämna Admin</button>
+        </div>
+
+        <h1 style="margin-top:8px; margin-bottom:6px;">Relationspiloten — Admin</h1>
+        <p style="font-size:0.86rem; margin-top:0;">
+          Här hanterar du flaggade chattmeddelanden, stänger av regelbrytare, nollställer försöksräknare (vid urladdat batteri / barnskrik) och följer plattformens statistik i realtid.
+        </p>
+
+        <!-- INLOGGNINGSRUTA FÖR ADMIN-NYCKEL -->
+        <div id="admin-login-box" style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:14px;">
+          <label for="admin-secret-input" style="font-weight:600; color:#fde68a; font-size:0.88rem;">🔑 Ange din Master Admin-nyckel (valideras direkt i Supabase):</label>
+          <div style="display:flex; gap:10px; margin-top:6px; flex-wrap:wrap;">
+            <input type="password" id="admin-secret-input" placeholder="Skriv in ditt hemliga admin-lösenord..." style="flex:1; margin:0; min-width:220px;">
+            <button type="button" id="btn-admin-unlock" class="btn" style="width:auto; margin:0; background:#d97706;" onclick="window.loadAdminDashboard()">🔓 Lås upp Adminpanelen</button>
+          </div>
+          <p id="admin-auth-msg" style="font-size:0.82rem; color:#fca5a5; margin:8px 0 0 0; display:none;"></p>
+        </div>
+
+        <!-- SJÄLVA INSTRUMENTPANELEN (VISAS NÄR NYCKELN ÄR VERIFIERAD) -->
+        <div id="admin-dashboard-content" style="display:none; margin-top:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+            <strong style="color:#6ee7b7; font-size:0.9rem;">🟢 Ansluten till Supabase Admin-RPC</strong>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.loadAdminDashboard()">🔄 Uppdatera all data</button>
+              <button type="button" class="btn btn-danger" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.lockAdminPanel()">🔒 Lås panelen</button>
+            </div>
+          </div>
+
+          <!-- 1. STATISTIK-KORT (KPI:ER) -->
+          <h3 style="font-size:1rem; margin-bottom:10px; color:#38bdf8;">📊 Plattformens Statistik &amp; Hälsa</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(155px, 1fr)); gap:10px; margin-bottom:20px;">
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Totalt antal profiler</div>
+              <div id="stat-total-profiles" style="font-size:1.5rem; font-weight:800; color:#fff; margin-top:4px;">0</div>
+              <div id="stat-ready-profiles" style="font-size:0.72rem; color:#6ee7b7; margin-top:2px;">0 redo för matchning</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Könsfördelning</div>
+              <div id="stat-gender-split" style="font-size:0.88rem; font-weight:700; color:#e2e8f0; margin-top:6px; line-height:1.4;">-</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Skapade Matchningar</div>
+              <div id="stat-total-matches" style="font-size:1.5rem; font-weight:800; color:#38bdf8; margin-top:4px;">0</div>
+              <div id="stat-avg-score" style="font-size:0.72rem; color:var(--muted); margin-top:2px;">Snitt: - %</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">Chatt &amp; Flaggningar</div>
+              <div id="stat-total-msgs" style="font-size:1.5rem; font-weight:800; color:#fde68a; margin-top:4px;">0</div>
+              <div id="stat-flagged-msgs" style="font-size:0.72rem; color:#ef4444; font-weight:700; margin-top:2px;">0 anmälda</div>
+            </div>
+            <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:12px;">
+              <div style="font-size:0.75rem; color:var(--muted);">360°-Kompass &amp; Röst</div>
+              <div id="stat-multimodal-count" style="font-size:1.1rem; font-weight:800; color:#d2a8ff; margin-top:6px;">0 kompasser</div>
+              <div style="font-size:0.72rem; color:var(--muted); margin-top:2px;">Inbakade i profiler</div>
+            </div>
+          </div>
+
+          <!-- 2. MODERERING AV FLAGGADE / ANMÄLDA CHATTMEDDELANDEN -->
+          <div style="background:#141922; border:1px solid #ef4444; border-radius:10px; padding:16px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:10px;">
+              <h3 style="margin:0; font-size:1rem; color:#fca5a5;">🚨 Anmälda Chattmeddelanden (Moderering)</h3>
+              <span id="admin-flagged-badge" class="status-badge" style="background:#7f1d1d; color:#fecaca; margin:0;">0 ärenden</span>
+            </div>
+            <div id="admin-flagged-list" style="display:flex; flex-direction:column; gap:10px;">
+              <p style="font-size:0.85rem; margin:0;">Inga flaggade meddelanden just nu.</p>
+            </div>
+          </div>
+
+          <!-- 3. MEDLEMSHANTERING & NOLLSTÄLLNING AV FÖRSÖKSRÄKNARE -->
+          <div style="background:#141922; border:1px solid var(--border); border-radius:10px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+              <h3 style="margin:0; font-size:1rem; color:#fff;">👥 Medlemmar, Försöksräknare &amp; Avstängning</h3>
+              <input type="text" id="admin-member-search" placeholder="🔍 Sök alias eller user-ID..." style="width:220px; margin:0; padding:7px 10px; font-size:0.82rem;" oninput="window.filterAdminMembers()">
+            </div>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:0; margin-bottom:12px;">
+              Klicka på <strong>"⚡ Nollställ vald räknare"</strong> på en medlem om telefonen laddat ur eller barnen skrikit, så synkas nollställningen direkt till medlemmens konto nästa gång hen öppnar sidan.
+            </p>
+            <div id="admin-members-list" style="display:flex; flex-direction:column; gap:12px; max-height:540px; overflow-y:auto; padding-right:4px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div data-view-src="views/modals.html">
+<!-- MODAL FÖR FRÅGOR & SVAR (FAQ) + GROK-FILTER + DISKRET KONTAKTUPPGIFT -->
+    <div id="faq-modal" class="modal-overlay" onclick="if(event.target===this) window.closeFaqModal()">
+      <div class="modal-content" style="max-width:640px; max-height:86vh; overflow-y:auto; border-color:#38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h2 style="margin:0; font-size:1.25rem; color:#fff;">❓ Frågor &amp; svar</h2>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:4px 10px; font-size:0.8rem;" onclick="window.closeFaqModal()">✕ Stäng</button>
+        </div>
+
+        <div style="font-size:0.9rem; color:#cbd5e1; line-height:1.6; display:flex; flex-direction:column; gap:14px;">
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:14px;">
+            <strong style="color:#38bdf8; display:block; margin-bottom:6px;">Om jag inte berättar vilket kön jag har eller vem jag är, hur vet jag då om jag matchas med en kille eller tjej?</strong>
+            <p style="margin:0; color:#e2e8f0; font-size:0.88rem;">
+              Det vet du inte, och det är en medveten del av experimentet. Matchningen går på hur ni resonerar och agerar, inte på kön, ålder eller utseende. Det betyder också att du kan matchas med någon du inte hade valt själv. Förhoppningen är att du träffar en människa du faktiskt har något att prata med. Vad det blir sedan, vän, partner, samarbetspartner eller ingenting, avgör ni själva. I chatten kan du frivilligt ange kön om du vill.
+            </p>
+            <div style="margin-top:10px; background:#161b24; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; font-size:0.84rem; color:#fde68a;">
+              <strong>⚡ Grok:</strong> <span style="color:#cbd5e1; font-style:italic;">Du kan alltså hamna i ett långt samtal om moraliska val med någon du aldrig hade swipeat på. Om ni fortfarande pratar efter det är det åtminstone inte för profilbilden.</span>
+            </div>
+          </div>
+
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:14px;">
+            <strong style="color:#38bdf8; display:block; margin-bottom:6px;">Är det här en dejtingapp eller något annat?</strong>
+            <p style="margin:0; color:#e2e8f0; font-size:0.88rem;">
+              Ett experiment som ligger någonstans mittemellan. Vanliga dejtingappar bygger mest på bilder och snabba omdömen, och många blir trötta på det. Relationspiloten vill pröva något annat: du spelar samarbetsrollspel, och en AI skriver en reflektion över hur du valde och agerade. Reflektionen kan sedan jämföras med andras. I en valfri del reagerar du också på ansikten och uttryck. Den är ett komplement och inte grunden. Det är ett tidigt pilotprojekt, och matchningarna är AI-uppskattningar, inte facit.
+            </p>
+            <div style="margin-top:10px; background:#161b24; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; font-size:0.84rem; color:#fde68a;">
+              <strong>⚡ Grok:</strong> <span style="color:#cbd5e1; font-style:italic;">Tinder möter rollspel och en AI som tar anteckningar. Kan bli intressant. Eller bara en mer omständlig väg till samma “jag är lite introvert som gillar att resa”.</span>
+            </div>
+          </div>
+
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:14px;">
+            <strong style="color:#38bdf8; display:block; margin-bottom:6px;">Hur skyddas min integritet?</strong>
+            <p style="margin:0 0 6px 0; color:#e2e8f0; font-size:0.88rem;">Så här fungerar det, rakt på sak:</p>
+            <ul style="margin:0; padding-left:18px; color:#e2e8f0; font-size:0.86rem; line-height:1.55;">
+              <li style="margin-bottom:4px;">Du loggar in med ett alias och ett lösenord. Namn och e-postadress behövs inte.</li>
+              <li style="margin-bottom:4px;">Andra deltagare ser aldrig dina svar eller din profiltext. De ser bara en procentsiffra och en kort AI-text om hur ni kan passa ihop.</li>
+              <li style="margin-bottom:4px;">Det du skriver skickas till Google Gemini för att AI-svaren ska kunna skapas. Din profil sparas i en databas hos Supabase. Som utvecklare kan jag tekniskt komma åt databasen, men jag använder den inte för att läsa dina svar.</li>
+              <li>Du kan radera din profil, dina matchningar, dina meddelanden och ditt konto med ett klick. Vad Google sparar av det som redan skickats styrs av deras villkor, inte av oss.</li>
+            </ul>
+            <div style="margin-top:10px; background:#161b24; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; font-size:0.84rem; color:#fde68a;">
+              <strong>⚡ Grok:</strong> <span style="color:#cbd5e1; font-style:italic;">“Vi skickar det till Google men lovar att inte kolla själva.” Bättre än många andra appar, men radera-knappen finns där av en anledning.</span>
+            </div>
+          </div>
+
+          <div style="background:#11151c; border:1px solid var(--border); border-radius:8px; padding:14px;">
+            <strong style="color:#38bdf8; display:block; margin-bottom:6px;">Varför rollspel i stället för vanliga personlighetstester, som Big Five?</strong>
+            <p style="margin:0; color:#e2e8f0; font-size:0.88rem;">
+              Big Five är ett bra och välstuderat test, men en enkät mäter mest vad du tror om dig själv. De flesta kryssar gärna i "lyhörd, stresstålig och bra lyssnare". Ett rollspel ger ett annat slags underlag: du måste välja, till exempel när resurserna tar slut och din kompanjon tvekar. Då får vi se vad du faktiskt gör, och AI:n kan spegla det tillbaka. Det är inte vetenskapligt validerat och inte ett bättre test, bara ett annorlunda sätt att se. Därför är vi nyfikna på om du känner igen dig i reflektionen.
+            </p>
+            <div style="margin-top:10px; background:#161b24; border-left:3px solid #f59e0b; padding:8px 12px; border-radius:6px; font-size:0.84rem; color:#fde68a;">
+              <strong>⚡ Grok:</strong> <span style="color:#cbd5e1; font-style:italic;">Big Five låter alla vara “lyhörda och stresståliga”. Här måste du faktiskt välja när burken med bönor tar slut. Mer avslöjande, och svårare att fejka.</span>
+            </div>
+          </div>
+
+          <!-- DISKRET UNDANGÖMD KONTAKTSEKTION (KRÄVER ATT MAN FÄLLER UT DEN) -->
+          <details style="margin-top:4px; font-size:0.76rem; color:#64748b; background:#0d1016; border:1px solid #1e293b; border-radius:6px; padding:8px 12px;">
+            <summary style="cursor:pointer; user-select:none; color:#64748b;">Teknisk info &amp; kontakt med utvecklaren (vid t.ex. låst räknare eller urladdad telefon)</summary>
+            <div style="margin-top:8px; color:#94a3b8; line-height:1.5;">
+              Har telefonen laddat ur mitt i ett test eller behöver du komma i kontakt med skaparen bakom pilotprojektet?
+              <button type="button" id="btn-reveal-dev-mail" onclick="window.revealDeveloperEmail()" style="background:none; border:none; color:#38bdf8; font-size:0.76rem; text-decoration:underline; cursor:pointer; padding:0; margin-left:4px;">Visa e-postadress</button>
+              <span id="dev-mail-slot" style="display:none; color:#fde68a; font-weight:600; margin-left:4px;"></span>
+            </div>
+          </details>
+        </div>
+
+        <button type="button" class="btn" style="margin-top:16px;" onclick="window.closeFaqModal()">Jag förstår — Tillbaka</button>
+      </div>
+    </div>
+
+    <!-- MODAL VID GULT KORT -->
+    <div id="troll-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h3>⚠️ En snabb avstämning med spelledaren</h3>
+        <p style="font-size: 0.92rem;">
+          Spelledaren uppfattade ditt senaste drag som antingen utanför ramarna eller svårt att tolka.
+        </p>
+
+        <div style="background: #11151c; border-radius: 8px; padding: 12px; margin: 12px 0;">
+          <strong style="color: #6ee7b7; font-size: 0.85rem;">GRÖNT LJUS (Helt okej):</strong>
+          <ul class="guideline-list" style="margin: 6px 0 10px 0;">
+            <li>Du behöver inte vara författare – korta svar som "jag letar efter ved" eller "jag vet inte, vad tycker du?" duger utmärkt.</li>
+            <li>Det är helt okej att tveka, göra misstag eller spela en försiktig karaktär.</li>
+          </ul>
+
+          <strong style="color: #f87171; font-size: 0.85rem;">RÖDA LINJER (Avbryter sessionen):</strong>
+          <ul class="guideline-list" style="margin: 6px 0 0 0;">
+            <li>Att medvetet sabotera fiktionen (t.ex. attackera kompanjonen utan orsak).</li>
+            <li>Tangentbordsspam, nonsensord eller att försöka styra AI:n bort från berättelsen.</li>
+          </ul>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--muted);">
+          Svara utifrån vad du eller din karaktär spontant vill göra härnäst.
+        </p>
+        <button type="button" id="btn-close-troll" class="btn">Jag förstår – låt oss fortsätta</button>
+      </div>
+    </div>
+
+    </div>
   </div>
 
-  <!-- JavaScript-moduler i tydlig laddningsordning -->
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/roleplay.js"></script>
-  <script src="js/matching-chat.js"></script>
-  <script src="js/multimodal-tests.js"></script>
-  <script src="js/swipe-lab.js"></script>
-  <script src="js/somatic-lab.js"></script>
-  <script src="js/standalone-labs.js"></script>
-  <script src="js/argon-queue.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/main.js"></script>
+  <!-- JavaScript-moduler i tydlig laddningsordning (med cache-busting v=7.2) -->
+  <script src="js/config.js?v=7.2"></script>
+  <script src="js/api.js?v=7.2"></script>
+  <script src="js/auth.js?v=7.2"></script>
+  <script src="js/roleplay.js?v=7.2"></script>
+  <script src="js/matching-chat.js?v=7.2"></script>
+  <script src="js/multimodal-tests.js?v=7.2"></script>
+  <script src="js/swipe-lab.js?v=7.2"></script>
+  <script src="js/somatic-lab.js?v=7.2"></script>
+  <script src="js/standalone-labs.js?v=7.2"></script>
+  <script src="js/argon-queue.js?v=7.2"></script>
+  <script src="js/admin.js?v=7.2"></script>
+  <script src="js/main.js?v=7.2"></script>
 </body>
 </html>
