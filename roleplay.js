@@ -520,6 +520,7 @@
       { key: "deep_routine",  code: "MOD_C", icon: "☕", label: "Modul C: Vardagslunk (35r)" },
       { key: "swipe_test",    code: "SWIPE_360", icon: "🧭", label: "360° Vektorswipe & Självbild" },
       { key: "somatic_test",  code: "SOMATIK",   icon: "🏛️", label: "Somatisk & Taktil Projektion" },
+      { key: "crm_test",      code: "CRM_LJUD",  icon: "🎧", label: "Psykoakustisk Ljudanalys (CRM)" },
       { key: "devil_test",    code: "SKARPA",    icon: "⚡", label: "Off-Guard Profilskärpa" },
       { key: "color_form_mood_test", code: "SYMBOL", icon: "🎨", label: "Symbolkompass (Humör & Koherens)" },
       { key: "test_voice",    code: "ROST_BILD", icon: "🎙️", label: "Röst-till-Bild Projektion" },
@@ -561,7 +562,7 @@
         });
       }
       if (txt.indexOf("VISUELL KOMPASS") !== -1) done.add("SWIPE_360");
-      if (txt.indexOf("SOMATISK & TAKTIL POLARITET") !== -1) { done.add("SOMATIK"); done.add("SKARPA"); }
+      if (txt.indexOf("SOMATISK & TAKTIL POLARITET") !== -1) { done.add("SOMATIK"); done.add("CRM_LJUD"); done.add("SKARPA"); }
       if (forsokData && typeof forsokData === "object") {
         MODULE_BADGE_Catalog.forEach(item => {
           if (Number(forsokData[item.key] || 0) >= 1) done.add(item.code);

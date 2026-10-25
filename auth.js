@@ -223,12 +223,19 @@
       const somUsed = getModuleAttempts("somatic_test");
       const somLbl = document.getElementById("attempts-somatic-label");
       if (somLbl) somLbl.textContent = somUsed + " av 1 förbrukat";
+      const crmLbl = document.getElementById("attempts-crm-label");
+      if (crmLbl) crmLbl.textContent = somUsed + " av 1 förbrukat";
       const somModLbl = document.getElementById("attempts-somatic-modal-label");
       if (somModLbl) somModLbl.textContent = somUsed + " av 1 förbrukat";
       const btnHubSom = document.getElementById("btn-hub-somaticlab");
       if (btnHubSom) {
         btnHubSom.disabled = (somUsed >= 1);
         if (somUsed >= 1) btnHubSom.textContent = "🔒 Somatisk & Taktil Projektion redan genomförd (1/1 försök)";
+      }
+      const btnHubCrm = document.getElementById("btn-hub-crmlab");
+      if (btnHubCrm) {
+        btnHubCrm.disabled = (somUsed >= 1);
+        if (somUsed >= 1) btnHubCrm.textContent = "🔒 Psykoakustisk Ljudanalys redan genomförd (1/1 försök)";
       }
       if (typeof updateHubClarityBadge === "function") updateHubClarityBadge();
       const moodUsed = getModuleAttempts("color_form_mood_test");

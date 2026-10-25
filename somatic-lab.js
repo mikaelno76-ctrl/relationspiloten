@@ -482,13 +482,15 @@ async function syncSupabaseStimuliBucket() {
       count++;
     });
 
+    const audioKeys = ["bed1", "bed2", "bed3", "bed4", "v1", "v2", "v3", "v4"];
+    const foundAudio = audioKeys.filter(k => !!somaticBucketMap[k]).length;
     if (statusEl) {
       if (count > 0) {
         statusEl.style.color = "#6ee7b7";
-        statusEl.innerHTML = "✅ <strong>" + count + "</strong> testbilder hittades automatiskt i Supabase-bucketen <code>stimuli</code>!";
+        statusEl.innerHTML = "✅ <strong>" + count + "</strong> filer i Supabase-bucketen <code>stimuli</code> (varav <strong>" + foundAudio + " / 8</strong> psykoakustiska ljudspår <code>bed1–v4</code>)!";
       } else {
         statusEl.style.color = "#fde68a";
-        statusEl.innerHTML = "ℹ️ Bucketen <code>stimuli</code> är tom eller ej skapad än (visar konstnärliga SVG-förlagor tills du laddat upp bilderna).";
+        statusEl.innerHTML = "ℹ️ Bucketen <code>stimuli</code> är tom eller ej skapad än (visar konstnärliga SVG-förlagor och synkroniserad Cue-Sheet-tidslinje tills filerna laddats upp).";
       }
     }
   } catch (e) {
@@ -1053,7 +1055,13 @@ async function analyzeSomaticAndTactileWithArgon() {
     alert("Du har redan slutfört och sparat Somatisk & Taktil Projektion i din profil.");
     return;
   }
-  if (sessionData) incrementModuleAttempts("somatic_test");
+  if (sessionData) {
+    incrementModuleAttempts("somatic_test");
+    const crmCheck = (typeof buildPsychoacousticCrmSynthesis === "function") ? buildPsychoacousticCrmSynthesis() : null;
+    if (crmCheck && crmCheck.total_crm_samples > 0) {
+      incrementModuleAttempts("crm_test");
+    }
+  }
 
   const outEl = document.getElementById("somatic-argon-output");
   const btn = document.getElementById("btn-run-somatic-argon");
@@ -2159,3 +2167,16 @@ function buildPsychoacousticCrmSynthesis() {
   };
 }
 window.buildPsychoacousticCrmSynthesis = buildPsychoacousticCrmSynthesis;
+
+
+function openPsychoacousticCrmLab() {
+  if (typeof stopCrmTrackingTimers === "function") stopCrmTrackingTimers();
+  syncSupabaseStimuliBucket();
+  document.body.classList.remove("swipe-locked");
+  switchView("view-somatic-lab");
+  if (typeof refreshAttemptsUI === "function") refreshAttemptsUI();
+  crmTrackLogs = {};
+  crmCurrentTrackIdx = 0;
+  openCrmIntroStep();
+}
+window.openPsychoacousticCrmLab = openPsychoacousticCrmLab;
