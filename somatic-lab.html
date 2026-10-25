@@ -1,0 +1,268 @@
+<!-- 4.5. SOMATISK & TAKTIL PROJEKTION (2-STEGS RADIALHJUL) + CONTINUOUS AFFECT TRACKING (CRM) + GLOBAL OFF-GUARD DJÄVULSTEST -->
+    <div id="view-somatic-lab" class="view">
+      <!-- STEG 1: INTRODUKTION (ALLTID ALLA 88 BILDER + 8 PSYKOAKUSTISKA CRM-SPÅR) -->
+      <div id="somatic-step-intro" class="card" style="border: 1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-gold">🏛️ Somatisk, Taktil &amp; Psykoakustisk Projektion</span>
+            <span class="status-badge badge-engine">88 Konststimuli + 8 CRM-spår + Off-Guard</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka</button>
+        </div>
+
+        <h2>Kroppsmatris, Händer/Fötter, Psykoakustisk CRM &amp; Profilskärpa</h2>
+        <p style="font-size:0.92rem; margin-bottom:14px;">
+          Istället för slentrianmässiga ”gilla/ogilla”-svep mäter detta test hur ditt nervsystem spontant översätter <strong>kroppsformer</strong>, <strong>händers och fötters uttryck</strong> samt <strong>ljudvärldar och vokalarketyper</strong> till synestetiska former, känselintryck, temperaturer och kontinuerliga rörelsekurvor (Continuous Affect Tracking / CRM).
+        </p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; font-size:0.84rem;">
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #f59e0b;">
+              <strong style="color:#fde68a; display:block; margin-bottom:4px;">Del 1: Kroppsmatris (68 bilder)</strong>
+              4 kalibreringsbilder följt av 64 konstnärliga kroppsarketyper. Tryck på bilden och välj <strong>Formkraft</strong> följt av <strong>Färgklang</strong>.
+            </div>
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #10b981;">
+              <strong style="color:#6ee7b7; display:block; margin-bottom:4px;">Del 2: Händer &amp; Fötter (20 bilder)</strong>
+              4 taktila kalibreringsbilder samt 16 studier av händer och fötter där hjulet skiftar till <strong>Känsel</strong> och <strong>Temperatur</strong>.
+            </div>
+            <div style="background:#161c26; padding:10px; border-radius:8px; border-left:3px solid #38bdf8;">
+              <strong style="color:#38bdf8; display:block; margin-bottom:4px;">Del 3: Psykoakustisk CRM (8 ljudspår)</strong>
+              4 bakgrundskomp (<code>bed1–bed4</code>) och 4 röstarketyper (<code>v1–v4</code>). Följ musiken och rösterna i realtid med fingret på vår 2D-affektyta.
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:10px; font-size:0.8rem; color:var(--muted);">
+            ⚡ <strong>Inbäddade Off-Guard-frågor:</strong> Mitt i bildflödet stannar skärmen ibland upp med en snabb flervalsfråga. Svara med din allra första impuls.<br>
+            🔒 <strong>GDPR-skyddad syntes:</strong> Endast de aggregerade profilvektorerna och CRM-korrelationerna sparas – aldrig enskilda råklick.
+          </div>
+        </div>
+
+        <div id="somatic-bucket-status" style="font-size:0.78rem; color:#94a3b8; margin-bottom:12px;">
+          🔍 Kontrollerar bild- och ljudbiblioteket i Supabase (<code>stimuli</code>)...
+        </div>
+
+        <div style="background:#141922; border-left:4px solid #f59e0b; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:0.84rem; color:#fde68a;">
+          ⚠️ <strong>Observera innan start:</strong> Du går igenom bildsekvensen (88 bilder) följt av de 8 psykoakustiska CRM-spåren (<strong>1 skarpt försök</strong> i profilen: <span id="attempts-somatic-modal-label">0 av 1 förbrukat</span>). Du kan även hoppa direkt till det psykoakustiska CRM-labbet nedan om du vill provköra ljudspåren separat!
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" id="btn-start-somatic-session" class="btn" style="flex:2; min-width:240px; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px; margin-top:0;" onclick="window.startSomaticLabSession()">
+            🚀 Starta hela sekvensen (88 bilder + 8 CRM-spår)
+          </button>
+          <button type="button" id="btn-start-crm-direct" class="btn btn-secondary" style="flex:1; min-width:210px; border:1px solid #38bdf8; color:#38bdf8; font-weight:700; font-size:0.9rem; padding:14px; margin-top:0;" onclick="window.startPsychoacousticCrmDirect()">
+            🎧 Starta CRM-ljudspår direkt (bed1–v4)
+          </button>
+        </div>
+      </div>
+
+      <!-- STEG 2: REN VISUELL RADIAL-ARENA (INGEN TEXT UNDER BILDERNA) -->
+      <div id="somatic-step-arena" class="card" style="display:none; max-width:500px; margin:0 auto; padding:14px; border:1px solid #334155; background:#0d1017;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span id="somatic-progress-counter" style="font-size:0.84rem; color:var(--muted); font-weight:700; font-family:monospace;">1 / 88</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.abortSomaticToIntro()">✕ Avbryt</button>
+        </div>
+
+        <div class="somatic-stimulus-card">
+          <div class="somatic-viewport" id="somatic-viewport">
+            <img id="somatic-stimulus-img" class="somatic-stimulus-img" alt="" style="display:none;" />
+            <div id="somatic-fallback-container" class="somatic-fallback-svg"></div>
+
+            <!-- 2-STEGS RADIALHJUL -->
+            <div class="somatic-wheel-overlay" id="somatic-wheel-overlay">
+              <div class="somatic-wheel-container" id="somatic-wheel-container">
+                <div class="somatic-wheel-center">
+                  <div class="somatic-wheel-step-lbl" id="somatic-wheel-step-lbl">STEG 1</div>
+                  <div class="somatic-wheel-step-title" id="somatic-wheel-step-title">FORMKRAFT</div>
+                </div>
+                <div id="somatic-wheel-nodes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEG 2.5: MELLANSKÄRM NÄR KROPPAR BYTS MOT HÄNDER OCH FÖTTER (EFTER KORT 68) -->
+      <div id="somatic-step-transition" class="card" style="display:none; max-width:520px; margin:0 auto; border:1px solid #10b981; background:#121722;">
+        <span class="status-badge" style="background:rgba(16, 185, 129, 0.2); color:#6ee7b7; border:1px solid #10b981;">✋ Del 2 av 3: Händer, Fötter &amp; Beröring</span>
+        <h2 style="margin-top:8px;">Nu skiftar vi från kroppsform till beröring &amp; fotfäste</h2>
+        <p style="font-size:0.92rem; color:#e2e8f0;">
+          Du har nu gått igenom kroppssilhuetterna. I nästa del visas studier av <strong>händer och fötter</strong> – både när de vilar mjukt och när de griper, formar eller tar spjärn.
+        </p>
+        <p style="font-size:0.88rem; color:#cbd5e1;">
+          Eftersom händer och fötter är våra verktyg för närhet, handlingskraft och förankring byter radialhjulet nu symboler så att det fångar <strong>hur kontakten känns i huden</strong>:
+        </p>
+
+        <div style="background:#0d1118; border:1px solid var(--border); border-radius:10px; padding:14px; margin:14px 0; font-size:0.84rem;">
+          <div style="margin-bottom:10px;">
+            <strong style="color:#fcd34d; display:block; margin-bottom:3px;">Steg 1 i hjulet — Känsel &amp; Grepp:</strong>
+            <span style="color:#cbd5e1;">Dunbädd (mjuk vila) • Smekning (följsam) • Pulsvåg (kemi/nerv) • Kraftgrepp (styrka/kontroll) • Spegelglas (sval/slät) • Taggfrost (stickig/avvisande)</span>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:10px;">
+            <strong style="color:#6ee7b7; display:block; margin-bottom:3px;">Steg 2 i hjulet — Temperatur:</strong>
+            <span style="color:#cbd5e1;">Glöd • Solvärme • Mossa • Cederträ • Sval skiffer • Nattfrost</span>
+          </div>
+        </div>
+
+        <p style="font-size:0.82rem; color:var(--muted); margin-bottom:16px;">
+          Precis som i första delen inleder vi med <strong>4 korta kalibreringsbilder</strong> innan de 16 bilderna på händer och fötter tar vid.
+        </p>
+
+        <button type="button" class="btn" style="background:linear-gradient(135deg, #10b981, #059669); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px;" onclick="window.continueToTactilePhase()">
+          ✋ Fortsätt till Händer &amp; Fötter (Kort 69–88) ➔
+        </button>
+      </div>
+
+      <!-- STEG 2.75: MELLANSKÄRM INFÖR PSYKOAKUSTISK CONTINUOUS AFFECT TRACKING (CRM) -->
+      <div id="somatic-step-crm-intro" class="card" style="display:none; max-width:540px; margin:0 auto; border:1px solid #38bdf8; background:#111722;">
+        <span class="status-badge badge-engine">🎧 Del 3 av 3: Continuous Affect Tracking (CRM)</span>
+        <h2 style="margin-top:8px;">Nu lyssnar vi: Hur rör sig ditt nervsystem i musiken och rösterna?</h2>
+        <p style="font-size:0.92rem; color:#e2e8f0;">
+          I denna del får du höra <strong>4 bakgrundskomp / ljudvärldar</strong> (<code>bed1–bed4</code>) och <strong>4 vokalarketyper</strong> (<code>v1–v4</code>). Istället för att svara efteråt följer du ljudet <strong>kontinuerligt i realtid</strong> med fingret eller muspekaren över vår 2D-affektyta.
+        </p>
+
+        <div style="background:#0d1118; border:1px solid var(--border); border-radius:10px; padding:14px; margin:14px 0; font-size:0.84rem;">
+          <strong style="color:#38bdf8; display:block; margin-bottom:6px;">🧭 Så fungerar 2D-affektytan (Continuous Response Measurement):</strong>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; color:#cbd5e1;">
+            <div>🟢 <strong>Uppåt (Norr):</strong> Jordad trygghet, ro, tillit &amp; värme</div>
+            <div>🔴 <strong>Höger (Öster):</strong> Stark kemi, puls, gåshud &amp; passion</div>
+            <div>🟣 <strong>Nedåt (Söder):</strong> Friktion, vaksamhet, tryck eller obehag</div>
+            <div>🔵 <strong>Vänster (Väster):</strong> Sval distans, tomrum &amp; introspektion</div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:8px; font-size:0.79rem; color:var(--muted);">
+            💡 Håll fingret/musen på plattan medan spåret spelas. Argon 4.0 korrelerar exakt din rörelsekurva mot varje brytpunkt, stråkentré, andningspaus och dramatopp i cue-sheetet!
+          </div>
+        </div>
+
+        <button type="button" class="btn" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800; font-size:0.98rem; padding:14px;" onclick="window.beginCrmArenaSequence()">
+          🎧 Starta Continuous Affect Tracking (8 spår) ➔
+        </button>
+      </div>
+
+      <!-- STEG 2.8: PSYKOAKUSTISK CRM-ARENA (bed1–bed4 & v1–v4 MED HELA CUE-SHEETET) -->
+      <div id="somatic-step-crm-arena" class="card" style="display:none; max-width:540px; margin:0 auto; padding:16px; border:1px solid #38bdf8; background:#0d1119;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+          <div>
+            <span id="crm-track-counter" class="status-badge badge-engine" style="margin:0; font-family:monospace;">Spår 1 / 8</span>
+            <span id="crm-track-category-badge" class="status-badge badge-gold" style="margin:0;">Bakgrundskomp</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.74rem;" onclick="window.finishCrmAndShowReport()">⏭️ Slutför &amp; Gå till Syntes</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.74rem;" onclick="window.abortSomaticToIntro()">✕ Avbryt</button>
+          </div>
+        </div>
+
+        <h3 id="crm-track-title" style="margin:4px 0 2px 0; font-size:1.04rem; color:#fff;">bed1.mp3 — Akustisk &amp; Organisk</h3>
+        <p id="crm-track-character" style="margin:0 0 10px 0; font-size:0.8rem; color:#94a3b8; line-height:1.4;"></p>
+
+        <!-- TIDSLINJE MED CUE-SEGMENT OCH AKTIV FAS -->
+        <div class="crm-timeline-wrap">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; font-family:monospace; color:#cbd5e1;">
+            <span id="crm-time-display">00:00 / 02:02</span>
+            <span id="crm-active-phase-pill" style="color:#fde68a; font-weight:700;">Väntar på uppspelning...</span>
+          </div>
+          <div class="crm-timeline-bar" id="crm-timeline-bar">
+            <div class="crm-playhead" id="crm-playhead" style="left:0%;"></div>
+          </div>
+          <div id="crm-active-cue-desc" style="font-size:0.77rem; color:#94a3b8; margin-top:6px; min-height:1.2em;">
+            Tryck på Spela eller håll fingret på 2D-ytan nedan för att starta spåret och logga din kurva.
+          </div>
+        </div>
+
+        <!-- 2D CONTINUOUS AFFECT PAD -->
+        <div class="crm-pad-wrap" id="crm-pad-wrap">
+          <div class="crm-axis-line-h"></div>
+          <div class="crm-axis-line-v"></div>
+          <div class="crm-ring-guide" style="width:38%; height:38%;"></div>
+          <div class="crm-ring-guide" style="width:74%; height:74%;"></div>
+
+          <div class="crm-pole-label crm-pole-n">🟢 TRYGGHET &amp; RO (SAFE)</div>
+          <div class="crm-pole-label crm-pole-e">🔴 KEMI &amp; PULS (SPARK)</div>
+          <div class="crm-pole-label crm-pole-s">🟣 FRIKTION &amp; VAKSAMHET</div>
+          <div class="crm-pole-label crm-pole-w">🔵 SVAL DISTANS &amp; RYMD</div>
+
+          <canvas id="crm-trail-canvas" width="390" height="390" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:4;"></canvas>
+          <div class="crm-cursor-puck" id="crm-cursor-puck"></div>
+        </div>
+
+        <!-- LIVE TELEMETRI -->
+        <div class="somatic-telemetry-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-top:6px; margin-bottom:10px;">
+          <span id="crm-live-coords">X (Kemi/Distans): 0.00 | Y (Trygg/Friktion): 0.00</span>
+          <span id="crm-sample-counter" style="color:#38bdf8;">0 mätpunkter (4 Hz)</span>
+        </div>
+
+        <audio id="crm-audio-player" preload="auto" crossorigin="anonymous" style="display:none;"></audio>
+
+        <!-- KONTROLLER FÖR UPPSPELNING & NÄSTA SPÅR -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" id="btn-crm-play-toggle" class="btn" style="flex:1; margin:0; background:#0284c7; padding:11px;" onclick="window.toggleCrmAudioPlayback()">
+            ▶️ Spela &amp; Spåra i realtid
+          </button>
+          <button type="button" id="btn-crm-next-track" class="btn btn-secondary" style="flex:1; margin:0; border:1px solid #38bdf8; color:#38bdf8; padding:11px;" onclick="window.nextCrmTrack()">
+            Nästa spår (Spara kurva) ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- STEG 3: SEPARERAD 4-LAGERS SYNTES & ARGON 4.0 DJUPANALYS -->
+      <div id="somatic-step-report" class="card" style="display:none; border:1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge badge-gold">Steg 3: Separerad 4-Lagers Syntes (inkl. CRM)</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.exitSomaticLab()">⬅️ Tillbaka till Hubben</button>
+        </div>
+
+        <h2>Dina fyra separerade attraktions-, CRM- &amp; skärpelager</h2>
+        <p style="font-size:0.88rem; margin-bottom:14px;">
+          Här redovisas dina fyra dimensioner var för sig: Kroppsmatris, Händer/Fötter, Psykoakustisk Continuous Affect Tracking (<code>bed1–bed4</code> &amp; <code>v1–v4</code>) samt Off-Guard Profilskärpa.
+        </p>
+
+        <div id="somatic-report-layers"></div>
+
+        <button type="button" id="btn-run-somatic-argon" class="btn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800; margin-top:12px;" onclick="window.analyzeSomaticAndTactileWithArgon()">
+          🧠 Slutför &amp; Låt Argon 4.0 tolka mina 4 lager (inkl. CRM-kurvor) till profilen
+        </button>
+
+        <pre id="somatic-argon-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.9rem; line-height:1.55;"></pre>
+
+        <div id="somatic-standalone-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('somatic-argon-output')">📋 Kopiera analysen</button>
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadSomaticJsonReport()">📥 Ladda ner JSON-vektorer &amp; CRM</button>
+          <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.exitSomaticLab()">🚀 Klar — Gå till Matchningshubben</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLOBAL OFF-GUARD "DJÄVULSTEST" MODAL (ANVÄNDS I BÅDE SVAJPFLÖDEN OCH ROLLSPEL) -->
+    <div id="offguard-devil-modal" class="somatic-offguard-modal">
+      <div class="somatic-offguard-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span class="somatic-offguard-badge">⚡ PAUS I FLÖDET — SNABB IMPULS</span>
+          <span style="font-family:monospace; font-size:0.76rem; color:#fcd34d;" id="offguard-context-tag">Första magkänslan</span>
+        </div>
+        <div class="somatic-offguard-question" id="offguard-question-text">Frågetext laddas...</div>
+        <div class="somatic-offguard-options" id="offguard-options-box"></div>
+      </div>
+    </div>
+
+
+    <!-- GLOBAL SUBJEKTIV FÄRG- & FORMSTEGE (BRA VS DÅLIGT HUMÖR + TEST-RETEST KOHERENS) -->
+    <div id="mood-ladder-modal" class="somatic-offguard-modal">
+      <div class="somatic-offguard-box" style="max-width:480px; border-color:#38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+          <span class="status-badge badge-engine" style="margin:0;" id="mood-ladder-badge">🎨 Personlig Symbolkompass (Del 1 av 4)</span>
+          <span style="font-family:monospace; font-size:0.75rem; color:#fcd34d;" id="mood-ladder-step-counter">Steg 1 / 4</span>
+        </div>
+
+        <h3 id="mood-ladder-title" style="color:#fff; font-size:1.05rem; margin:0 0 6px 0;">Färgstege vid Bra Humör</h3>
+        <p id="mood-ladder-desc" style="font-size:0.86rem; color:#cbd5e1; margin:0 0 12px 0; line-height:1.45;">
+          Klicka på brickorna i ordning från <strong>#1 (Mest tilltalande / ger mest kraft)</strong> ner till <strong>#6 (Minst tilltalande)</strong>. Klicka på en vald bricka om du vill ångra.
+        </p>
+
+        <div id="mood-ladder-grid" class="mood-ladder-grid"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; gap:10px;">
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:8px 14px; font-size:0.8rem;" onclick="window.resetCurrentMoodLadderStep()">↺ Nollställ ordning</button>
+          <button type="button" id="btn-mood-ladder-next" class="btn" style="flex:1; margin:0; padding:10px 16px; font-weight:800;" disabled onclick="window.commitCurrentMoodLadderStep()">
+            Bekräfta ordning (0/6 valda) ➔
+          </button>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,138 @@
+<!-- FRISTÅENDE TAXI DROP-IN MENY (?test=taxi) -->
+    <div id="view-taxi-menu" class="view">
+      <div class="card" style="border:1px solid #38bdf8;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+          <span class="status-badge badge-engine">🚕 Välkommen ombord — Interaktivt Baksätes-Lab</span>
+          <span class="status-badge">100% Anonymt • Inget sparas</span>
+        </div>
+        <h1 style="margin-bottom:6px;">Utforska din Relations- &amp; Intuitionsprofil under resan</h1>
+        <p style="font-size:0.92rem; margin-top:0;">
+          Välj ett av våra två fristående AI-experiment nedan. Du behöver inte skapa något konto och <strong>ingenting sparas på någon server</strong> – du får din analys direkt på skärmen och kan spara den på din egen telefon om du vill.
+        </p>
+
+        <div class="grid" style="margin-top:18px;">
+          <div class="scenario-item" style="border-left:4px solid #38bdf8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">⚡ Test 1: 360° Vektorswipe &amp; Självbild</h3>
+              <span class="status-badge badge-engine" style="margin:0;">ca 3–4 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Svep porträtt i 360 grader utifrån din första magkänsla (Tillit, Kemi, Varning eller Distans). Gallra därefter bort tre val och peka ut vilka 3 ansiktsuttryck som ligger närmast dig själv. Argon 4.0 analyserar både dina svepriktningar och hur snabbt/tvekande du reagerar.
+            </p>
+            <button type="button" class="btn" style="margin-top:0;" onclick="window.openSwipeLab()">
+              🔥 Starta 360° Vektorswipe
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border-left:4px solid #f59e0b;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🎙️🎨 Test 2: Röst ➔ AI-Målning ➔ Din Tolkning</h3>
+              <span class="status-badge badge-gold" style="margin:0;">ca 2 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Beskriv något vackert, något sorgligt eller något som skaver med din röst (20–30 sek). Argon 4.0 lyssnar på din röstmelodi och målar ett abstrakt/symboliskt konstverk utifrån vad den hörde. Du berättar vad du ser i målningen – och får en direkt psykologisk spegling.
+            </p>
+            <button type="button" class="btn" style="background:#d97706; margin-top:0;" onclick="window.openStandaloneVoiceLab()">
+              🎙️ Starta Röst-till-Målning
+            </button>
+          </div>
+
+          <div class="scenario-item" style="border-left:4px solid #10b981;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🏛️✋ Test 3: Somatisk &amp; Taktil Projektion + Djävulstest</h3>
+              <span class="status-badge" style="margin:0;">ca 3 min</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Synestetiskt 2-stegs radialhjul där du kopplar skulpturer (Kropp) samt rödkritestudier av händer och fötter till former, texturer och temperaturer – med inbäddade Off-Guard-frågor som mäter din profilskärpa.
+            </p>
+            <button type="button" class="btn" style="background:#059669; margin-top:0;" onclick="window.openSomaticLab()">
+              🏛️ Starta Somatisk &amp; Taktil Projektion
+            </button>
+          </div>
+
+
+          <div class="scenario-item" style="border-left:4px solid var(--accent);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="margin:0;">🎭 Hela Relationspiloten (Rollspel &amp; Matchning)</h3>
+              <span class="status-badge" style="margin:0;">Fullversion</span>
+            </div>
+            <p style="font-size:0.88rem; margin:8px 0 12px;">
+              Vill du uppleva hela det interaktiva samarbetsrollspelet och bli matchad med andra utifrån hur ni faktiskt agerar och löser dilemman under press?
+            </p>
+            <button type="button" class="btn btn-secondary" style="margin-top:0;" onclick="window.switchView('view-auth')">
+              🚀 Öppna Relationspilotens Startsida
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRISTÅENDE RÖST-TILL-BILD LAB (?test=voice) -->
+    <div id="view-voice-lab" class="view">
+      <div class="card" style="border:1px solid #f59e0b;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-gold">🎙️🎨 Fristående Experiment: Röst ➔ AI-Målning ➔ Spegling</span>
+            <span class="status-badge">Noll lagring</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;" onclick="window.exitStandaloneVoiceLab()">⬅️ Tillbaka</button>
+        </div>
+
+        <h2 style="margin-bottom:6px;">Växelspel med Argon 4.0</h2>
+        <p style="font-size:0.9rem; margin-top:0;">
+          1. Berätta fritt i mikrofonen (eller med text) om något vackert, något sorgligt eller något som skaver.<br>
+          2. Argon 4.0 lyssnar på din intonation och målar en bild av vad den hörde.<br>
+          3. Du berättar vad du tycker att bilden föreställer – och får en fristående psykologisk profilering direkt på skärmen.
+        </p>
+
+        <label style="font-size:0.88rem; font-weight:600; color:#cbd5e1;">1. Välj vad du vill beskriva:</label>
+        <select id="solo-voice-theme" style="margin-bottom:12px;">
+          <option value="Något vackert och djupt meningsfullt">✨ Beskriv något vackert (eller en plats/stund som ger dig ro)</option>
+          <option value="Något sorgligt, vemodigt eller förlorat">🌧️ Beskriv något sorgligt eller vemodigt som berört dig</option>
+          <option value="Något fult, trasigt eller skavande">⚡ Beskriv något fult, kaotiskt eller något som skaver i världen</option>
+          <option value="Kontrasten mellan något vackert och något fult/sorgligt">🎭 Beskriv både något vackert och något fult/sorgligt</option>
+        </select>
+
+        <label style="font-size:0.85rem;">Spela in din röst (ca 20–30 sek) eller välj en ljudfil:</label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+          <button type="button" id="btn-solo-voice-record" class="btn btn-secondary" style="margin-top:0; flex:1;" onclick="window.startSoloVoiceRecord()">🎙️ Spela in med mikrofon (max 30s)</button>
+          <input type="file" id="solo-voice-file" accept="audio/*" style="margin:0; flex:1; padding:8px;">
+        </div>
+        <div id="solo-voice-status" style="font-size:0.82rem; color:var(--muted); margin-top:4px; margin-bottom:10px;"></div>
+
+        <label style="font-size:0.82rem; color:var(--muted);">Valfritt (om du sitter i en bullrig miljö eller föredrar att skriva med ord):</label>
+        <textarea id="solo-voice-transcript" placeholder="Frivilligt: berätta med ord här eller lämna tomt om du spelat in med mikrofonen..." style="min-height:60px; margin-bottom:10px;"></textarea>
+
+        <button type="button" id="btn-solo-generate-art" class="btn" style="background:#0284c7;" onclick="window.generateSoloVoiceArt()">
+          🎨 Steg 1: Låt Argon 4.0 lyssna &amp; måla det den hörde
+        </button>
+        <p id="solo-art-status" style="font-size:0.84rem; color:#38bdf8; margin:8px 0 0 0;"></p>
+
+        <!-- STEG 2: ARGONS MÅLNING & TOLKNING -->
+        <div id="solo-voice-stage2" style="display:none; margin-top:18px; padding-top:16px; border-top:1px solid var(--border);">
+          <div style="background:#11151c; border-left:3px solid #38bdf8; padding:12px 14px; border-radius:6px; margin-bottom:14px;">
+            <strong style="color:#38bdf8; font-size:0.86rem;">🎨 Argon 4.0 säger:</strong>
+            <p id="solo-argon-intro" style="margin:4px 0 0 0; font-size:0.9rem; color:#e2e8f0; font-style:italic;"></p>
+          </div>
+
+          <div id="solo-artwork-box" style="width:100%; max-width:440px; margin:0 auto 14px; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:#090d13; box-shadow:0 8px 24px rgba(0,0,0,0.5);"></div>
+
+          <label style="font-size:0.9rem; font-weight:600; color:#fde68a;">
+            2. Din tur igen: Vad tycker du om målningen? Vad ser du i den och vilken känsla väcker den hos dig?
+          </label>
+          <textarea id="solo-voice-reaction" placeholder="Skriv spontant vad du ser i formerna och färgerna, eller hur du reagerar på Argons tolkning..." style="min-height:80px;"></textarea>
+
+          <button type="button" id="btn-solo-run-analysis" class="btn" style="margin-top:8px;" onclick="window.runSoloVoiceFinalAnalysis()">
+            🧠 Steg 2: Ge mig Argon 4.0:s analys av vårt växelspel
+          </button>
+
+          <pre id="solo-voice-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.92rem; line-height:1.58;"></pre>
+
+          <div id="solo-voice-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('solo-voice-output')">📋 Kopiera min analys</button>
+            <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadTextElement('solo-voice-output', 'min-rost-och-bild-analys.txt')">💾 Spara som fil på mobilen</button>
+            <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.switchView('view-auth')">🚀 Gå till Relationspiloten (Skapa konto / Spela rollspelet)</button>
+          </div>
+        </div>
+      </div>
+    </div>

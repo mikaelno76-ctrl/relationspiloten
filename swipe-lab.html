@@ -1,0 +1,129 @@
+<div id="view-swipe-lab" class="view">
+      <!-- FÖRBEREDELSESIDA: INSTRUKTIONER & VAL INNAN SVAJPNINGEN STARTAR -->
+      <div id="swipe-step-intro" class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Visuell Intuitiv Analys (360° Kompass)</span>
+          <button type="button" id="btn-exit-swipelab" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem;">⬅️ Tillbaka</button>
+        </div>
+
+        <h2>Så fungerar 360°-svajpningen</h2>
+        <p style="font-size:0.92rem; margin-bottom:14px;">
+          När du startar visas porträtt på en låst, centrerad skärm. Dra kortet i valfri riktning (även diagonalt) utifrån din första spontana magkänsla:
+        </p>
+
+        <div style="background:#11151c; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85rem;">
+            <div><span class="compass-dot dot-up"></span> <strong style="color:#6ee7b7;">UPP (Norr):</strong> Tillit &amp; Trygghet</div>
+            <div><span class="compass-dot dot-right"></span> <strong style="color:#fca5a5;">HÖGER (Öster):</strong> Attraktion &amp; Gnista</div>
+            <div><span class="compass-dot dot-down"></span> <strong style="color:#d2a8ff;">NER (Söder):</strong> Varning / Obehag</div>
+            <div><span class="compass-dot dot-left"></span> <strong style="color:#79c0ff;">VÄNSTER (Väster):</strong> Neutral / Distans</div>
+          </div>
+          <div style="border-top:1px solid var(--border); margin-top:10px; padding-top:10px; font-size:0.8rem; color:var(--muted);">
+            💡 <strong>Diagonalerna fångar nyanserna:</strong> Dra t.ex. <em>Uppåt-Höger</em> för trygg förälskelse, <em>Nedåt-Höger</em> för farlig attraktion, eller <em>Uppåt-Vänster</em> för ren vänskap/samarbete.
+          </div>
+        </div>
+
+        <div style="background:#141922; border-left:4px solid #f59e0b; border-radius:8px; padding:12px 14px; margin-bottom:16px; font-size:0.85rem; color:#fde68a;">
+          ⚠️ <strong>Viktigt innan du startar (Endast 1 försök):</strong><br>
+          <span style="color:#cbd5e1;">För att fånga din genuina, ofiltrerade magkänsla kan 360°-kompassen och självbildstestet <strong>endast genomföras 1 gång</strong>. Du går automatiskt igenom samtliga ronder i följd.</span>
+        </div>
+
+        <button type="button" id="btn-start-locked-swipe" class="btn" style="font-size:1.02rem; padding:14px;" onclick="window.startLockedSwipeSession()">
+          🚀 Starta Svajpningen (Endast 1 försök)
+        </button>
+      </div>
+
+      <!-- STEG 1: LÅST, ICKE-SCROLLBAR HELSKÄRMSSVAJP -->
+      <div id="swipe-step-arena" class="swipe-fullscreen-modal">
+        <div class="swipe-fs-header">
+          <span id="swipe-round-badge" class="status-badge badge-engine" style="margin:0;">Rond A</span>
+          <span id="lab-card-counter" style="font-size:0.82rem; color:var(--muted); font-weight:600;">1 / 16</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">✕ Avsluta</button>
+        </div>
+
+        <div class="swipe-fs-question">
+          <h3 id="swipe-phase-title">Vem vill du fika, äta lunch eller samarbeta med?</h3>
+          <p id="swipe-phase-desc" style="display:none;"></p>
+          <div class="swipe-fs-compass-mini">
+            <span>⬆️ Tillit</span>
+            <span>➡️ Kemi</span>
+            <span>⬇️ Varning</span>
+            <span>⬅️ Distans</span>
+          </div>
+        </div>
+
+        <div class="swipe-fs-arena-wrap" id="lab-arena">
+          <div id="lab-emotion-pill" class="emotion-pill">Tillit &amp; Kemi</div>
+          <!-- Dold hastighetssensor och telemetri (loggas tyst i bakgrunden) -->
+          <div id="lab-speed-pill" style="display:none;"></div>
+
+          <div id="lab-card-active" class="swipe-card-slot active-card">
+            <div class="swipe-img-wrap" style="height:82%;">
+              <img id="lab-card-img" class="swipe-img" alt="Arketyp" style="display:none;">
+              <div id="lab-card-fallback" class="swipe-placeholder">
+                <div style="font-size:2.4rem; margin-bottom:8px;">👤</div>
+                <strong id="lab-fallback-file" style="color:#fff;">a1.jpg</strong>
+                <span style="font-size:0.76rem; margin-top:6px;">Bilden hittades inte i mappen än.</span>
+              </div>
+            </div>
+            <div class="swipe-info" style="height:18%;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong id="lab-card-title" style="color:#fff; font-size:0.98rem;">Arketyp A1</strong>
+              </div>
+              <div id="lab-card-trait" style="font-size:0.78rem; color:#38bdf8; margin-top:2px;">Svep i 360° utifrån din magkänsla</div>
+            </div>
+          </div>
+
+          <div id="lab-card-next" class="swipe-card-slot under">
+            <div class="swipe-img-wrap" style="height:82%;">
+              <div class="swipe-placeholder"><span>Nästa porträtt...</span></div>
+            </div>
+            <div class="swipe-info" style="height:18%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEG 2: TVINGAT GALLRINGSMOMENT (FORCED CHOICE) -->
+      <div id="swipe-step-elimination" class="card" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Steg 2 av 3: Tvingad gallring</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">⬅️ Till instruktioner</button>
+        </div>
+        <h2>Gallra bort 3 av dina positiva val</h2>
+        <div style="background:#11151c; border-left:4px solid #ef4444; padding:12px 14px; border-radius:6px; margin-bottom:12px;">
+          <strong style="color:#fca5a5;">Tvingat gallringsmoment ("Forced choice"):</strong>
+          <p style="margin:4px 0 0 0; font-size:0.85rem;">Här är ansiktena du reagerade positivt på. För att skala bort slentrianswipande måste du nu <strong>välja bort 3 stycken</strong> (eller minst 1 om du har få val).</p>
+        </div>
+        <div id="elim-counter-text" style="font-size:0.85rem; font-weight:600; color:#f59e0b;">Valda att gallra bort: 0 av 3</div>
+        <div id="elimination-grid" class="archetype-grid"></div>
+        <button type="button" id="btn-confirm-elim" class="btn" style="margin-top:16px;" onclick="window.openSelfArchetypeStep()">Bekräfta gallring &amp; Gå till Självbildsvalet ➔</button>
+      </div>
+
+      <!-- STEG 3: SJÄLVIDENTIFIERINGS-MODUL (TOPP 3 EGNA ARKETYPER) -->
+      <div id="swipe-step-self" class="card" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="status-badge badge-engine">Steg 3 av 3: Din Självbild &amp; Energi</span>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:5px 10px; font-size:0.75rem;" onclick="window.closeLockedSwipeToIntro()">⬅️ Till instruktioner</button>
+        </div>
+        <h2>Vilket ansiktsuttryck identifierar du dig själv mest med?</h2>
+        <div style="background:#11151c; border-left:4px solid #f59e0b; padding:12px 14px; border-radius:6px; margin-bottom:12px;">
+          <strong style="color:#fde68a;">Speglings- &amp; Självbildsval (Topp 3):</strong>
+          <p style="margin:4px 0 0 0; font-size:0.85rem;">Klicka i ordning för att utse din <strong>1:a plats, 2:a plats och 3:e plats</strong> för det uttryck och den utstrålning som ligger närmast dig själv.</p>
+        </div>
+        <div id="self-counter-text" style="font-size:0.85rem; font-weight:600; color:#6ee7b7;">Dina valda självbilds-arketyper: 0 av 3</div>
+        <div id="self-archetype-grid" class="archetype-grid"></div>
+        <button type="button" id="btn-run-swipe-argon" class="btn" style="margin-top:16px;" onclick="window.analyzeSwipeAndSelfWithArgon()">
+          🧠 Slutför &amp; Låt Argon 4.0 sammanställa analysen
+        </button>
+        <pre id="swipe-argon-output" style="display:none; background:#0f1217; border:1px solid var(--border); padding:16px; border-radius:8px; margin-top:14px; font-size:0.9rem; line-height:1.55;"></pre>
+        <div id="swipe-standalone-actions" style="display:none; margin-top:12px; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.copyTextElement('swipe-argon-output')">📋 Kopiera analysen</button>
+          <button type="button" class="btn btn-secondary" style="flex:1; margin:0;" onclick="window.downloadTextElement('swipe-argon-output', 'min-360-kompass-profil.txt')">💾 Spara som fil på mobilen</button>
+          <button type="button" class="btn" style="width:100%; margin-top:8px;" onclick="window.exitSwipeLab()">🚀 Gå till Relationspiloten (Skapa konto / Spela rollspelet)</button>
+        </div>
+      </div>
+
+      <!-- DOLD TELEMETRI-CONTAINER (Krävs ej i UI, data hålls i minnet för Argon 4.0) -->
+      <div id="lab-telemetry-log" style="display:none;"></div>
+      <span id="lab-telemetry-count" style="display:none;"></span>
+    </div>

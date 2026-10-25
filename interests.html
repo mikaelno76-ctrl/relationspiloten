@@ -1,0 +1,93 @@
+<!-- 1.5. FÖRBEREDELSE: SCENARIOBYGGARE, SPRÅK & INTRESSEN -->
+    <div id="view-interests" class="view">
+      <div class="card">
+        <span class="status-badge">Steg 1 av 2: Anpassning &amp; Scenariobyggare</span>
+        <h1>Vad engagerar dig?</h1>
+        <p>Innan rollspelet startar formar vi grundäventyret direkt efter dina val och intressen så att världen och utmaningen känns levande för dig. Välj i menyerna och/eller skriv fritt under varje punkt.</p>
+
+        <div class="builder-box" style="margin-bottom:14px;">
+          <label for="base-lang-select">🌍 Språk för själva rollspelet:</label>
+          <select id="base-lang-select">
+            <option value="Svenska" selected>Svenska</option>
+            <option value="Engelska (English)">Engelska (English)</option>
+            <option value="Spanska (Español - Argentina / voseo)">Spanska (Español - Argentina / voseo)</option>
+            <option value="Spanska (Español)">Spanska (Español standard)</option>
+            <option value="Norska">Norska</option>
+            <option value="Danska">Danska</option>
+            <option value="Tyska (Deutsch)">Tyska (Deutsch)</option>
+            <option value="Franska (Français)">Franska (Français)</option>
+          </select>
+          <input type="text" id="base-lang-free" placeholder="Valfritt: Ange annat språk, dialekt eller stil fritt här...">
+        </div>
+
+        <div class="builder-grid">
+          <div class="builder-box">
+            <label for="base-world-select">🌌 Värld / Genre:</label>
+            <select id="base-world-select">
+              <option value="Verkligheten" selected>Verkligheten</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Postapokalyptiskt">Postapokalyptiskt</option>
+              <option value="Rymdäventyr">Rymdäventyr</option>
+            </select>
+            <input type="text" id="base-world-free" placeholder="Valfritt: Eget val eller detalj om världen...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-era-label" for="base-era-select">⏳ Tidsepok:</label>
+            <select id="base-era-select">
+              <option value="Nutid" selected>Nutid</option>
+              <option value="Stenåldern">Stenåldern</option>
+              <option value="Vikingatiden">Vikingatiden</option>
+              <option value="1500-talet">1500-talet</option>
+              <option value="1600-talet">1600-talet</option>
+              <option value="1700-talet">1700-talet</option>
+              <option value="1800-talet">1800-talet</option>
+              <option value="1920-talet">1920-talet</option>
+              <option value="1930-talet">1930-talet</option>
+              <option value="1940-talet">1940-talet</option>
+              <option value="1950-talet">1950-talet</option>
+              <option value="1960-talet">1960-talet</option>
+              <option value="1970-talet">1970-talet</option>
+              <option value="1980-talet">1980-talet</option>
+              <option value="1990-talet">1990-talet</option>
+            </select>
+            <input type="text" id="base-era-free" placeholder="Valfritt: Eget årtal eller fri epok...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-context-label" for="base-context-select">🎭 Kontext / Tema:</label>
+            <select id="base-context-select">
+              <option value="Familjedrama" selected>Familjedrama</option>
+              <option value="Krig">Krig</option>
+              <option value="Politik">Politik</option>
+              <option value="Tonårsdrama">Tonårsdrama</option>
+              <option value="Sport">Sport</option>
+            </select>
+            <input type="text" id="base-context-free" placeholder="Valfritt: Egen kontext eller situation...">
+          </div>
+
+          <div class="builder-box">
+            <label id="base-super-label" for="base-super-select">✨ Tillåta övernaturliga inslag:</label>
+            <select id="base-super-select">
+              <option value="Nej" selected>Nej</option>
+              <option value="Ja">Ja</option>
+            </select>
+            <input type="text" id="base-super-free" placeholder="Valfritt: Precisera fritt (t.ex. folktro, drömmar)...">
+          </div>
+        </div>
+
+        <label>Övriga intressen, miljöer &amp; teman du vill ha i äventyret:</label>
+        <textarea id="user-interests" placeholder="T.ex. Segling i skärgården, gamla motorer, historia, tysta vinterstugor, djur, filosofi, matlagning..."></textarea>
+
+        <label>Vad vill du helst undvika i fiktionen?:</label>
+        <input type="text" id="user-avoid" placeholder="T.ex. Skräck, våld, övernaturligt, stress, ytligt vädersnack...">
+
+        <div style="background:#141922; border-left:4px solid #38bdf8; border-radius:8px; padding:12px 14px; margin-top:8px; margin-bottom:12px; font-size:0.84rem; color:#cbd5e1;">
+          ℹ️ <strong>Regel för antal försök:</strong> Du har <strong>max 2 försök</strong> på varje rollspelsdelmoment (<span id="attempts-base-label" style="color:#6ee7b7; font-weight:600;">0 av 2 förbrukade</span>). För övriga tester (360°-svajp, röst-till-bild, vardagsbilder &amp; minne) gäller <strong>endast 1 försök</strong>.
+        </div>
+
+        <div id="interests-feedback" class="feedback-banner"></div>
+
+        <button type="button" id="btn-start-base" class="btn">🚀 Skapa mitt äventyr med Flash 3.1 Lite (16 rundor)</button>
+      </div>
+    </div>
