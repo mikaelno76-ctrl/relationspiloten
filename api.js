@@ -13,12 +13,45 @@
       el.textContent = message;
     }
 
-    function switchView(viewId) {
+    function switchView(viewId, skipHistoryPush) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       const target = document.getElementById(viewId);
       if (target) target.classList.add('active');
       if (typeof refreshAttemptsUI === "function") refreshAttemptsUI();
+      try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        window.scrollTo(0, 0);
+      }
+      if (!skipHistoryPush && window.history && window.history.pushState) {
+        const currentStateView = window.history.state && window.history.state.rpView;
+        if (currentStateView !== viewId) {
+          try {
+            window.history.pushState({ rpView: viewId }, "", window.location.pathname + window.location.search);
+          } catch (e) {}
+        }
+      }
     }
+
+    window.addEventListener("popstate", (e) => {
+      const faqEl = document.getElementById("faq-modal");
+      if (faqEl && faqEl.classList.contains("active")) {
+        faqEl.classList.remove("active");
+        return;
+      }
+      const swipeArena = document.getElementById("swipe-step-arena");
+      if (swipeArena && swipeArena.classList.contains("active") && typeof window.closeLockedSwipeToIntro === "function") {
+        window.closeLockedSwipeToIntro();
+        return;
+      }
+      const targetView = (e.state && e.state.rpView) ? e.state.rpView : (
+        (typeof enteredFromTaxiMenu !== "undefined" && enteredFromTaxiMenu) ? "view-taxi-menu" :
+        ((sessionData && document.getElementById("profile-text") && document.getElementById("profile-text").innerText.trim()) ? "view-hub" : "view-auth")
+      );
+      if (document.getElementById(targetView)) {
+        switchView(targetView, true);
+      }
+    });
 
     function closeTrollModal() {
       document.getElementById("troll-modal").classList.remove("active");

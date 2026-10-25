@@ -1,12 +1,22 @@
 <!-- 2. HUVUDSIDAN (MATCHNINGSHUBB) -->
     <div id="view-hub" class="view">
-      <div class="card">
+      <!-- Klistrad snabbnavigering så man slipper scrolla 4 skärmlängder -->
+      <nav class="hub-quick-nav" aria-label="Snabbnavigering i Matchningshubben">
+        <a href="#hub-sec-profile" class="hub-nav-pill">👤 Min Profil</a>
+        <a href="#hub-sec-matches" class="hub-nav-pill" style="color:#6ee7b7; border-color:rgba(16,185,129,0.4);">💞 Matchningar &amp; Chatt</a>
+        <a href="#hub-sec-swipelab" class="hub-nav-pill" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">🧭 360° &amp; Somatik</a>
+        <a href="#hub-sec-crm" class="hub-nav-pill" style="color:#f472b6; border-color:rgba(244,114,182,0.4);">🎧 Ljud-CRM</a>
+        <a href="#hub-sec-deep" class="hub-nav-pill" style="color:#fde68a; border-color:rgba(245,158,11,0.4);">🎭 35-rundors Rollspel</a>
+        <a href="#hub-sec-multimodal" class="hub-nav-pill">🎙️ Röst &amp; Bild</a>
+      </nav>
+      <div class="card" id="hub-sec-profile">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <span class="status-badge">Certifierad Profil</span>
             <span class="status-badge badge-engine">Analyserad av Argon 4.0</span>
           </div>
           <div style="display:flex; gap:8px; align-items:center;">
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.78rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openPsychoacousticCrmLab()">🎧 Ljudanalys (CRM)</button>
             <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.8rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openFaqModal()">❓ Frågor &amp; svar</button>
             <button type="button" id="btn-logout" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px;">Logga ut</button>
           </div>
@@ -41,7 +51,7 @@
       </div>
 
       <!-- MATCHAR: TOPPLISTA (GULD, SILVER, BRONS) MED 4 FILTER & GROK-ISBRYTARE -->
-      <div class="card">
+      <div class="card" id="hub-sec-matches">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
           <h2 style="margin:0;">Aktuella Matchningar (Topp 3)</h2>
           <span class="status-badge badge-engine" style="margin:0;">Argon 4.0 Korssyntes + Grok-Isbrytare</span>
@@ -96,7 +106,7 @@
         </div>
       </div>
 
-      <div class="card" style="border: 1px solid #38bdf8;">
+      <div class="card" id="hub-sec-swipelab" style="border: 1px solid #38bdf8;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <h2 style="margin:0;">⚡ Visuell Intuitiv Analys &amp; Självbildskompass</h2>
           <span class="status-badge badge-engine">360° Vektor + Millisekunds-sensor</span>
@@ -128,7 +138,7 @@
       </div>
 
       <!-- PSYKOAKUSTISK LJUDANALYS & RÖSTARKETYPER (CONTINUOUS AFFECT TRACKING / CRM) -->
-      <div class="card" style="border: 1px solid #38bdf8;">
+      <div class="card" id="hub-sec-crm" style="border: 1px solid #38bdf8;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <h2 style="margin:0;">🎧 Psykoakustisk Ljudanalys &amp; Vokal Kemi (Continuous Affect Tracking)</h2>
           <span class="status-badge badge-engine">8 Ljudspår (bed1–bed4 &amp; v1–v4) • 4 Hz CRM</span>
@@ -147,7 +157,7 @@
 
 
       <!-- FÖRDJUPANDE MODULER: VÄLJ DILEMMA + EGET TEMA -->
-      <div class="card">
+      <div class="card" id="hub-sec-deep">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h2 style="margin:0;">Fördjupande Rollspelsmoduler (35 Rundor)</h2>
           <span class="status-badge badge-engine">Spelledare: Flash 3.1 Lite</span>
@@ -275,7 +285,7 @@
       </div>
 
       <!-- VALFRIA KOMPLETTERANDE MULTIMODALA TESTER -->
-      <div class="card">
+      <div class="card" id="hub-sec-multimodal">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h2 style="margin:0;">Valfria kompletterande tester</h2>
           <span class="status-badge badge-engine">Multimodal motor: Argon 4.0</span>

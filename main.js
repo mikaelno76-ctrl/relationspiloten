@@ -8,7 +8,7 @@ async function loadModularViews() {
     if (!src) return;
     try {
       const sep = src.indexOf("?") === -1 ? "?" : "&";
-      const res = await fetch(src + sep + "v=7.2", { cache: "no-store" });
+      const res = await fetch(src + sep + "v=7.3", { cache: "no-store" });
       if (res.ok) {
         const html = await res.text();
         if (html && html.trim().length > 20) {
