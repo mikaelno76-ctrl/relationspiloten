@@ -1051,16 +1051,21 @@ function showSomaticSynthesisStep() {
 }
 
 async function analyzeSomaticAndTactileWithArgon() {
-  if (sessionData && getModuleAttempts("somatic_test") >= 1) {
-    alert("Du har redan slutfört och sparat Somatisk & Taktil Projektion i din profil.");
-    return;
-  }
+  const hasBodyOrTac = somaticSwipeLog && somaticSwipeLog.length > 0;
+  const crmCheck = (typeof buildPsychoacousticCrmSynthesis === "function") ? buildPsychoacousticCrmSynthesis() : null;
+  const hasCrm = !!(crmCheck && crmCheck.total_crm_samples > 0);
+
   if (sessionData) {
-    incrementModuleAttempts("somatic_test");
-    const crmCheck = (typeof buildPsychoacousticCrmSynthesis === "function") ? buildPsychoacousticCrmSynthesis() : null;
-    if (crmCheck && crmCheck.total_crm_samples > 0) {
-      incrementModuleAttempts("crm_test");
+    if (hasBodyOrTac && getModuleAttempts("somatic_test") >= 1 && (!hasCrm || getModuleAttempts("crm_test") >= 1)) {
+      alert("Du har redan slutfört och sparat Somatisk & Taktil Projektion i din profil.");
+      return;
     }
+    if (!hasBodyOrTac && hasCrm && getModuleAttempts("crm_test") >= 1) {
+      alert("Du har redan slutfört och sparat Psykoakustisk Ljudanalys (CRM) i din profil.");
+      return;
+    }
+    if (hasBodyOrTac) incrementModuleAttempts("somatic_test");
+    if (hasCrm) incrementModuleAttempts("crm_test");
   }
 
   const outEl = document.getElementById("somatic-argon-output");
@@ -1736,9 +1741,10 @@ function openCrmIntroStep() {
 window.openCrmIntroStep = openCrmIntroStep;
 
 function startPsychoacousticCrmDirect() {
-  if (sessionData && getModuleAttempts("somatic_test") >= 1) {
-    alert("Du har redan genomfört Somatisk, Taktil & Psykoakustisk Projektion i din profil (1 försök gäller). Be Admin nollställa räknaren om du blev avbruten.");
-    return;
+  if (sessionData && getModuleAttempts("crm_test") >= 1) {
+    if (!confirm("Du har redan registrerat ett försök på Psykoakustisk Ljudanalys i din profil. Vill du provköra ljudspåren (bed1–v4) ändå?")) {
+      return;
+    }
   }
   crmTrackLogs = {};
   crmCurrentTrackIdx = 0;

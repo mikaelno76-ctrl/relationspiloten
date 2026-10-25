@@ -221,10 +221,11 @@
       }
 
       const somUsed = getModuleAttempts("somatic_test");
+      const crmUsed = getModuleAttempts("crm_test");
       const somLbl = document.getElementById("attempts-somatic-label");
       if (somLbl) somLbl.textContent = somUsed + " av 1 förbrukat";
       const crmLbl = document.getElementById("attempts-crm-label");
-      if (crmLbl) crmLbl.textContent = somUsed + " av 1 förbrukat";
+      if (crmLbl) crmLbl.textContent = crmUsed + " av 1 förbrukat";
       const somModLbl = document.getElementById("attempts-somatic-modal-label");
       if (somModLbl) somModLbl.textContent = somUsed + " av 1 förbrukat";
       const btnHubSom = document.getElementById("btn-hub-somaticlab");
@@ -234,8 +235,10 @@
       }
       const btnHubCrm = document.getElementById("btn-hub-crmlab");
       if (btnHubCrm) {
-        btnHubCrm.disabled = (somUsed >= 1);
-        if (somUsed >= 1) btnHubCrm.textContent = "🔒 Psykoakustisk Ljudanalys redan genomförd (1/1 försök)";
+        btnHubCrm.disabled = false;
+        btnHubCrm.textContent = crmUsed >= 1
+          ? "🎧 Öppna Psykoakustisk Ljudanalys (bed1–bed4 & v1–v4)"
+          : "🎧 Starta Psykoakustisk Ljudanalys (bed1–bed4 & v1–v4)";
       }
       if (typeof updateHubClarityBadge === "function") updateHubClarityBadge();
       const moodUsed = getModuleAttempts("color_form_mood_test");

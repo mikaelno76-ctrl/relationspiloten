@@ -184,8 +184,8 @@
               '<option value="deep_conflict">⚖️ Modul B: Värdekonflikt (35 rundor)</option>' +
               '<option value="deep_routine">☕ Modul C: Vardagslunk (35 rundor)</option>' +
               '<option value="swipe_test">🔥 360° Vektorswipe &amp; Självbild</option>' +
-              '<option value="somatic_test">🏛️ Somatisk &amp; Taktil Projektion</option>
-              <option value="crm_test">🎧 Psykoakustisk Ljudanalys (CRM)</option>' +
+              '<option value="somatic_test">🏛️ Somatisk &amp; Taktil Projektion</option>' +
+              '<option value="crm_test">🎧 Psykoakustisk Ljudanalys (CRM)</option>' +
               '<option value="devil_test">⚡ Off-Guard Profilskärpa</option>' +
               '<option value="color_form_mood_test">🎨 Symbolkompass (Färg/Form Bra vs Dåligt humör, 0/2)</option>' +
               '<option value="test_voice">🎙️ Röst ➔ AI-Målning</option>' +
