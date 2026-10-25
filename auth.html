@@ -1,79 +1,152 @@
-<!-- 1. INLOGGNING, REGISTRERING & API-NYCKEL -->
+<!-- 1. INLOGGNING, REGISTRERING & SNABBLABB (v8.0 UI/UX) -->
     <div id="view-auth" class="view active">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h1>Relationspiloten</h1>
+      <!-- KORT 1: HERO, 3-STEG & KONTO -->
+      <div class="card" style="border-top: 3px solid #10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+          <div>
+            <span class="status-badge" style="margin-bottom:6px;">🧭 Beteendebaserat Matchningsexperiment</span>
+            <h1>Relationspiloten</h1>
+          </div>
           <span class="status-badge badge-engine">Flash 3.1 Lite + Argon 4.0</span>
         </div>
-        <p>Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
+        <p style="font-size:1.05rem; color:#e2e8f0; margin-top:4px; margin-bottom:14px;">Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
 
-        <label>Användar-alias:</label>
-        <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren">
-
-        <label>Lösenord:</label>
-        <input type="password" id="auth-pass" placeholder="Minst 6 tecken...">
-
-
-
-        <details class="legal-box">
-          <summary style="cursor:pointer; font-weight:700; color:#38bdf8; user-select:none;">
-            🔒 GDPR, Anonymitet &amp; AI-arkitektur (Klicka för att läsa detaljerna)
-          </summary>
-          <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
-            • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
-            • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
-            • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
-            • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+        <!-- Visuell 3-stegs översikt -->
+        <div class="rp-steps-strip">
+          <div class="rp-step-pill">
+            <div class="rp-step-num">1</div>
+            <div class="rp-step-text">
+              <strong>100 % Anonymt Alias</strong>
+              <span>Inga profilbilder, inget namn eller mejl. Noll ytligt dömande.</span>
+            </div>
           </div>
-        </details>
-
-        <label class="checkbox-label">
-          <input type="checkbox" id="legal-consent">
-          <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="age-consent">
-          <span>Jag är minst 18 år gammal.</span>
-        </label>
-
-        <div id="auth-feedback" class="feedback-banner"></div>
-
-        <div style="display:flex; gap:10px;">
-          <button type="button" id="btn-login" class="btn">Logga in</button>
-          <button type="button" id="btn-register" class="btn btn-secondary">Skapa profil</button>
-        </div>
-
-        
-        <!-- DIREKTGENENVÄG TILL SNABBTESTER & PSYKOAKUSTISK LJUDANALYS (CRM) -->
-        <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
-          <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; margin-bottom:8px;">
-            🧪 Direktlabb &amp; Fristående Tester (kan även köras direkt utan inloggning):
+          <div class="rp-step-pill">
+            <div class="rp-step-num">2</div>
+            <div class="rp-step-text">
+              <strong>16 Rundors Rollspel</strong>
+              <span>Lös skarpa dilemman under press med en AI-kompanjon.</span>
+            </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
-              🎧 Psykoakustisk Ljudanalys (CRM)
-            </button>
-            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
-              🏛️ Somatisk &amp; Taktil + CRM
-            </button>
-            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openSwipeLab()">
-              🔥 360° Vektorswipe
-            </button>
-            <button type="button" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openTaxiMenu()">
-              🚕 Öppna Baksätes-Labbet
-            </button>
+          <div class="rp-step-pill">
+            <div class="rp-step-num">3</div>
+            <div class="rp-step-text">
+              <strong>Djup Korssyntes</strong>
+              <span>Argon 4.0 matchar dig på hur du faktiskt agerar – inte vad du påstår.</span>
+            </div>
           </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:8px;">
-          <div id="js-health" style="font-size:0.78rem; color:#ef4444;">
+        <div style="background:rgba(12, 18, 30, 0.75); border:1px solid var(--border); border-radius:14px; padding:18px;">
+          <div style="font-size:0.95rem; font-weight:700; color:#6ee7b7; margin-bottom:10px;">
+            🔐 Logga in eller skapa din anonyma profil
+          </div>
+
+          <div class="builder-grid" style="margin-bottom:4px;">
+            <div>
+              <label for="auth-id">Användar-alias:</label>
+              <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren" style="margin-bottom:6px;">
+            </div>
+            <div>
+              <label for="auth-pass">Lösenord:</label>
+              <input type="password" id="auth-pass" placeholder="Minst 6 tecken..." style="margin-bottom:6px;">
+            </div>
+          </div>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="legal-consent">
+            <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="age-consent">
+            <span>Jag är minst 18 år gammal.</span>
+          </label>
+
+          <details class="legal-box" style="margin-bottom:12px;">
+            <summary style="cursor:pointer; font-weight:700; color:#38bdf8; user-select:none;">
+              🛡️ Läs mer om GDPR, Anonymitet &amp; Rätten att bli glömd (Art. 17)
+            </summary>
+            <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+              • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
+              • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
+              • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
+              • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+            </div>
+          </details>
+
+          <div id="auth-feedback" class="feedback-banner"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+            <button type="button" id="btn-login" class="btn" style="margin:0;">Logga in</button>
+            <button type="button" id="btn-register" class="btn btn-secondary" style="margin:0; border-color:#38bdf8; color:#38bdf8;">Skapa profil</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KORT 2: DIREKTLABB & FRISTÅENDE TESTER UTAN INLOGGNING -->
+      <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <span class="status-badge badge-engine" style="margin-bottom:4px;">🧪 Noll konto krävs • Direkt på skärmen</span>
+            <h2 style="margin:0;">Prova Fristående Direktlabb &amp; Baksätes-Tester</h2>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:8px 14px; font-size:0.84rem; border-color:#38bdf8; color:#38bdf8;" onclick="window.openTaxiMenu()">
+            🚕 Öppna Baksätes-Labbet (Alla 4) ➔
+          </button>
+        </div>
+        <p style="font-size:0.94rem; margin-bottom:12px;">
+          Sitter du i baksätet eller vill du bara testa hur Argon 4.0 läser av din magkänsla på 2–3 minuter utan att skapa profil? Välj ett experiment direkt nedan:
+        </p>
+
+        <div class="rp-lab-showcase-grid">
+          <div class="rp-lab-tile" style="border-left: 4px solid #38bdf8;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🎧 Psykoakustisk Ljudanalys (CRM)</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Följ 4 musikvärldar &amp; 4 röstarketyper i realtid på vår 2D-affektyta.</span>
+            </div>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.86rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Starta Ljudanalys (CRM)
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #f59e0b;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🏛️ Somatisk &amp; Taktil Projektion</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">2-stegs radialhjul för kroppsmatris, händer/fötter &amp; Off-Guard profilskärpa.</span>
+            </div>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.86rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+              🏛️ Starta Somatisk &amp; Taktil
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #10b981;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🔥 360° Vektorswipe &amp; Självbild</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Svep i 360° (Tillit, Kemi, Varning, Distans) med millisekunds-sensor.</span>
+            </div>
+            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:10px 12px; font-size:0.86rem; border-color:#10b981; color:#6ee7b7;" onclick="window.openSwipeLab()">
+              🔥 Starta 360° Vektorswipe
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #ec4899;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🎙️ Röst ➔ AI-Målning ➔ Tolkning</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Berätta i 20 sek – Argon 4.0 målar din röstmelodi och speglar din tolkning.</span>
+            </div>
+            <button type="button" class="btn btn-secondary" style="margin:0; padding:10px 12px; font-size:0.86rem; border-color:#ec4899; color:#f9a8d4;" onclick="window.openStandaloneVoiceLab()">
+              🎙️ Starta Röst-till-Målning
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:12px; border-top:1px solid var(--border); flex-wrap:wrap; gap:8px;">
+          <div id="js-health" style="font-size:0.8rem; color:#ef4444;">
             🔴 Laddar JavaScript-motor...
           </div>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
-            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#475569; font-size:0.74rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.86rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
+            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#64748b; font-size:0.78rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
           </div>
         </div>
-
       </div>
     </div>

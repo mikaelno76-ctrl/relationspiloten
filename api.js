@@ -13,10 +13,21 @@
       el.textContent = message;
     }
 
+    function updateGlobalNavHighlight(viewId) {
+      document.querySelectorAll('.rp-nav-btn[data-nav-view]').forEach(btn => {
+        if (btn.getAttribute('data-nav-view') === viewId) {
+          btn.classList.add('active-nav');
+        } else {
+          btn.classList.remove('active-nav');
+        }
+      });
+    }
+
     function switchView(viewId, skipHistoryPush) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       const target = document.getElementById(viewId);
       if (target) target.classList.add('active');
+      updateGlobalNavHighlight(viewId);
       if (typeof refreshAttemptsUI === "function") refreshAttemptsUI();
       try {
         window.scrollTo({ top: 0, behavior: 'smooth' });

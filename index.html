@@ -3,99 +3,1565 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relationspiloten v7 — Samarbetsrollspel, 360° Kompass, Somatik &amp; Psykoakustisk CRM</title>
-  <link rel="stylesheet" href="css/styles.css?v=7.3">
+  <title>Relationspiloten v8 — Samarbetsrollspel, 360° Kompass, Somatik &amp; Psykoakustisk CRM</title>
+  <link rel="stylesheet" href="css/styles.css?v=8.0">
+  <style id="rp-v8-embedded-styles">
+/* ==========================================================================
+   RELATIONSPILOTEN v8.0 — KOMPLETT UI/UX-DESIGN, NAVIGATION & LÄSBARHET
+   ========================================================================== */
+:root {
+  --bg: #090d16;
+  --bg-grad:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16, 185, 129, 0.16), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 85% 20%, rgba(56, 189, 248, 0.12), transparent 65%),
+    radial-gradient(ellipse 70% 60% at 15% 80%, rgba(245, 158, 11, 0.07), transparent 65%),
+    linear-gradient(180deg, #0b111e 0%, #090d16 100%);
+  --card: rgba(21, 29, 44, 0.92);
+  --card-solid: #151d2c;
+  --card-inner: #0f1522;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --cyan: #38bdf8;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --text: #f8fafc;
+  --text-body: #dbe4f0;
+  --muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.18);
+  --border-strong: rgba(56, 189, 248, 0.35);
+  --gold: #f59e0b;
+  --silver: #94a3b8;
+  --bronze: #d97706;
+  --radius-xl: 18px;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg);
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 14px 16px 48px;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  line-height: 1.65;
+}
+
+.container {
+  width: 100%;
+  max-width: 820px;
+}
+
+/* --- GLOBAL TOPP-NAVIGERING (ALLTID SYNLIG & LÄTT ATT HOPPA RUNT I) --- */
+.rp-global-header {
+  position: sticky;
+  top: 10px;
+  z-index: 90;
+  background: rgba(13, 19, 31, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rp-header-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #fff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  letter-spacing: -0.01em;
+}
+.rp-brand-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #10b981, #0284c7);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+}
+.rp-version-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.rp-nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.rp-nav-bar::-webkit-scrollbar { display: none; }
+
+.rp-nav-btn {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: #cbd5e1;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.16s ease;
+  margin: 0;
+  width: auto;
+}
+.rp-nav-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #fff;
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+.rp-nav-btn.active-nav {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(2, 132, 199, 0.25));
+  color: #6ee7b7;
+  border-color: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+/* --- VYER & KORT --- */
+.view {
+  display: none;
+  animation: rpViewFade 0.22s ease-out;
+}
+.view.active { display: block; }
+@keyframes rpViewFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  margin-bottom: 22px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 580px) {
+  body { padding: 10px 10px 36px; }
+  .card { padding: 20px 16px; border-radius: 15px; }
+  .rp-global-header { padding: 8px 10px; top: 6px; }
+}
+
+/* --- TYPOGRAFI & LÄSBARHET --- */
+h1 {
+  font-size: clamp(1.5rem, 4vw, 1.95rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 0 8px 0;
+  color: #ffffff;
+}
+h2 {
+  font-size: clamp(1.22rem, 3.2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  margin: 0 0 10px 0;
+  color: #f8fafc;
+}
+h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 6px 0;
+  color: #f1f5f9;
+}
+p {
+  font-size: 1rem;
+  line-height: 1.68;
+  color: var(--text-body);
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+label {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-top: 4px;
+}
+
+/* --- HERO-STEG & SNABBKORT PÅ STARTSIDAN --- */
+.rp-steps-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+@media (max-width: 640px) {
+  .rp-steps-strip { grid-template-columns: 1fr; gap: 8px; }
+}
+.rp-step-pill {
+  background: rgba(15, 21, 34, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.rp-step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  font-weight: 800;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.rp-step-text strong {
+  display: block;
+  font-size: 0.88rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.rp-step-text span {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+  display: block;
+}
+
+.rp-lab-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+@media (max-width: 580px) {
+  .rp-lab-showcase-grid { grid-template-columns: 1fr; }
+}
+.rp-lab-tile {
+  background: #101726;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.rp-lab-tile:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+/* --- KNAPPAR --- */
+.btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #04130d;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 13px 20px;
+  min-height: 48px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  font-size: 0.98rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.22);
+  transition: transform 0.12s ease, box-shadow 0.15s ease, filter 0.15s ease, background 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.34);
+}
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+.btn-secondary {
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  box-shadow: none;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.btn-secondary:hover:not(:disabled) {
+  background: #283548;
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-danger {
+  background: rgba(220, 38, 38, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  box-shadow: none;
+  margin-top: 8px;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn-choice {
+  background: #172133;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+  padding: 15px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.55;
+  font-size: 0.98rem;
+  transition: all 0.15s ease;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.btn-choice:hover {
+  background: #213049;
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+.btn-choice strong {
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+.builder-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+@media (max-width: 600px) {
+  .builder-grid { grid-template-columns: 1fr; }
+}
+.builder-box {
+  background: var(--card-inner);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+.builder-box label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+.builder-box select {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+.builder-box input[type="text"] {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1rem;
+  padding: 10px 12px;
+}
+.scenario-item, .match-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  background: #111826;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+}
+.match-card.gold { border-left: 5px solid var(--gold); }
+.match-card.silver { border-left: 5px solid var(--silver); }
+.match-card.bronze { border-left: 5px solid var(--bronze); }
+
+.chat-box {
+  height: 410px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  background: #0b101b;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.msg {
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 86%;
+  line-height: 1.62;
+  font-size: 0.98rem;
+}
+.msg.model { background: #1a2436; align-self: flex-start; border: 1px solid rgba(255,255,255,0.06); }
+.msg.user { background: #143527; align-self: flex-end; border: 1px solid rgba(16,185,129,0.3); }
+
+.input-row { display: flex; gap: 10px; margin-top: 12px; }
+input[type="text"], input[type="password"], textarea, select {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid #2e3d56;
+  background: #0c121e;
+  color: #fff;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  font-family: inherit;
+  font-size: 1rem; /* 16px förhindrar auto-zoom i iOS Safari */
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+textarea { min-height: 90px; resize: vertical; line-height: 1.55; }
+
+.legal-box {
+  font-size: 0.86rem;
+  color: var(--text-body);
+  background: #0d1320;
+  border: 1px solid var(--border);
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  line-height: 1.55;
+}
+.checkbox-label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  cursor: pointer;
+  margin: 12px 0;
+  color: #e2e8f0;
+  line-height: 1.48;
+}
+.checkbox-label input {
+  margin-top: 3px;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+.status-badge {
+  display: inline-block;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  margin-bottom: 8px;
+}
+.badge-engine { background: rgba(2, 132, 199, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+.badge-gold { background: rgba(180, 83, 9, 0.28); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.45); }
+.badge-silver { background: #334155; color: #cbd5e1; }
+.badge-bronze { background: #451a03; color: #fed7aa; }
+
+pre, #profile-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  font-size: 0.98rem;
+  line-height: 1.72;
+  color: #e2e8f0;
+}
+
+.feedback-banner {
+  display: none;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-top: 12px;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.feedback-banner.error {
+  display: block;
+  background: rgba(185, 28, 28, 0.25);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+.feedback-banner.info {
+  display: block;
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid #34d399;
+  color: #a7f3d0;
+}
+
+/* --- SEKTIONSHOPP I HUBBEN --- */
+.hub-quick-nav {
+  background: rgba(15, 21, 34, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 18px 0;
+  align-items: center;
+}
+.hub-nav-pill {
+  background: #1b263b;
+  border: 1px solid #2e3d56;
+  color: #e2e8f0;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.hub-nav-pill:hover {
+  background: #263552;
+  border-color: #38bdf8;
+  color: #fff;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(5, 8, 14, 0.82);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--card-solid);
+  border: 1px solid var(--warning);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+}
+.modal-content h3 { color: #fef3c7; margin-top: 0; }
+.guideline-list {
+  font-size: 0.94rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  padding-left: 20px;
+  margin: 12px 0;
+}
+
+/* --- 360 VEKTORSWIPE & GALLRING (INDEXTEST LAB) --- */
+    .compass-bar {
+      width: 100%;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      background: #11151c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+    .compass-point { display: flex; align-items: center; gap: 5px; }
+    .compass-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-up { background: #3fb950; }
+    .dot-right { background: #ff7b72; }
+    .dot-down { background: #d2a8ff; }
+    .dot-left { background: #79c0ff; }
+
+    .swipe-arena {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      height: 460px;
+      margin: 12px auto 16px;
+      perspective: 1000px;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .swipe-card-slot {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: 18px;
+      background: #161b22;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+      cursor: grab;
+      touch-action: none;
+      will-change: transform, box-shadow;
+    }
+    .swipe-card-slot:active { cursor: grabbing; }
+    .swipe-card-slot.under {
+      transform: scale(0.94) translateY(16px);
+      z-index: 1;
+      opacity: 0.55;
+      filter: blur(1px);
+    }
+    .swipe-card-slot.active-card { z-index: 2; }
+    .swipe-img-wrap {
+      width: 100%;
+      height: 76%;
+      background: #090d13;
+      position: relative;
+      overflow: hidden;
+    }
+    .swipe-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+    .swipe-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 35%, #1e293b, #090d13);
+      color: var(--muted);
+      text-align: center;
+      padding: 18px;
+    }
+    .swipe-info {
+      height: 24%;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #161b22;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .emotion-pill {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      padding: 7px 16px;
+      border-radius: 25px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0,0,0,0.8);
+      border: 2px solid transparent;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .emotion-pill.visible {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    .speed-pill {
+      position: absolute;
+      bottom: 118px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(15, 18, 23, 0.85);
+      color: #94a3b8;
+      border: 1px solid var(--border);
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .archetype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .grid-item-card {
+      background: #141922;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .grid-item-card:hover { border-color: #38bdf8; transform: translateY(-2px); }
+    .grid-item-card.eliminated {
+      border-color: #ef4444;
+      opacity: 0.45;
+      filter: grayscale(80%);
+    }
+    .grid-item-card.self-selected {
+      border-color: #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    .grid-rank-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f59e0b;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .grid-elim-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: #ef4444;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    .top-lang-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+    .lang-btn {
+      background: #161b22;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      width: auto;
+      margin: 0;
+    }
+    .lang-btn:hover {
+      color: #fff;
+      border-color: #38bdf8;
+    }
+    .lang-btn.active {
+      background: #1e293b;
+      color: #38bdf8;
+      border-color: #0284c7;
+    }
+
+
+    /* --- LÅST, CENTRERAD SVAJPVY UTAN SCROLL --- */
+    body.swipe-locked {
+      overflow: hidden !important;
+      position: fixed;
+      width: 100%;
+      height: 100dvh;
+      touch-action: none;
+    }
+    .swipe-fullscreen-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
+      background: var(--bg);
+      z-index: 2000;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .swipe-fullscreen-modal.active {
+      display: flex;
+    }
+    .swipe-fs-header {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .swipe-fs-question {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      margin: 4px 0 6px;
+      flex-shrink: 0;
+    }
+    .swipe-fs-question h3 {
+      font-size: 1.02rem;
+      margin: 0;
+      color: #fff;
+      font-weight: 700;
+    }
+    .swipe-fs-compass-mini {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .swipe-fs-arena-wrap {
+      flex: 1;
+      width: 100%;
+      max-width: 360px;
+      max-height: 470px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      touch-action: none;
+    }
+
+
+    /* --- SOMATISK & TAKTIL 2-STEGS RADIALMODUL + OFF-GUARD DJÄVULSTEST --- */
+    .somatic-stimulus-card {
+      width: 100%;
+      background: #14171f;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+    }
+    .somatic-viewport {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 450px;
+      background: radial-gradient(circle at 50% 35%, #232734 0%, #0e1017 85%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .somatic-stimulus-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+    .somatic-fallback-svg {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding: 16px;
+      text-align: center;
+    }
+    .somatic-module-pill {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 4;
+      text-transform: uppercase;
+    }
+    .somatic-file-pill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.68);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      font-family: monospace;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .somatic-card-footer {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #10131a;
+      border-top: 1px solid var(--border);
+    }
+    .somatic-card-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.18);
+      color: #fcd34d;
+      margin-bottom: 3px;
+    }
+    .somatic-card-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .somatic-card-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .somatic-wheel-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 10, 15, 0.65);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      touch-action: none;
+    }
+    .somatic-wheel-overlay.active {
+      display: flex;
+    }
+    .somatic-wheel-container {
+      width: 272px;
+      height: 272px;
+      position: relative;
+      border-radius: 50%;
+      border: 1px dashed rgba(252, 211, 77, 0.32);
+      background: radial-gradient(circle, rgba(20, 24, 34, 0.88) 0%, rgba(11, 12, 16, 0.45) 70%);
+    }
+    .somatic-wheel-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: #0f1219;
+      border: 2px solid rgba(252, 211, 77, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+    .somatic-wheel-step-lbl {
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .somatic-wheel-step-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #fcd34d;
+    }
+    .somatic-wheel-node {
+      position: absolute;
+      width: 66px;
+      height: 66px;
+      margin-left: -33px;
+      margin-top: -33px;
+      border-radius: 50%;
+      background: #171b26;
+      border: 2px solid rgba(255, 255, 255, 0.24);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    }
+    .somatic-wheel-node.highlighted,
+    .somatic-wheel-node:hover {
+      transform: scale(1.18);
+      border-color: #fcd34d;
+      box-shadow: 0 0 18px rgba(252, 211, 77, 0.65);
+      z-index: 5;
+    }
+    .somatic-wheel-node svg {
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+    }
+    .somatic-node-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #f3f4f6;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      pointer-events: none;
+    }
+    .somatic-telemetry-bar {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #0d1016;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .somatic-layer-box {
+      background: #11151d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .somatic-layer-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #fcd34d;
+      margin-bottom: 8px;
+    }
+    .somatic-metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .somatic-metric-item {
+      background: #171c27;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+    .somatic-metric-lbl {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .somatic-metric-val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px;
+    }
+    .somatic-offguard-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.92);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .somatic-offguard-modal.active {
+      display: flex;
+    }
+    .somatic-offguard-box {
+      width: 100%;
+      max-width: 450px;
+      background: #151923;
+      border: 1px solid rgba(245, 158, 11, 0.55);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+    }
+    .somatic-offguard-badge {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+    .somatic-offguard-question {
+      font-size: 0.98rem;
+      line-height: 1.45;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .somatic-offguard-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .somatic-offguard-btn {
+      background: #1e2433;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #e5e7eb;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      line-height: 1.38;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .somatic-offguard-btn:hover {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: #fcd34d;
+    }
+
+
+    /* --- SUBJEKTIV FÄRG- & FORMSTEGE (MOOD LADDER) --- */
+    .mood-ladder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .mood-ladder-item {
+      background: #181e2c;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .mood-ladder-item:hover {
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+    .mood-ladder-item.ranked {
+      border-color: #fcd34d;
+      background: #1f273a;
+      box-shadow: 0 0 14px rgba(252, 211, 77, 0.25);
+    }
+    .mood-swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+    .mood-swatch svg {
+      width: 24px;
+      height: 24px;
+    }
+    .mood-rank-pill {
+      margin-left: auto;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #0d1118;
+      border: 1px dashed #475569;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mood-ladder-item.ranked .mood-rank-pill {
+      background: #fcd34d;
+      border: 1px solid #f59e0b;
+      color: #0b0c10;
+    }
+
+
+    /* --- CONTINUOUS AFFECT TRACKING (CRM) / PSYKOAKUSTISKT RADAR --- */
+    .crm-pad-wrap {
+      width: 100%;
+      max-width: 390px;
+      aspect-ratio: 1 / 1;
+      margin: 10px auto 12px;
+      position: relative;
+      border-radius: 18px;
+      background: radial-gradient(circle at 50% 50%, #1c2333 0%, #0d1018 85%);
+      border: 2px solid #334155;
+      box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.75), 0 12px 28px rgba(0, 0, 0, 0.55);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+    .crm-pad-wrap.recording {
+      border-color: #38bdf8;
+      box-shadow: inset 0 0 36px rgba(56, 189, 248, 0.12), 0 0 22px rgba(56, 189, 248, 0.28);
+    }
+    .crm-axis-line-h {
+      position: absolute;
+      left: 0; right: 0; top: 50%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    .crm-axis-line-v {
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    .crm-ring-guide {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+    .crm-pole-label {
+      position: absolute;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: rgba(11, 14, 21, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+      z-index: 3;
+      letter-spacing: 0.3px;
+    }
+    .crm-pole-n { top: 8px; left: 50%; transform: translateX(-50%); color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
+    .crm-pole-e { right: 8px; top: 50%; transform: translateY(-50%); color: #f87171; border-color: rgba(248, 113, 113, 0.4); }
+    .crm-pole-s { bottom: 8px; left: 50%; transform: translateX(-50%); color: #c084fc; border-color: rgba(192, 132, 252, 0.4); }
+    .crm-pole-w { left: 8px; top: 50%; transform: translateY(-50%); color: #60a5fa; border-color: rgba(96, 165, 250, 0.4); }
+
+    .crm-cursor-puck {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 34px;
+      height: 34px;
+      margin-left: -17px;
+      margin-top: -17px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fde68a 0%, #f59e0b 65%, #b45309 100%);
+      border: 2px solid #fff;
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.85);
+      pointer-events: none;
+      z-index: 6;
+      transition: transform 0.04s linear;
+    }
+    .crm-cursor-puck.active-touch {
+      transform: scale(1.22);
+      box-shadow: 0 0 26px rgba(56, 189, 248, 0.95);
+    }
+    .crm-timeline-wrap {
+      width: 100%;
+      background: #0d1118;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .crm-timeline-bar {
+      position: relative;
+      width: 100%;
+      height: 16px;
+      background: #171d29;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      margin-top: 6px;
+    }
+    .crm-cue-segment {
+      height: 100%;
+      border-right: 1px solid rgba(11, 14, 21, 0.8);
+      position: relative;
+      transition: opacity 0.2s ease;
+      opacity: 0.42;
+    }
+    .crm-cue-segment.active-cue {
+      opacity: 1;
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+    .crm-playhead {
+      position: absolute;
+      top: 0; bottom: 0; left: 0%;
+      width: 3px;
+      background: #fff;
+      box-shadow: 0 0 8px #fff;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- Språkväljare -->
-    <div class="top-lang-bar">
-      <button type="button" class="lang-btn active" id="lang-btn-sv" onclick="window.setAppLanguage('sv')">🇸🇪 SV</button>
-      <button type="button" class="lang-btn" id="lang-btn-en" onclick="window.setAppLanguage('en')">🇬🇧 EN</button>
-    </div>
+    <!-- GLOBAL TOPP-NAVIGERING (ALLTID SYNLIG FÖR ENKEL NAVIGATION FRAM & TILLBAKA) -->
+    <header class="rp-global-header">
+      <div class="rp-header-toprow">
+        <button type="button" class="rp-brand" onclick="window.switchView('view-auth')" title="Gå till Startsidan">
+          <span class="rp-brand-icon">🧭</span>
+          <span>Relationspiloten</span>
+          <span class="rp-version-pill">v8.0 UI</span>
+        </button>
 
-    <!-- Modulära HTML-vyer (både förinbäddade för noll-fördröjning/lokal körning och dynamiskt synkade från views/*.html?v=7.3) -->
+        <div class="top-lang-bar" style="width:auto; margin:0;">
+          <button type="button" class="lang-btn active" id="lang-btn-sv" onclick="window.setAppLanguage('sv')">🇸🇪 SV</button>
+          <button type="button" class="lang-btn" id="lang-btn-en" onclick="window.setAppLanguage('en')">🇬🇧 EN</button>
+        </div>
+      </div>
+
+      <nav class="rp-nav-bar" aria-label="Huvudnavigering">
+        <button type="button" class="rp-nav-btn active-nav" data-nav-view="view-auth" onclick="window.switchView('view-auth')">🏠 Startsida</button>
+        <button type="button" class="rp-nav-btn" data-nav-view="view-taxi-menu" onclick="window.openTaxiMenu()">🚕 Baksätes-Labb</button>
+        <button type="button" class="rp-nav-btn" data-nav-view="view-swipe-lab" onclick="window.openSwipeLab()">🔥 360° Swipe</button>
+        <button type="button" class="rp-nav-btn" data-nav-view="view-somatic-lab" onclick="window.openSomaticLab()">🏛️ Somatik &amp; Taktil</button>
+        <button type="button" class="rp-nav-btn" onclick="window.openPsychoacousticCrmLab()">🎧 Ljud-CRM</button>
+        <button type="button" class="rp-nav-btn" data-nav-view="view-interests" onclick="window.switchView('view-interests')">🎭 Scenariobyggare</button>
+        <button type="button" class="rp-nav-btn" data-nav-view="view-hub" onclick="window.switchView('view-hub')">💞 Matchningshubb</button>
+        <button type="button" class="rp-nav-btn" onclick="window.openFaqModal()">❓ Frågor &amp; svar</button>
+      </nav>
+    </header>
+
+    <!-- Modulära HTML-vyer (både förinbäddade för noll-fördröjning/lokal körning och dynamiskt synkade från views/*.html?v=8.0) -->
     <div data-view-src="views/auth.html">
-<!-- 1. INLOGGNING, REGISTRERING & API-NYCKEL -->
+<!-- 1. INLOGGNING, REGISTRERING & SNABBLABB (v8.0 UI/UX) -->
     <div id="view-auth" class="view active">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h1>Relationspiloten</h1>
+      <!-- KORT 1: HERO, 3-STEG & KONTO -->
+      <div class="card" style="border-top: 3px solid #10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+          <div>
+            <span class="status-badge" style="margin-bottom:6px;">🧭 Beteendebaserat Matchningsexperiment</span>
+            <h1>Relationspiloten</h1>
+          </div>
           <span class="status-badge badge-engine">Flash 3.1 Lite + Argon 4.0</span>
         </div>
-        <p>Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
+        <p style="font-size:1.05rem; color:#e2e8f0; margin-top:4px; margin-bottom:14px;">Beteendebaserad relationsmatchning via djupgående samarbetsrollspel.</p>
 
-        <label>Användar-alias:</label>
-        <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren">
-
-        <label>Lösenord:</label>
-        <input type="password" id="auth-pass" placeholder="Minst 6 tecken...">
-
-
-
-        <details class="legal-box">
-          <summary style="cursor:pointer; font-weight:700; color:#38bdf8; user-select:none;">
-            🔒 GDPR, Anonymitet &amp; AI-arkitektur (Klicka för att läsa detaljerna)
-          </summary>
-          <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
-            • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
-            • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
-            • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
-            • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+        <!-- Visuell 3-stegs översikt -->
+        <div class="rp-steps-strip">
+          <div class="rp-step-pill">
+            <div class="rp-step-num">1</div>
+            <div class="rp-step-text">
+              <strong>100 % Anonymt Alias</strong>
+              <span>Inga profilbilder, inget namn eller mejl. Noll ytligt dömande.</span>
+            </div>
           </div>
-        </details>
-
-        <label class="checkbox-label">
-          <input type="checkbox" id="legal-consent">
-          <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="age-consent">
-          <span>Jag är minst 18 år gammal.</span>
-        </label>
-
-        <div id="auth-feedback" class="feedback-banner"></div>
-
-        <div style="display:flex; gap:10px;">
-          <button type="button" id="btn-login" class="btn">Logga in</button>
-          <button type="button" id="btn-register" class="btn btn-secondary">Skapa profil</button>
-        </div>
-
-        
-        <!-- DIREKTGENENVÄG TILL SNABBTESTER & PSYKOAKUSTISK LJUDANALYS (CRM) -->
-        <div style="margin-top:18px; padding-top:14px; border-top:1px solid var(--border);">
-          <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; margin-bottom:8px;">
-            🧪 Direktlabb &amp; Fristående Tester (kan även köras direkt utan inloggning):
+          <div class="rp-step-pill">
+            <div class="rp-step-num">2</div>
+            <div class="rp-step-text">
+              <strong>16 Rundors Rollspel</strong>
+              <span>Lös skarpa dilemman under press med en AI-kompanjon.</span>
+            </div>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
-              🎧 Psykoakustisk Ljudanalys (CRM)
-            </button>
-            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.84rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
-              🏛️ Somatisk &amp; Taktil + CRM
-            </button>
-            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openSwipeLab()">
-              🔥 360° Vektorswipe
-            </button>
-            <button type="button" class="btn btn-secondary" style="margin:0; padding:9px 12px; font-size:0.82rem;" onclick="window.openTaxiMenu()">
-              🚕 Öppna Baksätes-Labbet
-            </button>
+          <div class="rp-step-pill">
+            <div class="rp-step-num">3</div>
+            <div class="rp-step-text">
+              <strong>Djup Korssyntes</strong>
+              <span>Argon 4.0 matchar dig på hur du faktiskt agerar – inte vad du påstår.</span>
+            </div>
           </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; flex-wrap:wrap; gap:8px;">
-          <div id="js-health" style="font-size:0.78rem; color:#ef4444;">
+        <div style="background:rgba(12, 18, 30, 0.75); border:1px solid var(--border); border-radius:14px; padding:18px;">
+          <div style="font-size:0.95rem; font-weight:700; color:#6ee7b7; margin-bottom:10px;">
+            🔐 Logga in eller skapa din anonyma profil
+          </div>
+
+          <div class="builder-grid" style="margin-bottom:4px;">
+            <div>
+              <label for="auth-id">Användar-alias:</label>
+              <input type="text" id="auth-id" placeholder="t.ex. Skogsbacken eller Resenaren" style="margin-bottom:6px;">
+            </div>
+            <div>
+              <label for="auth-pass">Lösenord:</label>
+              <input type="password" id="auth-pass" placeholder="Minst 6 tecken..." style="margin-bottom:6px;">
+            </div>
+          </div>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="legal-consent">
+            <span>Jag godkänner villkoren och förstår att mina texter (samt röst/bild om jag väljer det) skickas till Google Gemini för AI-bearbetning och att min profil lagras i Supabase.</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="age-consent">
+            <span>Jag är minst 18 år gammal.</span>
+          </label>
+
+          <details class="legal-box" style="margin-bottom:12px;">
+            <summary style="cursor:pointer; font-weight:700; color:#38bdf8; user-select:none;">
+              🛡️ Läs mer om GDPR, Anonymitet &amp; Rätten att bli glömd (Art. 17)
+            </summary>
+            <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+              • <strong>Rollspelsmotor (Flash 3.1 Lite):</strong> Snabb dialog och scenariodriv i realtid.<br>
+              • <strong>Djupanalys &amp; Matchning (Argon 4.0):</strong> AI-genererad reflektion över hur du agerar i rollspelet (ingen psykologisk bedömning eller diagnos), valfri analys av röst/bild och matchning.<br>
+              • <strong>Tredje part:</strong> Det du skriver (och röst/bilder om du själv väljer att ladda upp dem) skickas till Google Gemini för att AI-svaren ska kunna skapas. Lagring sker i Supabase.<br>
+              • <strong>Art. 17 (Rätten att bli glömd):</strong> Du raderar profil, matchningar, meddelanden och ditt konto med ett klick inne i hubben.
+            </div>
+          </details>
+
+          <div id="auth-feedback" class="feedback-banner"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+            <button type="button" id="btn-login" class="btn" style="margin:0;">Logga in</button>
+            <button type="button" id="btn-register" class="btn btn-secondary" style="margin:0; border-color:#38bdf8; color:#38bdf8;">Skapa profil</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KORT 2: DIREKTLABB & FRISTÅENDE TESTER UTAN INLOGGNING -->
+      <div class="card" style="border: 1px solid rgba(56, 189, 248, 0.35);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <span class="status-badge badge-engine" style="margin-bottom:4px;">🧪 Noll konto krävs • Direkt på skärmen</span>
+            <h2 style="margin:0;">Prova Fristående Direktlabb &amp; Baksätes-Tester</h2>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:8px 14px; font-size:0.84rem; border-color:#38bdf8; color:#38bdf8;" onclick="window.openTaxiMenu()">
+            🚕 Öppna Baksätes-Labbet (Alla 4) ➔
+          </button>
+        </div>
+        <p style="font-size:0.94rem; margin-bottom:12px;">
+          Sitter du i baksätet eller vill du bara testa hur Argon 4.0 läser av din magkänsla på 2–3 minuter utan att skapa profil? Välj ett experiment direkt nedan:
+        </p>
+
+        <div class="rp-lab-showcase-grid">
+          <div class="rp-lab-tile" style="border-left: 4px solid #38bdf8;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🎧 Psykoakustisk Ljudanalys (CRM)</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Följ 4 musikvärldar &amp; 4 röstarketyper i realtid på vår 2D-affektyta.</span>
+            </div>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.86rem; background:linear-gradient(135deg, #38bdf8, #0284c7); color:#0b0c10; font-weight:800;" onclick="window.openPsychoacousticCrmLab()">
+              🎧 Starta Ljudanalys (CRM)
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #f59e0b;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🏛️ Somatisk &amp; Taktil Projektion</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">2-stegs radialhjul för kroppsmatris, händer/fötter &amp; Off-Guard profilskärpa.</span>
+            </div>
+            <button type="button" class="btn" style="margin:0; padding:10px 12px; font-size:0.86rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0c10; font-weight:800;" onclick="window.openSomaticLab()">
+              🏛️ Starta Somatisk &amp; Taktil
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #10b981;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🔥 360° Vektorswipe &amp; Självbild</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Svep i 360° (Tillit, Kemi, Varning, Distans) med millisekunds-sensor.</span>
+            </div>
+            <button type="button" id="btn-direct-swipelab" class="btn btn-secondary" style="margin:0; padding:10px 12px; font-size:0.86rem; border-color:#10b981; color:#6ee7b7;" onclick="window.openSwipeLab()">
+              🔥 Starta 360° Vektorswipe
+            </button>
+          </div>
+
+          <div class="rp-lab-tile" style="border-left: 4px solid #ec4899;">
+            <div>
+              <strong style="color:#fff; font-size:0.96rem; display:block;">🎙️ Röst ➔ AI-Målning ➔ Tolkning</strong>
+              <span style="font-size:0.83rem; color:var(--muted);">Berätta i 20 sek – Argon 4.0 målar din röstmelodi och speglar din tolkning.</span>
+            </div>
+            <button type="button" class="btn btn-secondary" style="margin:0; padding:10px 12px; font-size:0.86rem; border-color:#ec4899; color:#f9a8d4;" onclick="window.openStandaloneVoiceLab()">
+              🎙️ Starta Röst-till-Målning
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding-top:12px; border-top:1px solid var(--border); flex-wrap:wrap; gap:8px;">
+          <div id="js-health" style="font-size:0.8rem; color:#ef4444;">
             🔴 Laddar JavaScript-motor...
           </div>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
-            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#475569; font-size:0.74rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <button type="button" onclick="window.openFaqModal()" style="background:none; border:none; color:#38bdf8; font-size:0.86rem; font-weight:600; cursor:pointer; padding:4px; text-decoration:underline;">❓ Frågor &amp; svar</button>
+            <button type="button" onclick="window.openAdminPanel()" style="background:none; border:none; color:#64748b; font-size:0.78rem; cursor:pointer; padding:4px;">🛡️ Admin</button>
           </div>
         </div>
-
       </div>
     </div>
-
     </div>
     <div data-view-src="views/interests.html">
 <!-- 1.5. FÖRBEREDELSE: SCENARIOBYGGARE, SPRÅK & INTRESSEN -->
@@ -104,10 +1570,10 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
           <span class="status-badge" style="margin:0;">Steg 1 av 2: Anpassning &amp; Scenariobyggare</span>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.8rem;" onclick="window.switchView('view-auth')">⬅️ Startsidan</button>
-            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.8rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openPsychoacousticCrmLab()">🎧 Ljudanalys (CRM)</button>
-            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.8rem; border:1px solid #f59e0b; color:#fde68a;" onclick="window.openSomaticLab()">🏛️ Somatisk &amp; Taktil</button>
-            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.8rem;" onclick="window.switchView('view-hub')">🏠 Matchningshubben</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.82rem;" onclick="window.switchView('view-auth')">⬅️ Startsidan</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.82rem; border:1px solid #38bdf8; color:#38bdf8;" onclick="window.openPsychoacousticCrmLab()">🎧 Ljudanalys (CRM)</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.82rem; border:1px solid #f59e0b; color:#fde68a;" onclick="window.openSomaticLab()">🏛️ Somatisk &amp; Taktil</button>
+            <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:7px 12px; font-size:0.82rem;" onclick="window.switchView('view-hub')">💞 Matchningshubben</button>
           </div>
         </div>
         <h1>Vad engagerar dig?</h1>
@@ -204,9 +1670,10 @@
     <div data-view-src="views/hub.html">
 <!-- 2. HUVUDSIDAN (MATCHNINGSHUBB) -->
     <div id="view-hub" class="view">
-      <!-- Klistrad snabbnavigering så man slipper scrolla 4 skärmlängder -->
-      <nav class="hub-quick-nav" aria-label="Snabbnavigering i Matchningshubben">
-        <a href="#hub-sec-profile" class="hub-nav-pill">👤 Min Profil</a>
+      <!-- Snabbhopp mellan Hubbens sektioner -->
+      <nav class="hub-quick-nav" aria-label="Snabbhopp i Matchningshubben">
+        <span style="font-size:0.78rem; color:var(--muted); font-weight:700; padding:0 4px; white-space:nowrap;">Hopp i Hubb:</span>
+        <a href="#hub-sec-profile" class="hub-nav-pill">👤 Profil</a>
         <a href="#hub-sec-matches" class="hub-nav-pill" style="color:#6ee7b7; border-color:rgba(16,185,129,0.4);">💞 Matchningar &amp; Chatt</a>
         <a href="#hub-sec-swipelab" class="hub-nav-pill" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">🧭 360° &amp; Somatik</a>
         <a href="#hub-sec-crm" class="hub-nav-pill" style="color:#f472b6; border-color:rgba(244,114,182,0.4);">🎧 Ljud-CRM</a>
@@ -1097,9 +2564,12 @@
 <!-- FRISTÅENDE TAXI DROP-IN MENY (?test=taxi) -->
     <div id="view-taxi-menu" class="view">
       <div class="card" style="border:1px solid #38bdf8;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-          <span class="status-badge badge-engine">🚕 Välkommen ombord — Interaktivt Baksätes-Lab</span>
-          <span class="status-badge">100% Anonymt • Inget sparas</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div>
+            <span class="status-badge badge-engine">🚕 Välkommen ombord — Interaktivt Baksätes-Lab</span>
+            <span class="status-badge">100% Anonymt • Inget sparas</span>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width:auto; margin:0; padding:6px 12px; font-size:0.82rem;" onclick="window.switchView('view-auth')">⬅️ Till Startsidan</button>
         </div>
         <h1 style="margin-bottom:6px;">Utforska din Relations- &amp; Intuitionsprofil under resan</h1>
         <p style="font-size:0.92rem; margin-top:0;">
@@ -1441,18 +2911,18 @@
     </div>
   </div>
 
-  <!-- JavaScript-moduler i tydlig laddningsordning (med cache-busting v=7.3) -->
-  <script src="js/config.js?v=7.3"></script>
-  <script src="js/api.js?v=7.3"></script>
-  <script src="js/auth.js?v=7.3"></script>
-  <script src="js/roleplay.js?v=7.3"></script>
-  <script src="js/matching-chat.js?v=7.3"></script>
-  <script src="js/multimodal-tests.js?v=7.3"></script>
-  <script src="js/swipe-lab.js?v=7.3"></script>
-  <script src="js/somatic-lab.js?v=7.3"></script>
-  <script src="js/standalone-labs.js?v=7.3"></script>
-  <script src="js/argon-queue.js?v=7.3"></script>
-  <script src="js/admin.js?v=7.3"></script>
-  <script src="js/main.js?v=7.3"></script>
+  <!-- JavaScript-moduler i tydlig laddningsordning (med cache-busting v=8.0) -->
+  <script src="js/config.js?v=8.0"></script>
+  <script src="js/api.js?v=8.0"></script>
+  <script src="js/auth.js?v=8.0"></script>
+  <script src="js/roleplay.js?v=8.0"></script>
+  <script src="js/matching-chat.js?v=8.0"></script>
+  <script src="js/multimodal-tests.js?v=8.0"></script>
+  <script src="js/swipe-lab.js?v=8.0"></script>
+  <script src="js/somatic-lab.js?v=8.0"></script>
+  <script src="js/standalone-labs.js?v=8.0"></script>
+  <script src="js/argon-queue.js?v=8.0"></script>
+  <script src="js/admin.js?v=8.0"></script>
+  <script src="js/main.js?v=8.0"></script>
 </body>
 </html>
