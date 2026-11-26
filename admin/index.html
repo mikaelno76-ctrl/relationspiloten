@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ydmfcogwrhcbvooinftu.supabase.co; img-src data:; base-uri 'none'; form-action 'none'">
+<title>Relationspiloten Admin</title>
+<style>
+  :root {
+    --bg:#0e1a24; --card:#14232f; --card2:#101c26; --line:rgba(157,176,191,.22);
+    --text:#f4f7f9; --body:#d5dee6; --muted:#9db0bf;
+    --accent:#2dd4bf; --accent-ink:#04201c; --warn:#fbbf24; --danger:#f87171; --ok:#34d399;
+  }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--body); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; padding-bottom:84px; }
+  .wrap { max-width:760px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:0; color:var(--text); }
+  h2 { font-size:1.1rem; margin:0 0 10px; color:var(--text); }
+  p { margin:0 0 10px; }
+  .muted { color:var(--muted); font-size:.85rem; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin:0 0 12px; }
+  .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .spread { justify-content:space-between; }
+  button, input, select { font:inherit; }
+  .btn { min-height:46px; padding:10px 16px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--text); font-weight:700; cursor:pointer; }
+  .btn:active { transform:scale(.98); }
+  .btn.primary { background:var(--accent); color:var(--accent-ink); border-color:transparent; }
+  .btn.danger { background:rgba(248,113,113,.14); border-color:rgba(248,113,113,.5); color:#fecaca; }
+  .btn.small { min-height:40px; padding:6px 12px; font-size:.88rem; }
+  .btn[disabled] { opacity:.5; cursor:not-allowed; }
+  input[type=password], input[type=text], input[type=search], select { width:100%; min-height:46px; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:var(--card2); color:var(--text); }
+  label.chk { display:flex; gap:8px; align-items:center; font-size:.9rem; color:var(--body); margin:10px 0 0; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:560px){ .grid { grid-template-columns:repeat(3,1fr); } }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; }
+  .stat .n { font-size:2rem; font-weight:800; color:var(--text); line-height:1.1; }
+  .stat .l { font-size:.82rem; color:var(--muted); }
+  .stat.alert { border-color:rgba(251,191,36,.6); background:rgba(251,191,36,.08); }
+  .stat.alert .n { color:var(--warn); }
+  .pill { display:inline-block; padding:2px 10px; border-radius:99px; font-size:.78rem; font-weight:700; background:rgba(255,255,255,.08); color:var(--body); margin:0 6px 6px 0; }
+  .pill.ok { background:rgba(52,211,153,.15); color:#a7f3d0; }
+  .pill.no { background:rgba(255,255,255,.06); color:var(--muted); }
+  .msgbox { background:var(--card2); border-left:3px solid var(--warn); border-radius:8px; padding:10px 12px; margin:8px 0 12px; white-space:pre-wrap; word-break:break-word; color:var(--text); }
+  .profile { background:var(--card2); border:1px dashed var(--line); border-radius:10px; padding:10px 12px; margin:8px 0; white-space:pre-wrap; word-break:break-word; font-size:.9rem; max-height:260px; overflow:auto; }
+  nav.tabs { position:fixed; left:0; right:0; bottom:0; background:rgba(14,26,36,.96); border-top:1px solid var(--line); display:flex; padding-bottom:env(safe-area-inset-bottom); z-index:20; }
+  nav.tabs button { flex:1; background:none; border:0; color:var(--muted); padding:10px 4px 8px; min-height:60px; font-weight:700; font-size:.78rem; cursor:pointer; }
+  nav.tabs button .ico { display:block; font-size:1.3rem; line-height:1.2; }
+  nav.tabs button.on { color:var(--accent); }
+  nav.tabs .badge { display:inline-block; min-width:18px; padding:0 5px; margin-left:4px; border-radius:99px; background:var(--warn); color:#222; font-size:.72rem; }
+  .overlay { position:fixed; inset:0; background:rgba(5,8,14,.8); display:flex; align-items:center; justify-content:center; padding:18px; z-index:50; }
+  .dialog { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; max-width:440px; width:100%; }
+  .dialog .btns { display:flex; gap:10px; margin-top:14px; }
+  .dialog .btns .btn { flex:1; }
+  #toast { position:fixed; left:50%; transform:translateX(-50%); bottom:84px; background:#0b2f2a; color:#ccfbf1; border:1px solid var(--accent); padding:10px 16px; border-radius:99px; z-index:60; font-weight:700; opacity:0; pointer-events:none; transition:opacity .25s; max-width:92vw; text-align:center; }
+  #toast.show { opacity:1; }
+  #toast.err { background:#3b1111; border-color:var(--danger); color:#fecaca; }
+  .err { color:#fecaca; }
+  .hidden { display:none !important; }
+  .empty { text-align:center; padding:28px 10px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INLOGGNING -->
+  <section id="login" class="card" style="margin-top:6vh;">
+    <h1>🛡️ Relationspiloten Admin</h1>
+    <p class="muted">Granska anmälda meddelanden, ge en andra chans på tester och se hur många medlemmar du har.</p>
+    <label for="key" style="display:block; margin:14px 0 6px; font-weight:700; color:var(--text);">Master Admin-nyckel</label>
+    <input id="key" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Din nyckel">
+    <label class="chk"><input type="checkbox" id="remember"> Kom ihåg på den här enheten (spara inte på delade datorer)</label>
+    <p id="loginErr" class="err hidden" style="margin-top:10px;"></p>
+    <button id="loginBtn" class="btn primary" style="width:100%; margin-top:14px;">Logga in</button>
+    <p class="muted" style="margin-top:14px;">Nyckeln kontrolleras i Supabase och lämnar aldrig din enhet på något annat sätt. Efter 15 minuters inaktivitet låses appen.</p>
+  </section>
+
+  <!-- APP -->
+  <main id="app" class="hidden">
+    <div class="row spread" style="margin:4px 0 14px;">
+      <div>
+        <h1>🛡️ Admin</h1>
+        <div class="muted" id="updated">Inte hämtat än</div>
+      </div>
+      <div class="row">
+        <button id="refreshBtn" class="btn small">↻ Uppdatera</button>
+        <button id="logoutBtn" class="btn small">Logga ut</button>
+      </div>
+    </div>
+
+    <section id="tab-overview">
+      <div class="grid" id="stats"></div>
+      <div class="card" style="margin-top:12px;">
+        <h2>Medlemmar i siffror</h2>
+        <div id="breakdown" class="muted"></div>
+      </div>
+      <p class="muted">Räknar medlemmar som har skapat en profil. Konton som registrerats men aldrig kommit så långt syns inte här.</p>
+    </section>
+
+    <section id="tab-flags" class="hidden">
+      <h2>Anmälda meddelanden</h2>
+      <div id="flags"></div>
+    </section>
+
+    <section id="tab-members" class="hidden">
+      <h2>Medlemmar</h2>
+      <input id="search" type="search" placeholder="Sök alias…" style="margin-bottom:12px;">
+      <div id="members"></div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs hidden" id="tabs">
+  <button data-tab="overview" class="on"><span class="ico">📊</span>Översikt</button>
+  <button data-tab="flags"><span class="ico">🚩</span>Anmälningar<span id="flagBadge" class="badge hidden">0</span></button>
+  <button data-tab="members"><span class="ico">👥</span>Medlemmar</button>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+  var SUPABASE_URL = "https://ydmfcogwrhcbvooinftu.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_Nm6hCgyva38fMMIPcWIBkw_jU3uJ3qY";
+  var LOCK_MS = 15 * 60 * 1000;
+  var STORE = "rp_admin_key_v1";
+
+  var MODULES = [
+    ["base_roleplay", "Grundäventyret"],
+    ["swipe_test", "360°-svajp"],
+    ["somatic_test", "Kroppsbilder"],
+    ["color_form_mood_test", "Färg, form & humör"],
+    ["crm_test", "Ljudtestet"],
+    ["devil_test", "Off-guard-frågor"],
+    ["test_memory", "Minnesfrågan"],
+    ["test_photos", "Tre bilder"],
+    ["test_voice", "Röst till bild"],
+    ["deep_resource", "Fördjupning: Resurs"],
+    ["deep_conflict", "Fördjupning: Konflikt"],
+    ["deep_routine", "Fördjupning: Rutin"]
+  ];
+  var MOD_LABEL = {}; MODULES.forEach(function (m) { MOD_LABEL[m[0]] = m[1]; });
+
+  var key = "";
+  var data = null;
+  var lastFetch = 0;
+  var lockTimer = null;
+  var fails = 0, lockedUntil = 0;
+
+  function $(id) { return document.getElementById(id); }
+
+  // Säker elementbyggare: all text sätts som textContent, aldrig som HTML
+  function h(tag, attrs, kids) {
+    var el = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "class") el.className = attrs[k];
+      else if (k === "text") el.textContent = attrs[k];
+      else if (k.indexOf("on") === 0) el.addEventListener(k.slice(2), attrs[k]);
+      else el.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) el.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return el;
+  }
+
+  function toast(msg, isErr) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.className = (isErr ? "err " : "") + "show";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.className = ""; }, 3200);
+  }
+
+  function fmtTime(iso) {
+    try { return new Date(iso).toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" }); }
+    catch (e) { return iso || ""; }
+  }
+
+  // ---------- Anrop mot Supabase (samma RPC-funktioner som appen använder) ----------
+  function rpc(name, body) {
+    var ctrl = new AbortController();
+    var to = setTimeout(function () { ctrl.abort(); }, 20000);
+    return fetch(SUPABASE_URL + "/rest/v1/rpc/" + name, {
+      method: "POST",
+      headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify(body || {}),
+      signal: ctrl.signal
+    }).then(function (res) {
+      return res.text().then(function (txt) {
+        var j = null; try { j = txt ? JSON.parse(txt) : null; } catch (e) {}
+        if (!res.ok) {
+          var msg = (j && (j.message || j.error_description || j.msg)) || "Något gick fel mot databasen.";
+          var err = new Error(msg); err.status = res.status; throw err;
+        }
+        return j;
+      });
+    }).catch(function (e) {
+      if (e && e.name === "AbortError") throw new Error("Det tog för lång tid. Kolla uppkopplingen och försök igen.");
+      if (e instanceof TypeError) throw new Error("Ingen kontakt med servern. Kolla uppkopplingen.");
+      throw e;
+    }).then(function (r) { clearTimeout(to); return r; }, function (e) { clearTimeout(to); throw e; });
+  }
+
+  function isBadKey(e) { return /nyckel/i.test(e.message || ""); }
+
+  // ---------- Inloggning ----------
+  function showLoginErr(msg) { var p = $("loginErr"); p.textContent = msg; p.classList.toggle("hidden", !msg); }
+
+  function login(fromStored) {
+    var now = Date.now();
+    if (now < lockedUntil) { showLoginErr("För många felaktiga försök. Vänta " + Math.ceil((lockedUntil - now) / 1000) + " sekunder."); return; }
+    var k = fromStored || $("key").value;
+    if (!k) { showLoginErr("Skriv din nyckel."); return; }
+    $("loginBtn").disabled = true; $("loginBtn").textContent = "Kontrollerar…"; showLoginErr("");
+    rpc("admin_oversikt", { p_secret: k }).then(function (d) {
+      key = k; data = d; fails = 0; lastFetch = Date.now();
+      try {
+        if ($("remember").checked && !fromStored) localStorage.setItem(STORE, k);
+      } catch (e) {}
+      $("key").value = "";
+      enterApp();
+    }).catch(function (e) {
+      if (isBadKey(e)) {
+        fails++; if (fails >= 5) { lockedUntil = Date.now() + 60000; fails = 0; }
+        try { localStorage.removeItem(STORE); } catch (x) {}
+        showLoginErr("Fel nyckel.");
+      } else showLoginErr(e.message);
+    }).then(function () { $("loginBtn").disabled = false; $("loginBtn").textContent = "Logga in"; });
+  }
+
+  function logout(msg) {
+    key = ""; data = null; clearTimeout(lockTimer);
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    $("app").classList.add("hidden"); $("tabs").classList.add("hidden"); $("login").classList.remove("hidden");
+    $("members").textContent = ""; $("flags").textContent = "";
+    showLoginErr(msg || "");
+  }
+
+  function touch() {
+    clearTimeout(lockTimer);
+    if (!key) return;
+    lockTimer = setTimeout(function () { logout("Låst efter 15 minuters inaktivitet."); }, LOCK_MS);
+  }
+
+  function enterApp() {
+    $("login").classList.add("hidden"); $("app").classList.remove("hidden"); $("tabs").classList.remove("hidden");
+    renderAll(); touch();
+  }
+
+  // ---------- Hämta och rendera ----------
+  function load(silent) {
+    return rpc("admin_oversikt", { p_secret: key }).then(function (d) {
+      data = d; lastFetch = Date.now(); renderAll();
+    }).catch(function (e) {
+      if (isBadKey(e)) { logout("Nyckeln gäller inte längre. Logga in igen."); return; }
+      if (!silent) toast(e.message, true);
+    });
+  }
+
+  function attemptsOf(fd) {
+    var out = [];
+    if (!fd || typeof fd !== "object") return out;
+    Object.keys(fd).forEach(function (k) {
+      if (k === "admin_reset_ts") return;
+      var v = fd[k], n = typeof v === "number" ? v : (v && typeof v === "object" ? Number(v.count || 0) : 0);
+      if (n > 0) out.push({ key: k, n: n });
+    });
+    return out;
+  }
+
+  function stat(n, l, alert) { return h("div", { class: "stat" + (alert ? " alert" : "") }, [h("div", { class: "n", text: String(n) }), h("div", { class: "l", text: l })]); }
+
+  function renderAll() {
+    if (!data) return;
+    var members = data.members || [], matches = data.matches || [], flagged = data.flagged_messages || [];
+    $("updated").textContent = "Uppdaterad " + new Date(lastFetch || Date.now()).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+
+    var approved = members.filter(function (m) { return m.godkand_for_matchning; }).length;
+    var st = $("stats"); st.textContent = "";
+    st.appendChild(stat(members.length, "Medlemmar"));
+    st.appendChild(stat(approved, "Godkända för matchning"));
+    st.appendChild(stat(matches.length, "Matchningar"));
+    st.appendChild(stat(data.total_messages_count || 0, "Chattmeddelanden"));
+    st.appendChild(stat(flagged.length, "Väntande anmälningar", flagged.length > 0));
+
+    var kon = {}; members.forEach(function (m) { var k = m.frivilligt_kon || "Ej angivet"; kon[k] = (kon[k] || 0) + 1; });
+    var bd = $("breakdown"); bd.textContent = "";
+    if (!members.length) bd.textContent = "Inga medlemmar än.";
+    Object.keys(kon).sort().forEach(function (k) { bd.appendChild(h("span", { class: "pill", text: k + ": " + kon[k] })); });
+
+    var badge = $("flagBadge"); badge.textContent = String(flagged.length); badge.classList.toggle("hidden", flagged.length === 0);
+    renderFlags(flagged); renderMembers();
+  }
+
+  function renderFlags(flagged) {
+    var box = $("flags"); box.textContent = "";
+    if (!flagged.length) { box.appendChild(h("div", { class: "empty", text: "✅ Inga anmälda meddelanden just nu." })); return; }
+    flagged.forEach(function (f) {
+      var card = h("div", { class: "card" });
+      card.appendChild(h("div", { class: "row spread" }, [
+        h("strong", { text: "Från: " + (f.sender_alias || "okänd") }),
+        h("span", { class: "muted", text: fmtTime(f.created_at) })
+      ]));
+      card.appendChild(h("div", { class: "msgbox", text: f.meddelande_text || "(tomt meddelande)" }));
+      card.appendChild(h("div", { class: "row" }, [
+        h("button", { class: "btn small", text: "Behåll (avfärda anmälan)", onclick: function () { flagAction(f, false); } }),
+        h("button", { class: "btn small danger", text: "Radera meddelandet", onclick: function () { flagAction(f, true); } }),
+        f.sender_id ? h("button", { class: "btn small danger", text: "Radera avsändaren", onclick: function () { deleteMember(f.sender_id, f.sender_alias); } }) : null
+      ]));
+      box.appendChild(card);
+    });
+  }
+
+  function flagAction(f, del) {
+    var q = del ? "Radera meddelandet för alltid?" : "Avfärda anmälan och behålla meddelandet?";
+    confirmDialog(del ? "Radera meddelande" : "Behåll meddelande", q, del ? "Radera" : "Behåll", del).then(function (ok) {
+      if (!ok) return;
+      rpc("admin_hantera_flaggat_meddelande", { p_secret: key, p_msg_id: f.id, p_radera: !!del }).then(function () {
+        toast(del ? "Meddelandet raderat" : "Anmälan avfärdad"); return load(true);
+      }).catch(function (e) { toast(e.message, true); });
+    });
+  }
+
+  function renderMembers() {
+    var box = $("members"); box.textContent = "";
+    var q = ($("search").value || "").trim().toLowerCase();
+    var list = (data.members || []).filter(function (m) { return !q || String(m.alias || "").toLowerCase().indexOf(q) >= 0; });
+    if (!list.length) { box.appendChild(h("div", { class: "empty", text: q ? "Ingen träff." : "Inga medlemmar än." })); return; }
+    list.forEach(function (m) {
+      var used = attemptsOf(m.forsok_data);
+      var card = h("div", { class: "card" });
+      card.appendChild(h("div", { class: "row spread" }, [
+        h("strong", { text: m.alias || "Medlem" }),
+        h("span", { class: "pill " + (m.godkand_for_matchning ? "ok" : "no"), text: m.godkand_for_matchning ? "Matchningsbar" : "Ej godkänd" })
+      ]));
+      var meta = h("div", { style: "margin-top:6px;" });
+      if (m.frivilligt_kon) meta.appendChild(h("span", { class: "pill", text: m.frivilligt_kon }));
+      used.forEach(function (u) { meta.appendChild(h("span", { class: "pill", text: (MOD_LABEL[u.key] || u.key) + ": " + u.n })); });
+      if (!used.length) meta.appendChild(h("span", { class: "muted", text: "Inga använda försök" }));
+      card.appendChild(meta);
+
+      var sel = h("select", { "aria-label": "Välj test att nollställa" }, [h("option", { value: "ALL", text: "Alla tester" })].concat(
+        MODULES.map(function (mm) { return h("option", { value: mm[0], text: mm[1] }); })));
+      var profileBox = h("div", { class: "profile hidden", text: m.profil_text || "(ingen profiltext)" });
+      card.appendChild(h("div", { style: "margin-top:8px;" }, [sel]));
+      card.appendChild(h("div", { class: "row", style: "margin-top:10px;" }, [
+        h("button", { class: "btn small primary", text: "Ge en andra chans", onclick: function () { resetAttempts(m, sel.value); } }),
+        h("button", { class: "btn small", text: "Visa profiltext", onclick: function (ev) {
+          var hid = profileBox.classList.toggle("hidden"); ev.target.textContent = hid ? "Visa profiltext" : "Dölj profiltext"; } }),
+        h("button", { class: "btn small danger", text: "Radera medlem", onclick: function () { deleteMember(m.user_id, m.alias); } })
+      ]));
+      card.appendChild(profileBox);
+      box.appendChild(card);
+    });
+  }
+
+  function resetAttempts(m, mod) {
+    var label = mod === "ALL" ? "alla tester" : (MOD_LABEL[mod] || mod);
+    confirmDialog("Ge en andra chans", "Nollställ " + label + " för " + (m.alias || "medlemmen") + "? Medlemmen kan då göra om testet. Tidigare sparade resultat för det testet försvinner också.", "Nollställ", false).then(function (ok) {
+      if (!ok) return;
+      rpc("admin_nollstall_forsok", { p_secret: key, p_target_user: m.user_id, p_module: mod }).then(function () {
+        toast("Nollställt: " + label); return load(true);
+      }).catch(function (e) { toast(e.message, true); });
+    });
+  }
+
+  function deleteMember(id, alias) {
+    var name = alias || "medlemmen";
+    confirmDialog("Radera medlem", "Detta raderar " + name + " permanent: kontot, profilen, matchningar och alla chattmeddelanden. Det går inte att ångra.", "Radera för alltid", true, name).then(function (ok) {
+      if (!ok) return;
+      rpc("admin_radera_medlem", { p_secret: key, p_target_user: id }).then(function () {
+        toast("Medlemmen raderad"); return load(true);
+      }).catch(function (e) { toast(e.message, true); });
+    });
+  }
+
+  // ---------- Bekräftelserutor ----------
+  function confirmDialog(title, text, okLabel, danger, typeToConfirm) {
+    return new Promise(function (resolve) {
+      var input = null;
+      var ok = h("button", { class: "btn " + (danger ? "danger" : "primary"), text: okLabel });
+      var cancel = h("button", { class: "btn", text: "Avbryt" });
+      var body = [h("h2", { text: title }), h("p", { text: text })];
+      if (typeToConfirm) {
+        body.push(h("p", { class: "muted", text: "Skriv ”" + typeToConfirm + "” för att bekräfta:" }));
+        input = h("input", { type: "text", autocapitalize: "off", autocomplete: "off" });
+        body.push(input); ok.disabled = true;
+        input.addEventListener("input", function () { ok.disabled = input.value.trim() !== typeToConfirm; });
+      }
+      body.push(h("div", { class: "btns" }, [cancel, ok]));
+      var ov = h("div", { class: "overlay" }, [h("div", { class: "dialog", role: "dialog", "aria-modal": "true" }, body)]);
+      function close(v) { ov.remove(); resolve(v); }
+      cancel.addEventListener("click", function () { close(false); });
+      ok.addEventListener("click", function () { if (!ok.disabled) close(true); });
+      ov.addEventListener("click", function (e) { if (e.target === ov) close(false); });
+      document.body.appendChild(ov);
+      (input || cancel).focus();
+    });
+  }
+
+  // ---------- Flikar och händelser ----------
+  function showTab(name) {
+    ["overview", "flags", "members"].forEach(function (t) { $("tab-" + t).classList.toggle("hidden", t !== name); });
+    Array.prototype.forEach.call(document.querySelectorAll("nav.tabs button"), function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === name); });
+    window.scrollTo(0, 0);
+  }
+
+  $("loginBtn").addEventListener("click", function () { login(); });
+  $("key").addEventListener("keydown", function (e) { if (e.key === "Enter") login(); });
+  $("logoutBtn").addEventListener("click", function () { logout("Utloggad."); });
+  $("refreshBtn").addEventListener("click", function () { load(false).then(function () { toast("Uppdaterat"); }); });
+  $("search").addEventListener("input", renderMembers);
+  Array.prototype.forEach.call(document.querySelectorAll("nav.tabs button"), function (b) {
+    b.addEventListener("click", function () { showTab(b.getAttribute("data-tab")); touch(); });
+  });
+  ["click", "keydown", "touchstart"].forEach(function (ev) { document.addEventListener(ev, touch, { passive: true }); });
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && key && Date.now() - lastFetch > 60000) load(true);
+  });
+
+  // Automatisk inloggning om du valt "kom ihåg" på den här enheten
+  try {
+    var saved = localStorage.getItem(STORE);
+    if (saved) { $("remember").checked = true; login(saved); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
