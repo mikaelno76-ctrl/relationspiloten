@@ -58,6 +58,16 @@
   #toast.show { opacity:1; }
   #toast.err { background:#3b1111; border-color:var(--danger); color:#fecaca; }
   .err { color:#fecaca; }
+  .bars { margin-top:6px; }
+  .bar { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:.9rem; }
+  .bar .lab { width:34px; flex-shrink:0; color:var(--text); font-weight:700; }
+  .bar .track { flex:1; height:14px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+  .bar .fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--accent),#7dd3fc); }
+  .bar .cnt { width:30px; text-align:right; color:var(--muted); flex-shrink:0; }
+  .stars { color:var(--warn); letter-spacing:1px; font-size:1.05rem; }
+  .stars .off { color:rgba(255,255,255,.2); }
+  .filters { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 12px; }
+  .filters .btn.on { background:var(--accent); color:var(--accent-ink); border-color:transparent; }
   .hidden { display:none !important; }
   .empty { text-align:center; padding:28px 10px; color:var(--muted); }
 </style>
@@ -104,6 +114,19 @@
       <div id="flags"></div>
     </section>
 
+    <section id="tab-ratings" class="hidden">
+      <h2>⭐ Taxi-rollspelets betyg</h2>
+      <div class="grid" id="ratingStats"></div>
+      <div class="card" style="margin-top:12px;">
+        <h2>Fördelning</h2>
+        <div id="ratingBars" class="bars"></div>
+      </div>
+      <h2 style="margin-top:18px;">Kommentarer</h2>
+      <div class="filters" id="ratingFilters"></div>
+      <div id="ratingList"></div>
+      <p class="muted" id="ratingNote"></p>
+    </section>
+
     <section id="tab-members" class="hidden">
       <h2>Medlemmar</h2>
       <input id="search" type="search" placeholder="Sök alias…" style="margin-bottom:12px;">
@@ -116,6 +139,7 @@
   <button data-tab="overview" class="on"><span class="ico">📊</span>Översikt</button>
   <button data-tab="flags"><span class="ico">🚩</span>Anmälningar<span id="flagBadge" class="badge hidden">0</span></button>
   <button data-tab="members"><span class="ico">👥</span>Medlemmar</button>
+  <button data-tab="ratings"><span class="ico">⭐</span>Taxi-betyg</button>
 </nav>
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -204,6 +228,78 @@
 
   function isBadKey(e) { return /nyckel/i.test(e.message || ""); }
 
+  // ---------- Taxi-betyg (tabellen taxi_betyg, samma Supabase-projekt) ----------
+  var ratings = null, ratingsError = "", ratingFilter = "all";
+  var RATINGS_LIMIT = 1000;
+
+  function loadRatings() {
+    var ctrl = new AbortController();
+    var to = setTimeout(function () { ctrl.abort(); }, 20000);
+    return fetch(SUPABASE_URL + "/rest/v1/taxi_betyg?select=id,betyg,kommentar,sprak,scenario,created_at&order=created_at.desc&limit=" + RATINGS_LIMIT, {
+      headers: { "apikey": SUPABASE_KEY },
+      signal: ctrl.signal
+    }).then(function (res) {
+      if (!res.ok) throw new Error("Kunde inte hämta betygen (status " + res.status + ").");
+      return res.json();
+    }).then(function (rows) {
+      ratings = Array.isArray(rows) ? rows : []; ratingsError = "";
+    }).catch(function (e) {
+      ratingsError = (e && e.name === "AbortError") ? "Det tog för lång tid att hämta betygen." : (e && e.message) || "Kunde inte hämta betygen.";
+    }).then(function () { clearTimeout(to); renderRatings(); });
+  }
+
+  function starString(n) {
+    var s = h("span", { class: "stars", "aria-label": n + " av 5 stjärnor" });
+    for (var i = 1; i <= 5; i++) s.appendChild(h("span", { class: i <= n ? "" : "off", text: "★" }));
+    return s;
+  }
+
+  function renderRatings() {
+    var st = $("ratingStats"), bars = $("ratingBars"), list = $("ratingList"), filt = $("ratingFilters");
+    st.textContent = ""; bars.textContent = ""; list.textContent = ""; filt.textContent = ""; $("ratingNote").textContent = "";
+    if (ratingsError) { list.appendChild(h("div", { class: "empty err", text: ratingsError })); return; }
+    if (!ratings) { list.appendChild(h("div", { class: "empty", text: "Hämtar betyg…" })); return; }
+    var rows = ratings, n = rows.length;
+    var sum = 0, counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, withComment = 0, recent = 0, recentSum = 0;
+    var cutoff = Date.now() - 30 * 24 * 3600 * 1000;
+    rows.forEach(function (r) {
+      var b = Math.max(1, Math.min(5, Math.round(Number(r.betyg) || 0)));
+      sum += b; counts[b]++;
+      if (r.kommentar && String(r.kommentar).trim().length > 0) withComment++;
+      if (new Date(r.created_at).getTime() >= cutoff) { recent++; recentSum += b; }
+    });
+    var avg = n ? (sum / n) : 0;
+    st.appendChild(stat(n, "Antal betyg"));
+    st.appendChild(stat(n ? avg.toFixed(2).replace(".", ",") : "–", "Snittbetyg (av 5)"));
+    st.appendChild(stat(withComment, "Med kommentar"));
+    st.appendChild(stat(recent ? (recentSum / recent).toFixed(2).replace(".", ",") : "–", "Snitt senaste 30 dagarna (" + recent + " st)"));
+
+    if (!n) { bars.appendChild(h("div", { class: "muted", text: "Inga betyg än." })); list.appendChild(h("div", { class: "empty", text: "Inga kommentarer än." })); return; }
+    for (var s = 5; s >= 1; s--) {
+      var pct = Math.round(counts[s] / n * 100);
+      var fill = h("div", { class: "fill" }); fill.style.width = pct + "%";
+      bars.appendChild(h("div", { class: "bar" }, [h("span", { class: "lab", text: s + " ★" }), h("div", { class: "track" }, [fill]), h("span", { class: "cnt", text: String(counts[s]) })]));
+    }
+
+    [["all", "Alla"], ["low", "1–3 stjärnor"], ["high", "4–5 stjärnor"]].forEach(function (f) {
+      filt.appendChild(h("button", { class: "btn small" + (ratingFilter === f[0] ? " on" : ""), text: f[1], onclick: function () { ratingFilter = f[0]; renderRatings(); } }));
+    });
+    var shown = rows.filter(function (r) {
+      if (!r.kommentar || !String(r.kommentar).trim()) return false;
+      var b = Number(r.betyg) || 0;
+      return ratingFilter === "all" || (ratingFilter === "low" ? b <= 3 : b >= 4);
+    });
+    if (!shown.length) list.appendChild(h("div", { class: "empty", text: withComment ? "Inga kommentarer i det här urvalet." : "Ingen har lämnat någon kommentar än. Bara stjärnor hittills." }));
+    shown.forEach(function (r) {
+      var meta = [fmtTime(r.created_at), r.scenario, r.sprak].filter(Boolean).join(" · ");
+      list.appendChild(h("div", { class: "card" }, [
+        h("div", { class: "row spread" }, [starString(Math.round(Number(r.betyg) || 0)), h("span", { class: "muted", text: meta })]),
+        h("div", { class: "msgbox", style: "border-left-color:var(--accent); margin-bottom:0;", text: String(r.kommentar).trim() })
+      ]));
+    });
+    if (n >= RATINGS_LIMIT) $("ratingNote").textContent = "Visar de " + RATINGS_LIMIT + " senaste betygen.";
+  }
+
   // ---------- Inloggning ----------
   function showLoginErr(msg) { var p = $("loginErr"); p.textContent = msg; p.classList.toggle("hidden", !msg); }
 
@@ -230,7 +326,7 @@
   }
 
   function logout(msg) {
-    key = ""; data = null; clearTimeout(lockTimer);
+    key = ""; data = null; ratings = null; clearTimeout(lockTimer);
     try { localStorage.removeItem(STORE); } catch (e) {}
     $("app").classList.add("hidden"); $("tabs").classList.add("hidden"); $("login").classList.remove("hidden");
     $("members").textContent = ""; $("flags").textContent = "";
@@ -245,13 +341,14 @@
 
   function enterApp() {
     $("login").classList.add("hidden"); $("app").classList.remove("hidden"); $("tabs").classList.remove("hidden");
-    renderAll(); touch();
+    renderAll(); loadRatings(); touch();
   }
 
   // ---------- Hämta och rendera ----------
   function load(silent) {
     return rpc("admin_oversikt", { p_secret: key }).then(function (d) {
       data = d; lastFetch = Date.now(); renderAll();
+      if (!silent) loadRatings();
     }).catch(function (e) {
       if (isBadKey(e)) { logout("Nyckeln gäller inte längre. Logga in igen."); return; }
       if (!silent) toast(e.message, true);
@@ -401,7 +498,7 @@
 
   // ---------- Flikar och händelser ----------
   function showTab(name) {
-    ["overview", "flags", "members"].forEach(function (t) { $("tab-" + t).classList.toggle("hidden", t !== name); });
+    ["overview", "flags", "members", "ratings"].forEach(function (t) { $("tab-" + t).classList.toggle("hidden", t !== name); });
     Array.prototype.forEach.call(document.querySelectorAll("nav.tabs button"), function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === name); });
     window.scrollTo(0, 0);
   }
